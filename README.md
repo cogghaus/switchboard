@@ -1,37 +1,32 @@
-# Orchestrator's Assistant
+# Switchboard
 
-A Claude Code plugin that gives the main session (the orchestrator) a roster of
-specialist sub-agents to delegate to, plus routing and operating skills for
-running them well.
+A Claude Code plugin that turns your main session into an orchestrator: you route each task to the right specialist sub-agent, at the right model, and review what comes back. Switchboard bundles the roster of specialists and the skills that drive them.
 
 ## What is bundled
 
-- **`agents/`** - twelve specialist sub-agent definitions, one per role
-  (security review, frontend, backend, QA, architecture, product/requirements,
-  documentation, release management, code review, offensive security x2,
-  lateral-thinking/brainstorm). Each is a standalone Claude Code sub-agent:
-  name, routing description, an explicit tool allowlist, and an assigned
-  model. They carry the full persona - identity, communication style,
-  principles, domain expertise, output/severity/verdict formats, and voice -
-  of the original forge-lab agent personalities they were converted from, with
-  all forge-lab runtime plumbing (hub API calls, done-file contracts, session
-  memory protocol, daemon/dispatcher mechanics) stripped out. In this plugin,
-  a sub-agent is spawned by the orchestrating main session and returns its
-  result directly - there is no separate daemon or hub to report to.
+### `agents/` - the roster (12 specialist sub-agents)
 
-- **Skills** (routing and model-matrix wiring) are not yet included in this
-  first cut. That is a deliberate follow-up step, not an oversight.
+One standalone Claude Code sub-agent per role:
 
-## Origin
+- **Security:** Security Reviewer, Red Team Lead, Infra Pentester
+- **Build:** Backend Developer, Frontend Developer, QA Engineer, Code Reviewer
+- **Plan and docs:** Architect, Business Analyst, Technical Writer, Release Manager, Loki (lateral thinker)
 
-The agent personalities originate from `forge-lab`'s
-`packages/forge-agents/personalities/`, a multi-agent orchestration system
-with its own daemon/hub runtime. This plugin extracts the personas only and
-re-targets them at Claude Code's native sub-agent mechanism.
+Each carries a routing description, a tool allowlist, an assigned model, and its full persona - identity, principles, domain expertise, and output formats. A sub-agent is spawned by your main session and returns its result directly.
 
-One personality - the Orchestrator (`forge-master`) - was deliberately not
-converted to a sub-agent. In a Claude Code plugin, the orchestrator role is
-the human's own main session, not a spawned sub-agent, so the fit is
-different. See the project's session notes for the reviewer decision on
-whether to exclude it entirely or repurpose it as a triage/decomposition
-helper sub-agent.
+### `skills/` - how to drive the roster
+
+- **`orchestrator-loop`** - the default operating loop: receive a goal, decide direct vs delegate, route to the right specialist at the right model, review, and report. This makes delegation the default behavior rather than something you improvise.
+- **`model-routing`** - the model-selection matrix: which model gives the best token-to-quality result for a given task or agent, with the security tier pinned to a stable model. `model-matrix.md` (readable) and `model-matrix.json` (source) ship alongside it.
+
+## Install (local, no marketplace)
+
+```
+claude --plugin-dir <path-to-switchboard>
+```
+
+Then run `/help` to see the roster and skills. No marketplace or shared config is required to test locally.
+
+## Model assignments
+
+Each agent's `model:` is set from the routing matrix: security agents on a stable safety-carrying tier, design and lateral work on the frontier tier, mechanical and build work on a mid tier, lookups on a small tier. See `skills/model-routing/model-matrix.md`.

@@ -12,3 +12,8 @@ npm-debug.log*
 # Local scratch / drafts
 _proposals/
 *.local.md
+
+# Tooling output / cache (not part of the plugin)
+graphify-out/
+.graphify*
+.serena/
