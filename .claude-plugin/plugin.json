@@ -1,6 +1,6 @@
 {
   "name": "switchboard",
   "displayName": "Switchboard",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Switchboard - route each task to the right specialist. A roster of specialist sub-agents plus routing and operating skills for a person who delegates work to the best-fit model per task."
 }

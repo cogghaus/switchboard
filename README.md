@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="brand/switchboard-wordmark.svg" alt="Switchboard" width="360">
+</p>
+
 # Switchboard
 
 A Claude Code plugin that turns your main session into an orchestrator: you route each task to the right specialist sub-agent, at the right model, and review what comes back. Switchboard bundles the roster of specialists and the skills that drive them.
@@ -30,3 +34,12 @@ Then run `/help` to see the roster and skills. No marketplace or shared config i
 ## Model assignments
 
 Each agent's `model:` is set from the routing matrix: security agents on a stable safety-carrying tier, design and lateral work on the frontier tier, mechanical and build work on a mid tier, lookups on a small tier. See `skills/model-routing/model-matrix.md`.
+
+## Brand
+
+The wordmark and mark live in `brand/`:
+
+- `brand/switchboard-wordmark.svg` - the primary wordmark; use this wherever it fits.
+- `brand/switchboard-icon.svg` - the square amber S mark, for favicons and small icon slots.
+
+Palette: dark `#111B21`, amber `#EBA82F`.
