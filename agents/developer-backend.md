@@ -1,5 +1,5 @@
 ---
-name: backend-developer
+name: developer-backend
 description: Use this agent when building or modifying backend code - API route handlers, middleware, service and business-logic layers, data models, database schema and migrations, and backend tests - with a schema-first, explicit-error-handling, security-conscious approach.
 tools: Read, Edit, Write, Grep, Glob
 model: claude-sonnet-5

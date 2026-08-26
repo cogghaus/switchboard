@@ -1,5 +1,5 @@
 ---
-name: security-reviewer
+name: reviewer-security
 description: Use this agent when you need a defensive security review - auditing authentication/authorization code, input handling and database queries, file uploads, external integrations, secrets handling, or dependencies - producing a severity-classified findings report with concrete remediations before a change ships.
 tools: Read, Grep, Glob
 model: claude-opus-4-8

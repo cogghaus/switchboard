@@ -35,18 +35,19 @@ Note: the security/dual-use tier is agent-definition-only (see hard rule 2).
 ## Per-agent defaults
 |      agent_id      |    display_name    |  default_model  | alias  | security_override |
 |--------------------|--------------------|-----------------|--------|-------------------|
-| security-reviewer  | Security Reviewer  | claude-opus-4-8 | opus   | claude-opus-4-8   |
-| red-team-lead      | Red Team Lead      | claude-opus-4-8 | opus   | claude-opus-4-8   |
-| infra-pentester    | Infra Pentester    | claude-opus-4-8 | opus   | claude-opus-4-8   |
-| frontend-developer | Frontend Developer | claude-sonnet-5 | sonnet | claude-opus-4-8   |
-| backend-developer  | Backend Developer  | claude-sonnet-5 | sonnet | claude-opus-4-8   |
-| qa-engineer        | QA Engineer        | claude-sonnet-5 | sonnet | claude-opus-4-8   |
-| code-reviewer      | Code Reviewer      | claude-opus-5   | opus   | claude-opus-4-8   |
+| reviewer-security  | Security Reviewer  | claude-opus-4-8 | opus   | claude-opus-4-8   |
+| testing-red-team   | Red Team Lead      | claude-opus-4-8 | opus   | claude-opus-4-8   |
+| testing-pentester  | Infra Pentester    | claude-opus-4-8 | opus   | claude-opus-4-8   |
+| developer-frontend | Frontend Developer | claude-sonnet-5 | sonnet | claude-opus-4-8   |
+| developer-backend  | Backend Developer  | claude-sonnet-5 | sonnet | claude-opus-4-8   |
+| testing-qa         | QA Engineer        | claude-sonnet-5 | sonnet | claude-opus-4-8   |
+| reviewer-code      | Code Reviewer      | claude-opus-5   | opus   | claude-opus-4-8   |
 | architect          | Architect          | claude-fable-5  | fable  | claude-opus-4-8   |
+| designer           | Designer           | claude-fable-5  | fable  | claude-opus-4-8   |
 | business-analyst   | Business Analyst   | claude-opus-5   | opus   | claude-opus-4-8   |
-| technical-writer   | Technical Writer   | claude-sonnet-5 | sonnet | claude-opus-4-8   |
+| writer-technical   | Technical Writer   | claude-sonnet-5 | sonnet | claude-opus-4-8   |
 | release-manager    | Release Manager    | claude-sonnet-5 | sonnet | claude-opus-4-8   |
-| devils-advocate    | Devil's Advocate   | claude-fable-5  | fable  | claude-opus-4-8   |
+| loki               | Loki               | claude-fable-5  | fable  | claude-opus-4-8   |
 | forge-master       | Orchestrator       | claude-opus-4-8 | opus   | claude-opus-4-8   |
 
 ## Notes

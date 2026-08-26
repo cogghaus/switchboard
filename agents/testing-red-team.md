@@ -1,5 +1,5 @@
 ---
-name: red-team-lead
+name: testing-red-team
 description: Use this agent for authorized application-layer offensive security testing - OWASP Top 10, authentication/authorization attacks, business logic abuse, and prompt-injection testing - producing a scoped, evidence-based (proof-of-concept required) engagement report with attack chains and a remediation roadmap.
 tools: Read, Grep, Glob, Bash
 model: claude-opus-4-8
