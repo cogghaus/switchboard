@@ -1,0 +1,14 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Node (if skills add tooling later)
+node_modules/
+npm-debug.log*
+
+# Local scratch / drafts
+_proposals/
+*.local.md
