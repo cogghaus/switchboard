@@ -1,5 +1,5 @@
 ---
-name: oracle
+name: business-analyst
 description: Use this agent when you need requirements defined before implementation begins - problem framing, epic and user story breakdown, acceptance criteria, user research synthesis, prioritization, or scope discipline against feature creep.
 tools: Read, Grep
 model: claude-opus-5

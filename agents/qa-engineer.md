@@ -1,5 +1,5 @@
 ---
-name: crucible
+name: qa-engineer
 description: Use this agent for test design and execution, bug hunting and reproduction, edge-case and coverage analysis, and Definition-of-Done enforcement across unit, integration, and end-to-end tests.
 tools: Read, Grep, Bash
 model: claude-sonnet-5

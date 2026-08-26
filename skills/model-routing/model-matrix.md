@@ -33,21 +33,21 @@ Source of truth: model-matrix.json -> rebuild DB -> regen this view. See SKILL: 
 Note: the security/dual-use tier is agent-definition-only (see hard rule 2).
 
 ## Per-agent defaults
-|   agent_id   |    display_name    |  default_model  | alias  | security_override |
-|--------------|--------------------|-----------------|--------|-------------------|
-| aegis        | Security Reviewer  | claude-opus-4-8 | opus   | claude-opus-4-8   |
-| slag         | Red Team Lead      | claude-opus-4-8 | opus   | claude-opus-4-8   |
-| flux         | Infra Pentester    | claude-opus-4-8 | opus   | claude-opus-4-8   |
-| anvil        | Frontend Developer | claude-sonnet-5 | sonnet | claude-opus-4-8   |
-| furnace      | Backend Developer  | claude-sonnet-5 | sonnet | claude-opus-4-8   |
-| crucible     | QA Engineer        | claude-sonnet-5 | sonnet | claude-opus-4-8   |
-| temper       | Code Reviewer      | claude-opus-5   | opus   | claude-opus-4-8   |
-| architect    | Architect          | claude-fable-5  | fable  | claude-opus-4-8   |
-| oracle       | Business Analyst   | claude-opus-5   | opus   | claude-opus-4-8   |
-| scribe       | Technical Writer   | claude-sonnet-5 | sonnet | claude-opus-4-8   |
-| herald       | Release Manager    | claude-sonnet-5 | sonnet | claude-opus-4-8   |
-| loki         | Loki               | claude-fable-5  | fable  | claude-opus-4-8   |
-| forge-master | Orchestrator       | claude-opus-4-8 | opus   | claude-opus-4-8   |
+|      agent_id      |    display_name    |  default_model  | alias  | security_override |
+|--------------------|--------------------|-----------------|--------|-------------------|
+| security-reviewer  | Security Reviewer  | claude-opus-4-8 | opus   | claude-opus-4-8   |
+| red-team-lead      | Red Team Lead      | claude-opus-4-8 | opus   | claude-opus-4-8   |
+| infra-pentester    | Infra Pentester    | claude-opus-4-8 | opus   | claude-opus-4-8   |
+| frontend-developer | Frontend Developer | claude-sonnet-5 | sonnet | claude-opus-4-8   |
+| backend-developer  | Backend Developer  | claude-sonnet-5 | sonnet | claude-opus-4-8   |
+| qa-engineer        | QA Engineer        | claude-sonnet-5 | sonnet | claude-opus-4-8   |
+| code-reviewer      | Code Reviewer      | claude-opus-5   | opus   | claude-opus-4-8   |
+| architect          | Architect          | claude-fable-5  | fable  | claude-opus-4-8   |
+| business-analyst   | Business Analyst   | claude-opus-5   | opus   | claude-opus-4-8   |
+| technical-writer   | Technical Writer   | claude-sonnet-5 | sonnet | claude-opus-4-8   |
+| release-manager    | Release Manager    | claude-sonnet-5 | sonnet | claude-opus-4-8   |
+| devils-advocate    | Devil's Advocate   | claude-fable-5  | fable  | claude-opus-4-8   |
+| forge-master       | Orchestrator       | claude-opus-4-8 | opus   | claude-opus-4-8   |
 
 ## Notes
 - Surface note (updated 2026-08-26): on 2026-08-25 the opus alias was observed as Opus 5; on 2026-08-26 empirical tests showed opus-spawned subagents coming up as Opus 4.8 (harness-injected identity, consistent across 4 runs, not an independent oracle; aliases move, so re-verify). Working assumption: claude-opus-4-8 is reachable via a live Agent-tool spawn (model:opus) as well as via a sub-agent definition full ID. Pin by full ID in definitions regardless, for stability.

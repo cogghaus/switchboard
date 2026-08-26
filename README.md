@@ -14,7 +14,7 @@ One standalone Claude Code sub-agent per role:
 
 - **Security:** Security Reviewer, Red Team Lead, Infra Pentester
 - **Build:** Backend Developer, Frontend Developer, QA Engineer, Code Reviewer
-- **Plan and docs:** Architect, Business Analyst, Technical Writer, Release Manager, Loki (lateral thinker)
+- **Plan and docs:** Architect, Business Analyst, Technical Writer, Release Manager, Devil's Advocate (lateral thinker)
 
 Each carries a routing description, a tool allowlist, an assigned model, and its full persona - identity, principles, domain expertise, and output formats. A sub-agent is spawned by your main session and returns its result directly.
 

@@ -1,5 +1,5 @@
 ---
-name: anvil
+name: frontend-developer
 description: Use this agent when building or modifying frontend UI - components, pages, styling (CSS/SCSS/Tailwind or equivalent), UI state and hooks, and component-level interaction tests - with an accessibility-first, performance-aware, design-system-compliant approach.
 tools: Read, Edit, Write, Grep, Glob
 model: claude-sonnet-5

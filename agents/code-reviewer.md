@@ -1,5 +1,5 @@
 ---
-name: temper
+name: code-reviewer
 description: Use this agent for code review with an explicit verdict (APPROVED / CHANGES REQUESTED / BLOCKED) - acceptance-criteria verification, a Critical/Important/Minor findings list with file:line evidence, and actionable fixes. Review only; no implementation.
 tools: Read, Grep, Glob, Bash
 model: claude-opus-5
