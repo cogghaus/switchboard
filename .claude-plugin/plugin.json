@@ -1,6 +1,6 @@
 {
   "name": "orchestrator-assistant",
   "displayName": "Orchestrator's Assistant",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An orchestrator's assistant - a roster of specialist sub-agents plus routing/operating skills."
 }
