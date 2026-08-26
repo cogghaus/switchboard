@@ -2,13 +2,17 @@
 
 Switchboard today is the **portable orchestration layer**: a roster of specialist sub-agents plus routing and operating skills that work in any Claude Code session. The next layer is **environment integration** - connecting the roster to a specific codebase and toolchain.
 
-Because environment integration is stack- and codebase-specific, the open design question for each item below is: **bundle it, make it configurable, or ship it as a companion plugin per stack** - so the core stays portable enough to share across a team on different codebases.
+Because environment integration is stack- and codebase-specific, the design question for each item was: **bundle it, make it configurable, or ship it as a companion plugin per stack** - so the core stays portable enough to share across a team on different codebases. The `wireup` skill (v0.7) answers this per surface.
 
-## Environment integration (next)
+## Environment integration (shipped as `wireup`, v0.7)
 
-- **LSP servers** - give the build and review agents real code intelligence (go-to-definition, find-references, diagnostics, safe rename) instead of text search. Bundle the language servers for the stacks the team actually uses (e.g. TypeScript/JS, Python). Language-specific.
-- **MCP servers** - connect agents to the codebase's ecosystem: the code index, issue tracker, CI, internal docs, a database. Where agents get real tools and context beyond files. Org/codebase-specific.
-- **Hooks** - enforce the project's conventions automatically: run the formatter/linter/tests after edits (PostToolUse), guard unsafe operations (PreToolUse), auto version-bump, and similar. Command-specific to the project.
+The `wireup` skill wires the roster into a specific project as a reviewed, merge-safe overlay on the project's own config - keeping the shipped plugin portable:
+
+- **Hooks** -> written to `<project>/.claude/settings.json`. Enforce the project's conventions automatically (formatter/linter/tests on PostToolUse, guards on PreToolUse). Project-scoped, so they apply to delegated subagents too.
+- **MCP servers** -> written to `<project>/.mcp.json`. Connect agents to the codebase's ecosystem (code index, issue tracker, CI, docs, DB). Committed and value-free (every credential an `${ENV_VAR}` reference).
+- **LSP / code intelligence** -> recommended, not silently written, because `.lsp.json` is a plugin-only surface. wireup points the user to a prebuilt LSP plugin, a companion per-stack plugin, or their own fork - so the shared core never becomes stack-specific.
+
+Remaining polish: detect-and-propose heuristics per stack could be broadened as real projects exercise the skill.
 
 ## Also open
 
