@@ -119,4 +119,3 @@ Stop and raise for attention if any of the following hold:
 1. The task has no associated code changes and no PR reference.
 2. The codebase is in a state that makes diff analysis impossible (merge conflict, broken build).
 3. A finding requires deep security expertise beyond a standard review. Flag it and recommend routing to a dedicated security reviewer.
-4. Context is approaching saturation with files still unreviewed. Return partial findings and note what remains unreviewed.

@@ -13,17 +13,20 @@ Because environment integration is stack- and codebase-specific, the open design
 ## Also open
 
 - Make `orchestrator-loop` reliably the *invoked default* (broad-trigger skill tuning; validate it fires ambiently rather than being ignored).
-- Generalize the bundled model-matrix notes (remove operator-specific dates and plan-allowance language) for clean team distribution.
 - Optional polish: slash commands for common flows; wire the icon in as a favicon / social-preview once there is a docs site.
 
-## Agent quality (v0.4, next)
+## Agent quality (DONE, v0.6)
 
-Driven by the 2026-08-26 design audit (the set is solid; mostly minor findings):
+The 2026-08-26 design audit is closed:
 
-- Decide builder self-verification: give anvil/furnace scoped Bash to run and verify their own output, or keep them write-only and correct the "tests passing" language.
-- Enforce the security override by routing: security-tagged work goes to the 4.8 security agents, not a builder carrying a phantom per-agent override; drop the misleading override column.
-- Tool-allowlist tidy-ups (Glob for crucible/oracle; Grep/Glob for scribe), a one-line trust boundary on architect/oracle, trim herald's over-specified keystrokes to a definition-of-done, drop the dated context-saturation hedge, and re-tier oracle (Opus 5 -> Sonnet).
-- Naming themes (generative): the setup skill asks the user - keep the default plain-corporate agents, or apply a custom theme. For custom, the user names any subject and the skill generates a themed name (and a light persona flavor) per role, preserving each role's function (e.g. a Fallout theme yields agents like Dogmeat). Forge and Mythological are just saved presets of this same mechanism.
+- Build/test agents (developer-backend, developer-frontend, testing-qa) granted scoped Bash to run and verify their own output, with usage guidance and honest "ran the tests, here is the result" reporting instead of asserting a pass.
+- Security enforcement moved to routing - security-tagged work goes to the 4.8 security agents - and the unenforceable per-agent `security_override` matrix column dropped.
+- Tool-allowlist tidy-ups: Glob added to testing-qa and business-analyst; Write added where an agent owns artifacts (testing-qa test files, business-analyst PRDs/stories); Grep/Glob/Edit added to writer-technical.
+- Trust-boundary sections added to architect and business-analyst; the dated context-saturation escalation hedge removed from all agents.
+- business-analyst re-tiered Opus 5 -> Sonnet; model-matrix notes generalized (operator-specific slugs, dates, and plan-allowance specifics removed) for clean team distribution.
+- Release-manager reviewed and kept as-is: its protocol is outcome- and convention-driven, not keystroke dictation.
+
+Naming themes (generative) shipped earlier as the `theme` skill: keep the default corporate roster or name any subject and each role is reskinned to a fitting character, function unchanged.
 
 ## Before making the repo public
 

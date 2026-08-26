@@ -16,18 +16,19 @@ Switchboard ships with a plain corporate roster (Security Reviewer, Backend Deve
 
 ## Role reference (map by FUNCTION, not by the current name)
 
-- security-reviewer - defensive security review; a guardian / protector.
-- red-team-lead - offensive application-security testing; an adversary.
-- infra-pentester - infrastructure and supply-chain attack testing; a saboteur of foundations.
-- backend-developer - servers, data, APIs; a builder / engineer.
-- frontend-developer - the UI and user-facing surface; the face / interface.
-- qa-engineer - finds defects; the all-seeing inspector.
-- code-reviewer - the quality gate, issues verdicts; the judge.
+- reviewer-security - defensive security review; a guardian / protector.
+- testing-red-team - offensive application-security testing; an adversary.
+- testing-pentester - infrastructure and supply-chain attack testing; a saboteur of foundations.
+- developer-backend - servers, data, APIs; a builder / engineer.
+- developer-frontend - the UI and user-facing surface; the face / interface.
+- designer - product and UX design, user journeys and wireframes; the visionary / artisan.
+- testing-qa - finds defects; the all-seeing inspector.
+- reviewer-code - the quality gate, issues verdicts; the judge.
 - architect - system design and trade-offs; the master planner.
 - business-analyst - requirements and what to build; the seer / interpreter.
-- technical-writer - docs and the knowledge base; the chronicler / scribe.
+- writer-technical - docs and the knowledge base; the chronicler / scribe.
 - release-manager - versioning and shipping; the herald / deliverer.
-- devils-advocate - challenges assumptions, surfaces lateral alternatives; the contrarian / trickster.
+- loki - challenges assumptions, surfaces lateral alternatives; the contrarian / trickster.
 
 (architect is a plain role word already, so many themes leave it or give it a planner/inventor character.)
 
@@ -36,7 +37,7 @@ Switchboard ships with a plain corporate roster (Security Reviewer, Backend Deve
 For each agent file in `agents/`:
 - Change the `name:` frontmatter to a kebab-case slug of the themed name, unique across the roster, and the `# H1` title to the themed name.
 - Optionally add ONE short themed flavor line at the top of the Identity section - a nod to the character. Keep every functional section (principles, method, output format, tools, model, when-to-stop) exactly as-is.
-- Do NOT change `tools`, `model`, `description`, or any functional or safety instruction. The security agents (security-reviewer, red-team-lead, infra-pentester) keep `model: claude-opus-4-8` whatever their new name.
+- Do NOT change `tools`, `model`, `description`, or any functional or safety instruction. The security agents (reviewer-security, testing-red-team, testing-pentester) keep `model: claude-opus-4-8` whatever their new name.
 
 Then keep the roster consistent:
 - Update the model matrix: `skills/model-routing/model-matrix.json` (each agent's `agent_id` and `display_name`), then regenerate `model-matrix.md` to match.
@@ -47,4 +48,4 @@ Then keep the roster consistent:
 
 - Reskinning is names and one flavor line only. A theme must never change an agent's tools, model, safety instructions, or role.
 - Keep the mapping legible: a stranger reading the themed roster next to this role reference should be able to tell which agent is which. If a themed pick is too obscure, prefer clarity.
-- Filenames stay as the stable role slugs (security-reviewer.md, and so on); only `name:`, the `# H1`, and the optional flavor line change - so re-theming is repeatable and reversible.
+- Filenames stay as the stable role slugs (reviewer-security.md, and so on); only `name:`, the `# H1`, and the optional flavor line change - so re-theming is repeatable and reversible.

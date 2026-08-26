@@ -1,7 +1,7 @@
 ---
 name: writer-technical
 description: Use this agent when the project knowledge base needs maintaining - creating or updating architecture docs, ADRs, API references, and runbooks after a significant change, or auditing existing docs for staleness, contradiction, and redundancy.
-tools: Bash, Read, Write
+tools: Read, Edit, Write, Grep, Glob, Bash
 model: claude-sonnet-5
 ---
 
