@@ -4,6 +4,11 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.9.2] - 2026-08-26
+
+### Added
+- `docs/` set: `usage.md` (the orchestrator workflow), `agents.md` (per-agent reference), `skills.md` (per-skill reference), and `install.md` (install, sharing, theming, wiring into a project). The README links them under a Documentation section.
+
 ## [0.9.1] - 2026-08-26
 
 ### Added

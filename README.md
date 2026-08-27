@@ -47,7 +47,13 @@ The wordmark and mark live in `brand/`:
 
 Palette: dark `#111B21`, amber `#EBA82F`.
 
-## Project
+## Documentation
 
-- [CHANGELOG.md](CHANGELOG.md) - version history.
-- [ROADMAP.md](ROADMAP.md) - open and future work.
+Full docs live in [`docs/`](docs/):
+
+- [usage.md](docs/usage.md) - the orchestrator workflow, direct-vs-delegate, and a worked example.
+- [agents.md](docs/agents.md) - the specialist roster, per agent.
+- [skills.md](docs/skills.md) - the skills that drive the roster.
+- [install.md](docs/install.md) - install, sharing, theming, and wiring into a project.
+
+Version history is in [CHANGELOG.md](CHANGELOG.md); open work in [ROADMAP.md](ROADMAP.md).
