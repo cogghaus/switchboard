@@ -46,3 +46,8 @@ The wordmark and mark live in `brand/`:
 - `brand/switchboard-icon.svg` - the square amber S mark, for favicons and small icon slots.
 
 Palette: dark `#111B21`, amber `#EBA82F`.
+
+## Project
+
+- [CHANGELOG.md](CHANGELOG.md) - version history.
+- [ROADMAP.md](ROADMAP.md) - open and future work.

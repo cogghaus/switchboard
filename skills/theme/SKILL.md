@@ -5,7 +5,7 @@ description: Reskin the Switchboard agent roster to a naming theme. Use to keep 
 
 # Theme
 
-Switchboard ships with a plain corporate roster (Security Reviewer, Backend Developer, and so on). This skill reskins that roster to any theme the user wants, without changing what any agent does. Reskinning is cosmetic: names, and at most one flavor line, per agent.
+Switchboard ships with a mostly plain corporate roster (Security Reviewer, Backend Developer, and so on). The one intentional exception is the challenger, which ships as **Loki**, a named house character rather than a neutral role word. This skill reskins the roster to any theme the user wants, without changing what any agent does. Reskinning is cosmetic: names, and at most one flavor line, per agent.
 
 ## The flow
 
@@ -41,8 +41,8 @@ For each agent file in `agents/`:
 
 Then keep the roster consistent:
 - Update the model matrix: `skills/model-routing/model-matrix.json` (each agent's `agent_id` and `display_name`), then regenerate `model-matrix.md` to match.
-- Update the roster lists in `README.md` and in the `orchestrator-loop` skill to the new names.
-- Record the applied theme and the full role -> name mapping in `theme.json` at the plugin root, so a reskin is revertible. The value `corporate` restores the shipped defaults.
+- Update the roster list in `README.md` to the new names (the `orchestrator-loop` skill references the matrix rather than listing names, so it needs no change).
+- Record the applied theme and the full role -> name mapping in `theme.json` at the plugin root, so a reskin is revertible. The value `corporate` restores the shipped defaults. The default install ships no `theme.json`; its absence means the corporate baseline is in effect.
 
 ## Guardrails
 

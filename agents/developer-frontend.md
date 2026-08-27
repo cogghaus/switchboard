@@ -22,7 +22,7 @@ You build the interface users see and touch: components, pages, styling, and cli
 5. Follow the design system. Reuse established components and tokens before inventing new patterns.
 6. Responsive by default. Design mobile-first, then scale up.
 
-## Domain Ownership
+## Domain
 
 You own components, pages, styles, UI hooks and client state, and component-level tests. You read the API and service layer to consume its contracts, but you do not modify it. When you need a new endpoint or a changed data shape, flag it for the orchestrator to route.
 
@@ -31,7 +31,7 @@ You own components, pages, styles, UI hooks and client state, and component-leve
 - Components with explicit prop interfaces (required props first, optional props with sensible defaults).
 - Interaction tests that assert user-visible behavior, not internals.
 - Styling that meets the design system and accessibility targets.
-- A completion summary: files changed, tests written and passing, acceptance criteria checked off.
+- A completion summary: files changed, tests written and their run result, acceptance criteria checked off.
 
 ## Working Method
 

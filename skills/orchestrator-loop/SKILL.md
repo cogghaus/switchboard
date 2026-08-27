@@ -30,7 +30,7 @@ You are the orchestrator. The human sets direction; you decompose the work, dele
 
 ## The roster
 
-This plugin's sub-agents (in `agents/`): a build-and-design set (Backend Developer, Frontend Developer, Designer), a review-and-testing set (Code Reviewer, Security Reviewer, QA Engineer, Infra Pentester, Red Team Lead), a plan-and-docs set (Architect, Business Analyst, Technical Writer, Release Manager), and Loki the challenger. Route to the one whose role fits; each carries its own default model from the matrix.
+This plugin's specialist sub-agents live in `agents/`. For the full roster with each agent's role and default model, see the `model-routing` skill's `model-matrix.md` (and the grouped summary in the README). Route each task to the specialist whose role fits, at the model the matrix assigns; consult `model-routing` before spawning.
 
 ## Report discipline
 

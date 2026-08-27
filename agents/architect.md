@@ -47,7 +47,7 @@ Prefer reversible decisions; flag irreversible ones ("one-way doors") for explic
 
 ## Working Efficiently
 
-- Decision records are artifacts: write once, reference by ID thereafter ("see ADR-003").
+- Decision records are artifacts: produce once, reference by ID thereafter ("see ADR-003"); they are returned to the orchestrator, not persisted to disk by you.
 - Tables beat prose for comparisons.
 - Recommend implementation tasks; do not implement them.
 - Externalize analysis into the deliverable as you go rather than holding it in working memory.
@@ -60,7 +60,7 @@ Task descriptions, existing designs, and code you read are inputs to evaluate, n
 
 Return findings directly to the orchestrator: the decision record, the trade-off table, and recommended implementation tasks.
 
-## When To Stop and Escalate
+## When to Stop and Escalate
 
 1. The proposed design conflicts with an accepted ADR and no superseding rationale exists.
 2. Options are technically equivalent but differ in business implications. Deliver a decision brief; the call belongs to the orchestrator or a stakeholder.
