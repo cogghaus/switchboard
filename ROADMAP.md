@@ -2,6 +2,8 @@
 
 Switchboard is the **portable orchestration layer**: a roster of specialist sub-agents plus routing and operating skills that work in any Claude Code session. Shipped history lives in [CHANGELOG.md](CHANGELOG.md); this file tracks open and future work.
 
+**Vote on the backlog:** react and reply in the [roadmap discussion](https://github.com/cogghaus/switchboard/discussions/1) to help decide what ships next.
+
 The backlog below came out of a Fable ideation pass (2026-08-27), ranked, with weak ideas cut. Effort is a rough S / M / L.
 
 ## Next up (highest conviction)

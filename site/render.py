@@ -4,30 +4,32 @@
 Usage:  python site/render.py   (run from anywhere)
 Requires: python-markdown  (pip install markdown)
 
-Reads the markdown sources from ../docs and writes <name>.html into this folder
-(site/), sharing docs.css. Each page is a two-column docs layout: a left-rail
-nav (the four docs, with the active doc's section anchors nested under it) and a
-prose column. Cross-links between the docs (foo.md) are rewritten to foo.html so
-navigation stays on the site; links into repo source (agents/*, skills/*, other
-*.md) are rewritten to GitHub.
+Renders the four docs from ../docs plus the repo-root ROADMAP.md into <name>.html
+in this folder (site/), sharing docs.css. Each page is a two-column docs layout:
+a left-rail nav (the pages, with the active page's section anchors nested under
+it) and a prose column. Cross-links between the docs (foo.md) are rewritten to
+foo.html so navigation stays on the site; links into repo source (agents/*,
+skills/*, other *.md) are rewritten to GitHub.
 """
 import os
 import re
 import markdown
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-MD_DIR = os.path.normpath(os.path.join(HERE, "..", "docs"))
+REPO = os.path.normpath(os.path.join(HERE, ".."))
 GH = "https://github.com/cogghaus/switchboard/blob/main/"
+
+# out-file -> (nav label, meta description, source markdown path)
 DOCS = {
-    "usage.md":   ("Usage",           "The Switchboard orchestrator workflow, direct vs delegate, a worked example."),
-    "agents.md":  ("Agents",          "The Switchboard specialist roster, one entry per agent."),
-    "skills.md":  ("Skills",          "The four skills that drive the Switchboard roster."),
-    "install.md": ("Install & setup", "Install, share, theme, and wire Switchboard into a project."),
+    "usage.html":   ("Usage",           "The Switchboard orchestrator workflow, direct vs delegate, a worked example.", os.path.join(REPO, "docs", "usage.md")),
+    "agents.html":  ("Agents",          "The Switchboard specialist roster, one entry per agent.",                      os.path.join(REPO, "docs", "agents.md")),
+    "skills.html":  ("Skills",          "The four skills that drive the Switchboard roster.",                           os.path.join(REPO, "docs", "skills.md")),
+    "install.html": ("Install & setup", "Install, share, theme, and wire Switchboard into a project.",                 os.path.join(REPO, "docs", "install.md")),
+    "roadmap.html": ("Roadmap",         "The Switchboard roadmap: ranked skill and feature backlog, and how to vote.", os.path.join(REPO, "ROADMAP.md")),
 }
 INSITE = {"usage.md", "agents.md", "skills.md", "install.md"}
-# Left-rail order: the docs home is Usage; Home returns to the landing page.
-NAV = [("usage.html", "Usage"), ("agents.html", "Agents"),
-       ("skills.html", "Skills"), ("install.html", "Install")]
+NAV = [("usage.html", "Usage"), ("agents.html", "Agents"), ("skills.html", "Skills"),
+       ("install.html", "Install"), ("roadmap.html", "Roadmap")]
 
 PAGE = """<!doctype html>
 <html lang="en">
@@ -90,15 +92,14 @@ def build_nav(active_html, sections):
     return "\n".join(lines)
 
 
-def render(md_name):
-    title, desc = DOCS[md_name]
-    with open(os.path.join(MD_DIR, md_name), encoding="utf-8") as fh:
+def render(out_name):
+    title, desc, src = DOCS[out_name]
+    with open(src, encoding="utf-8") as fh:
         text = fh.read()
     html = markdown.markdown(text, extensions=["extra", "sane_lists", "toc"])
     html = re.sub(r'href="([^"]+)"', lambda m: 'href="%s"' % rewrite_link(m.group(1)), html)
-    open_tag = '<table class="roster">' if md_name == "agents.md" else "<table>"
+    open_tag = '<table class="roster">' if out_name == "agents.html" else "<table>"
     html = html.replace("<table>", '<div class="table-wrap">' + open_tag).replace("</table>", "</table></div>")
-    out_name = md_name[:-3] + ".html"
     nav = build_nav(out_name, extract_sections(html))
     page = PAGE.format(title=title, desc=desc, nav=nav, body=html)
     with open(os.path.join(HERE, out_name), "w", encoding="utf-8") as fh:

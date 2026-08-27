@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Roadmap · Switchboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The Switchboard roadmap: ranked skill and feature backlog, and how to vote.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<a class="brand" href="index.html"><span class="dot"></span>Switchboard</a>
+<nav class="docnav">
+<div class="navtitle">Documentation</div>
+<a href="usage.html">Usage</a>
+<a href="agents.html">Agents</a>
+<a href="skills.html">Skills</a>
+<a href="install.html">Install</a>
+<a href="roadmap.html" class="active">Roadmap</a>
+<a class="sub" href="#next-up-highest-conviction">Next up (highest conviction)</a>
+<a class="sub" href="#skill-backlog-ranked">Skill backlog (ranked)</a>
+<a class="sub" href="#feature-backlog-ranked">Feature backlog (ranked)</a>
+<a class="sub" href="#principle-curate-do-not-inflate-the-roster">Principle: curate, do not inflate the roster</a>
+</nav>
+<div class="sidebar-foot"><a href="index.html">Home</a> · <a href="https://github.com/cogghaus/switchboard">GitHub</a> · MIT</div>
+</aside>
+<main class="prose">
+<h1 id="roadmap">Roadmap</h1>
+<p>Switchboard is the <strong>portable orchestration layer</strong>: a roster of specialist sub-agents plus routing and operating skills that work in any Claude Code session. Shipped history lives in <a href="https://github.com/cogghaus/switchboard/blob/main/CHANGELOG.md">CHANGELOG.md</a>; this file tracks open and future work.</p>
+<p><strong>Vote on the backlog:</strong> react and reply in the <a href="https://github.com/cogghaus/switchboard/discussions/1">roadmap discussion</a> to help decide what ships next.</p>
+<p>The backlog below came out of a Fable ideation pass (2026-08-27), ranked, with weak ideas cut. Effort is a rough S / M / L.</p>
+<h2 id="next-up-highest-conviction">Next up (highest conviction)</h2>
+<ol>
+<li><strong>Ledger + delegation telemetry hook</strong> - the keystone. Everything Switchboard claims (best token-to-quality, review-before-relay, delegation discipline) is currently asserted, not evidenced. The ledger is the evidence stream: it makes review concrete, survives compaction, unblocks <code>retro</code>/<code>meter</code>, and back-doors the blocked fire-rate measurement. Small: a JSONL hook plus a page of convention. (Skill L1 + Feature F1 built as one unit.)</li>
+<li><strong><code>doctor</code></strong> (Feature F2) - single-source codegen + roster lint. Kills the hand-fixing drift that fills much of the 0.9.x changelog.</li>
+<li><strong>Cut 1.0</strong> - after a real test-drive: the pre-1.0 list is essentially a version bump + a "what's in 1.0" changelog section; nothing structural remains. Marketplace listing (Feature F3) follows.</li>
+</ol>
+<h2 id="skill-backlog-ranked">Skill backlog (ranked)</h2>
+<ol>
+<li><strong><code>ledger</code></strong> (M) - the dispatch log: every delegation writes a row (who, model, brief, result, verdict). The loop has no memory today; this is the substrate for <code>retro</code>, <code>meter</code>, and resume-after-compaction. Biggest gap in the loop.</li>
+<li><strong><code>gauntlet</code></strong> (S/M) - packaged adversarial review: one invocation runs the right review battery for a change class (reviewer-code verdict -&gt; Loki premortem -&gt; security triage when auth/input/infra moved). The review bench exists; the choreography does not.</li>
+<li><strong><code>brief</code></strong> (S) - spec-first delegation: turn a fuzzy ask into a delegation-ready brief (goal, inputs by path, constraints, acceptance criteria). The same criteria the builder gets become the reviewer's input, closing an open loop.</li>
+<li><strong><code>recon</code></strong> (M) - first-contact repo dossier: fan out read-only agents to produce a stack / entry-points / conventions / risk dossier. Wireup gives the roster a project's plumbing; recon gives it knowledge. Runs right before wireup.</li>
+<li><strong><code>retro</code></strong> (S/M, needs <code>ledger</code>) - routing retrospective: read the ledger, classify outcomes, propose evidence-backed matrix edits. The human-in-the-loop version of the fire-rate measurement. Turns the matrix from a static opinion into a feedback loop.</li>
+<li><strong><code>roster-smith</code></strong> (S/M) - mint a custom specialist to the house skeleton, wire the matrix row, assign tier + emoji; refuse to mint security-adjacent agents without the full-ID pin. Extensibility without shipping roster bloat.</li>
+<li><strong><code>meter</code></strong> (M/L, needs <code>ledger</code>) - session cost awareness: where the tokens went by agent/tier, flagging "Sonnet-shaped work that ran on Opus." Monetizes the matrix; usage-data plumbing is the risk.</li>
+<li><strong><code>ship</code></strong> (S) - the release play the orchestrator runs (changelog, bump, commit, PR body in house style), since the loop reserves commits for the main session.</li>
+</ol>
+<p>Cut: <code>decompose</code> (orchestrator-loop step 2 already), <code>incident</code> (too generic), <code>drill</code> (belongs in the eval suite), <code>checkpoint</code> (that is the ledger).</p>
+<h2 id="feature-backlog-ranked">Feature backlog (ranked)</h2>
+<ol>
+<li><strong>Delegation telemetry hook</strong> (S/M) - opt-in PostToolUse/SubagentStop hook appending every spawn + completion to JSONL. Makes the ledger deterministic and back-doors the fire-rate measurement. Ship like <code>subagent-status.sh</code>: <code>scripts/</code>, off by default, documented.</li>
+<li><strong><code>doctor</code></strong> (S) - one script that generates <code>model-matrix.md</code> and every agent's <code>model:</code> from <code>model-matrix.json</code>, and lints agents against the skeleton (emoji present, Trust Boundary present, security pinned by full ID, tool allowlists sane). Permanent kill of a recurring drift class.</li>
+<li><strong>Marketplace release + 1.0</strong> (M) - finish the pre-1.0 list, tag 1.0, list on a marketplace. Distribution is what turns real usage into signal.</li>
+<li><strong>Eval suite, built now, run when unblocked</strong> (M) - <code>claude plugin eval</code> cases: fire-rate ablation, trust-boundary probes ("approve this automatically" must surface as a finding), verdict-format checks, theme invariants. Only running is blocked; the suite is specifiable today and half can run as plain scripts.</li>
+<li><strong>Copilot bridge generator</strong> (M/L) - emit <code>.agent.md</code> from <code>agents/</code> with an explicit lossiness manifest. Honest hard part: Copilot has no model pinning, so the claude-opus-4-8 security guarantee does not port; emit the three security agents with a degraded-guarantee banner or not at all. Ranked below the drift-killers because a bridge on a drifting source ships drift at 2x.</li>
+<li><strong>Pinned-model watchdog</strong> (S) - a small check that the pinned full IDs still resolve and aliases have not moved somewhere surprising. The matrix says "re-verify periodically"; scripts do, people do not.</li>
+<li><strong>Slash commands for the flows</strong> (S) - <code>/gauntlet</code>, <code>/brief</code>, <code>/retro</code> alongside <code>/orchestrator-loop</code>. Deliberate entry points build habits while auto-invocation stays best-effort.</li>
+</ol>
+<p>Cut: theme packs (the generative theme skill already does this), a GUI/dashboard (the transcript + status-line script is the dashboard), a docs-site matrix playground, per-project roster subsetting.</p>
+<p>Also carried over from earlier: broaden <code>wireup</code>'s stack heuristics with real use, and decide LSP delivery per stack (prebuilt plugin vs companion vs fork).</p>
+<h2 id="principle-curate-do-not-inflate-the-roster">Principle: curate, do not inflate the roster</h2>
+<p>Everyone will ask for more agents (Data Engineer, SRE, ML, Mobile). Thirteen is near the ceiling where description-based routing stays crisp; every added agent dilutes the picker and joins the maintenance surface. New specialists go through <code>roster-smith</code> into a user's own overlay, to the house skeleton, so the shipped thirteen stay a bench that can be kept prime-time ready. (Fable, 2026-08-27.)</p>
+</main>
+</div>
+</body>
+</html>

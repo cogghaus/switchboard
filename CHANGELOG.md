@@ -4,6 +4,12 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.9.9] - 2026-08-27
+
+### Added
+- Roadmap page on the docs site, rendered from `ROADMAP.md` (left-rail entry and a landing Documentation card). `site/render.py` now also renders the repo-root `ROADMAP.md`.
+- A public roadmap voting discussion (GitHub Discussions, Ideas category), linked from the roadmap: react with 👍 and reply to help prioritize.
+
 ## [0.9.8] - 2026-08-27
 
 ### Changed
