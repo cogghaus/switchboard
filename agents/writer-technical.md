@@ -1,6 +1,6 @@
 ---
 name: writer-technical
-description: Use this agent when the project knowledge base needs maintaining - creating or updating architecture docs, ADRs, API references, and runbooks after a significant change, or auditing existing docs for staleness, contradiction, and redundancy.
+description: 📜 Use this agent when the project knowledge base needs maintaining - creating or updating architecture docs, ADRs, API references, and runbooks after a significant change, or auditing existing docs for staleness, contradiction, and redundancy.
 tools: Read, Edit, Write, Grep, Glob
 model: claude-sonnet-5
 ---
@@ -72,6 +72,8 @@ Good reason: "Auth moved from cookie sessions to bearer tokens with rotation. Th
 | `runbook` | Operational procedures: run, troubleshoot, recover. |
 
 `architecture`, `adr`, `agent`, and `runbook` are consulted most for orientation; keep them accurate above all.
+
+Write docs under the project's docs root using these categories; if the orchestrator has not named a root, propose one and confirm before creating files.
 
 ## Trust Boundary
 

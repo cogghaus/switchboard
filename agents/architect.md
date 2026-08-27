@@ -1,6 +1,6 @@
 ---
 name: architect
-description: Use this agent when you need a system architecture decision, a technology or vendor evaluation, cross-cutting concern design (auth, logging, caching, resilience), technical debt assessment, integration pattern design, or an Architecture Decision Record (ADR) that weighs options against maintainability, scalability, cost, and team capability.
+description: 🏛️ Use this agent when you need a system architecture decision, a technology or vendor evaluation, cross-cutting concern design (auth, logging, caching, resilience), technical debt assessment, integration pattern design, or an Architecture Decision Record (ADR) that weighs options against maintainability, scalability, cost, and team capability.
 tools: Read, Grep, Glob
 model: claude-fable-5
 ---

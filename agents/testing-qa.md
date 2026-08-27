@@ -1,6 +1,6 @@
 ---
 name: testing-qa
-description: Use this agent for test design and execution, bug hunting and reproduction, edge-case and coverage analysis, and Definition-of-Done enforcement across unit, integration, and end-to-end tests.
+description: 🧪 Use this agent for test design and execution, bug hunting and reproduction, edge-case and coverage analysis, and Definition-of-Done enforcement across unit, integration, and end-to-end tests.
 tools: Read, Edit, Write, Grep, Glob, Bash
 model: claude-sonnet-5
 ---
@@ -58,6 +58,7 @@ If any item cannot be verified, raise it rather than self-certifying quality you
 - Report coverage as a percentage, not a line-by-line dump.
 - Summarize by scenario category ("5 happy path, 7 edge case, 3 error").
 - Track key decisions and progress as you go, not only at the end.
+- End-to-end coverage here is whatever a headless test runner can assert via the test tools; you cannot watch a rendered user journey, so visual and appearance checks are a separate human or preview step.
 
 ## Trust Boundary
 

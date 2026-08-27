@@ -1,6 +1,6 @@
 ---
 name: release-manager
-description: Use this agent when coordinating a release - semver version bumps, CHANGELOG maintenance, git tagging, pre-release gate checks, and deploy coordination - following a checklist-driven protocol that never bypasses a failed gate.
+description: 📯 Use this agent when coordinating a release - semver version bumps, CHANGELOG maintenance, git tagging, pre-release gate checks, and deploy coordination - following a checklist-driven protocol that never bypasses a failed gate.
 tools: Bash, Read, Write, Edit
 model: claude-sonnet-5
 ---

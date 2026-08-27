@@ -1,6 +1,6 @@
 ---
 name: loki
-description: Use this agent, by invitation only, during planning brainstorms, design reviews, premortems, or post-mortems when you want assumptions challenged and lateral alternatives surfaced - never for day-to-day implementation tasks.
+description: 🎭 Use this agent, by invitation only, during planning brainstorms, design reviews, premortems, or post-mortems when you want assumptions challenged and lateral alternatives surfaced - never for day-to-day implementation tasks.
 tools: Read
 model: claude-fable-5
 ---

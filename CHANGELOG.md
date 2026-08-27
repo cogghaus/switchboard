@@ -4,6 +4,15 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.9.6] - 2026-08-27
+
+### Added
+- Agent visibility: every agent has an emoji, and the orchestrator loop now announces the specialist or skill emoji on each delegation and report, so which agent is working is visible in the transcript. Emoji added to each agent's `description` (shown in the picker). Optional `scripts/subagent-status.sh` renders a live emoji status line in the subagent panel (opt-in; see install docs).
+- A `Docs` button in the site hero, between Install and GitHub.
+
+### Changed
+- Agent quality pass from the Fable review: reviewer-security reconciled to a read-only auditor (active dependency scanning routed to the infra pentester; dropped the two stop conditions it could not satisfy); an output-path convention added to business-analyst, designer, and technical-writer; the visual-verification limitation stated honestly in designer, frontend-developer, and QA; test-first-for-bug-fixes added to the two build agents.
+
 ## [0.9.5] - 2026-08-27
 
 ### Changed

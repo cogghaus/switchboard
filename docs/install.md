@@ -29,6 +29,23 @@ Either way, the plugin is portable: it ships no project-specific config and no a
 
 The `orchestrator-loop` skill auto-invokes on substantial tasks, but that is best-effort. For a deterministic always-on default, add the opt-in per-user `SessionStart` hook documented in `skills/orchestrator-loop/SKILL.md` (there is a POSIX form and a Windows form). It injects a short orchestrator framing at the start of each of your sessions and is per-user, so it never affects coworkers who install the plugin. Remove the hook entry to turn it off.
 
+## See which agent is working
+
+Switchboard leads every delegation and report with the specialist's emoji (🔥 Backend Developer, 🧪 QA Engineer, and so on), so which agent or skill is doing the work is visible in the transcript by default - this convention is built into the orchestrator loop and needs no setup.
+
+For a live indicator in Claude Code's subagent panel as agents run, enable the optional status-line script:
+
+1. Ensure `jq` is installed (the script uses it).
+2. Point `subagentStatusLine` in your own `~/.claude/settings.json` at the shipped script, replacing `<SWITCHBOARD>` with your installed plugin path:
+
+```json
+{
+  "subagentStatusLine": "<SWITCHBOARD>/scripts/subagent-status.sh"
+}
+```
+
+The panel then shows each running sub-agent with its emoji, for example `🔥 developer-backend · running`. This is per-user and optional; the plugin ships it off by default. Status-line behavior in the IDE surfaces is not yet documented, so treat the live panel as best-effort - the transcript announcements above always work.
+
 ## Theme the roster (optional)
 
 Run the `theme` skill to reskin the roster to a naming theme. It asks whether to keep the plain corporate default or apply a custom theme; for custom, you name any subject (a show, game, universe, or motif) and each role is renamed to a fitting character. Theming is cosmetic - names and at most one flavor line per agent - and never changes an agent's tools, model, or safety instructions. The value `corporate` restores the shipped defaults. See `skills/theme/SKILL.md`.
