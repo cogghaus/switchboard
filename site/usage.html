@@ -11,14 +11,28 @@
 <link rel="stylesheet" href="docs.css">
 </head>
 <body>
-<header class="topbar"><div class="inner">
+<div class="layout">
+<aside class="sidebar">
 <a class="brand" href="index.html"><span class="dot"></span>Switchboard</a>
-<nav class="nav"><a href="index.html">Home</a><a href="usage.html" class="active">Usage</a><a href="agents.html">Agents</a><a href="skills.html">Skills</a><a href="install.html">Install</a></nav>
-</div></header>
+<nav class="docnav">
+<div class="navtitle">Documentation</div>
+<a href="usage.html" class="active">Usage</a>
+<a class="sub" href="#the-loop">The loop</a>
+<a class="sub" href="#direct-vs-delegate">Direct vs delegate</a>
+<a class="sub" href="#how-routing-works">How routing works</a>
+<a class="sub" href="#a-worked-example">A worked example</a>
+<a class="sub" href="#making-it-automatic">Making it automatic</a>
+<a class="sub" href="#see-also">See also</a>
+<a href="agents.html">Agents</a>
+<a href="skills.html">Skills</a>
+<a href="install.html">Install</a>
+</nav>
+<div class="sidebar-foot"><a href="index.html">Home</a> · <a href="https://github.com/cogghaus/switchboard">GitHub</a> · MIT</div>
+</aside>
 <main class="prose">
-<h1>Using Switchboard</h1>
+<h1 id="using-switchboard">Using Switchboard</h1>
 <p>Switchboard changes how you work in a session: instead of doing everything in one place, you act as an <strong>orchestrator</strong>. You set direction and keep the thinking that compounds - framing, decomposition, review, and the final commit - and you route the volume and the specialized execution out to sub-agents, each running on the model that gives the best result per token for its kind of work.</p>
-<h2>The loop</h2>
+<h2 id="the-loop">The loop</h2>
 <p>Every substantial task runs the same loop (this is the <code>orchestrator-loop</code> skill):</p>
 <ol>
 <li><strong>Frame.</strong> Restate the goal in one line, so a bad framing is caught before any work happens.</li>
@@ -28,20 +42,20 @@
 <li><strong>Review.</strong> Never relay a sub-agent's output unread. For high-stakes or security work, have a second agent verify.</li>
 <li><strong>Report.</strong> Plan, then what was done, then results and what is outstanding.</li>
 </ol>
-<h2>Direct vs delegate</h2>
+<h2 id="direct-vs-delegate">Direct vs delegate</h2>
 <ul>
 <li><strong>Do it yourself:</strong> small edits, quick lookups, the framing and decomposition, the review, and every serial write and commit.</li>
 <li><strong>Delegate:</strong> large mechanical passes, independent work that can run in parallel, specialized domains, broad research, and adversarial verification.</li>
 </ul>
 <p>Delegation is not free - a brief and a review cost time - so it pays off when the work is genuinely large, parallel, or specialized, not for a two-line change.</p>
-<h2>How routing works</h2>
+<h2 id="how-routing-works">How routing works</h2>
 <p>Each agent ships with a default model chosen for its work (see the <code>model-routing</code> skill and <code>skills/model-routing/model-matrix.md</code>). The short version:</p>
 <ul>
 <li>Capable tiers where quality compounds: design, architecture, ambiguity, orchestration, and review.</li>
 <li>Cheaper tiers for volume: large mechanical implementation to a mid tier, quick lookups to a small tier.</li>
 <li>Security, dual-use, red-team, and pentest work is pinned to a stable safety tier (<code>claude-opus-4-8</code>) and routed to the dedicated security agents. Do not run security work on other tiers; route it to <code>reviewer-security</code>, <code>testing-red-team</code>, or <code>testing-pentester</code>.</li>
 </ul>
-<h2>A worked example</h2>
+<h2 id="a-worked-example">A worked example</h2>
 <blockquote>
 <p>"Add rate limiting to the public API and document it."</p>
 </blockquote>
@@ -53,18 +67,15 @@
 <li><strong>Delegate the doc:</strong> brief <code>writer-technical</code> to document the new behavior once the code is settled.</li>
 <li><strong>Report:</strong> summarize what shipped, the test outcome, and anything deferred; make the commit yourself.</li>
 </ol>
-<h2>Making it automatic</h2>
+<h2 id="making-it-automatic">Making it automatic</h2>
 <p>The <code>orchestrator-loop</code> skill auto-invokes on substantial tasks, but auto-invocation is best-effort. To enter the loop deliberately, call it by name with <code>/orchestrator-loop</code>. To make it your standing default on every session, add the opt-in <code>SessionStart</code> hook documented in <code>skills/orchestrator-loop/SKILL.md</code>.</p>
-<h2>See also</h2>
+<h2 id="see-also">See also</h2>
 <ul>
 <li><a href="agents.html">agents.md</a> - the specialist roster.</li>
 <li><a href="skills.html">skills.md</a> - the skills that drive the roster.</li>
 <li><a href="install.html">install.md</a> - install, theming, and wiring into a project.</li>
 </ul>
 </main>
-<footer class="doc"><div class="inner">
-<span>Switchboard · MIT licensed</span>
-<span><a href="https://github.com/cogghaus/switchboard">GitHub</a></span>
-</div></footer>
+</div>
 </body>
 </html>

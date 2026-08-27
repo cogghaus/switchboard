@@ -4,6 +4,13 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.9.7] - 2026-08-27
+
+### Changed
+- Docs site redesigned into a two-column layout with a persistent left-rail table of contents (the four docs, with the active doc's sections nested beneath it). The hero `Docs` button now opens the docs (Usage page) instead of scrolling to a section.
+- Emoji attached to every agent reference - the agents doc table and blurbs, the README roster, and the site roster now lead each agent with its emoji - to reinforce the visual-to-name association.
+- Fixed a garbled sentence in reviewer-security's Secure Patterns (caught by the Fable re-review, which otherwise graded the roster prime-time ready with all 13 passing).
+
 ## [0.9.6] - 2026-08-27
 
 ### Added

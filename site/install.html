@@ -11,13 +11,29 @@
 <link rel="stylesheet" href="docs.css">
 </head>
 <body>
-<header class="topbar"><div class="inner">
+<div class="layout">
+<aside class="sidebar">
 <a class="brand" href="index.html"><span class="dot"></span>Switchboard</a>
-<nav class="nav"><a href="index.html">Home</a><a href="usage.html">Usage</a><a href="agents.html">Agents</a><a href="skills.html">Skills</a><a href="install.html" class="active">Install</a></nav>
-</div></header>
+<nav class="docnav">
+<div class="navtitle">Documentation</div>
+<a href="usage.html">Usage</a>
+<a href="agents.html">Agents</a>
+<a href="skills.html">Skills</a>
+<a href="install.html" class="active">Install</a>
+<a class="sub" href="#install-locally-no-marketplace">Install locally (no marketplace)</a>
+<a class="sub" href="#share-it-with-a-team">Share it with a team</a>
+<a class="sub" href="#make-orchestrator-loop-your-default">Make orchestrator-loop your default</a>
+<a class="sub" href="#see-which-agent-is-working">See which agent is working</a>
+<a class="sub" href="#theme-the-roster-optional">Theme the roster (optional)</a>
+<a class="sub" href="#wire-it-into-a-project-optional">Wire it into a project (optional)</a>
+<a class="sub" href="#configuration-surfaces-at-a-glance">Configuration surfaces at a glance</a>
+<a class="sub" href="#see-also">See also</a>
+</nav>
+<div class="sidebar-foot"><a href="index.html">Home</a> · <a href="https://github.com/cogghaus/switchboard">GitHub</a> · MIT</div>
+</aside>
 <main class="prose">
-<h1>Install and configuration</h1>
-<h2>Install locally (no marketplace)</h2>
+<h1 id="install-and-configuration">Install and configuration</h1>
+<h2 id="install-locally-no-marketplace">Install locally (no marketplace)</h2>
 <p>Point Claude Code at the plugin directory:</p>
 <pre><code>claude --plugin-dir &lt;path-to-switchboard&gt;
 </code></pre>
@@ -25,16 +41,16 @@
 <pre><code>claude --plugin-dir &lt;path-to-switchboard&gt; plugin details switchboard
 </code></pre>
 <p>You should see 13 agents and 4 skills.</p>
-<h2>Share it with a team</h2>
+<h2 id="share-it-with-a-team">Share it with a team</h2>
 <p>Two ways to distribute:</p>
 <ul>
 <li><strong>Clone and <code>--plugin-dir</code>.</strong> Each person clones the repo and runs Claude Code with <code>--plugin-dir</code> pointing at their clone. Simplest for a small team.</li>
 <li><strong>Marketplace.</strong> Add the repo to a Claude Code marketplace and install by name. Better for wider distribution and updates.</li>
 </ul>
 <p>Either way, the plugin is portable: it ships no project-specific config and no always-on hooks, so enabling it never reshapes an unrelated session on its own.</p>
-<h2>Make orchestrator-loop your default</h2>
+<h2 id="make-orchestrator-loop-your-default">Make orchestrator-loop your default</h2>
 <p>The <code>orchestrator-loop</code> skill auto-invokes on substantial tasks, but that is best-effort. For a deterministic always-on default, add the opt-in per-user <code>SessionStart</code> hook documented in <code>skills/orchestrator-loop/SKILL.md</code> (there is a POSIX form and a Windows form). It injects a short orchestrator framing at the start of each of your sessions and is per-user, so it never affects coworkers who install the plugin. Remove the hook entry to turn it off.</p>
-<h2>See which agent is working</h2>
+<h2 id="see-which-agent-is-working">See which agent is working</h2>
 <p>Switchboard leads every delegation and report with the specialist's emoji (🔥 Backend Developer, 🧪 QA Engineer, and so on), so which agent or skill is doing the work is visible in the transcript by default - this convention is built into the orchestrator loop and needs no setup.</p>
 <p>For a live indicator in Claude Code's subagent panel as agents run, enable the optional status-line script:</p>
 <ol>
@@ -46,9 +62,9 @@
 }
 </code></pre>
 <p>The panel then shows each running sub-agent with its emoji, for example <code>🔥 developer-backend · running</code>. This is per-user and optional; the plugin ships it off by default. Status-line behavior in the IDE surfaces is not yet documented, so treat the live panel as best-effort - the transcript announcements above always work.</p>
-<h2>Theme the roster (optional)</h2>
+<h2 id="theme-the-roster-optional">Theme the roster (optional)</h2>
 <p>Run the <code>theme</code> skill to reskin the roster to a naming theme. It asks whether to keep the plain corporate default or apply a custom theme; for custom, you name any subject (a show, game, universe, or motif) and each role is renamed to a fitting character. Theming is cosmetic - names and at most one flavor line per agent - and never changes an agent's tools, model, or safety instructions. The value <code>corporate</code> restores the shipped defaults. See <code>skills/theme/SKILL.md</code>.</p>
-<h2>Wire it into a project (optional)</h2>
+<h2 id="wire-it-into-a-project-optional">Wire it into a project (optional)</h2>
 <p>Run the <code>wireup</code> skill inside a specific codebase to connect the roster to that project's toolchain, as a reviewed, merge-safe overlay on the project's own config:</p>
 <ul>
 <li><strong>Hooks</strong> are written to the project's own settings and enforce its conventions (formatter, linter, tests, guards). They are project-scoped, so they also apply to delegated sub-agents.</li>
@@ -56,7 +72,7 @@
 <li><strong>Code intelligence (LSP)</strong> is recommended rather than written, because that surface is plugin-only; <code>wireup</code> points you at a prebuilt LSP plugin, a companion per-stack plugin, or a fork.</li>
 </ul>
 <p>Nothing is written without your review, and re-running <code>wireup</code> changes nothing already in place. See <code>skills/wireup/SKILL.md</code>.</p>
-<h2>Configuration surfaces at a glance</h2>
+<h2 id="configuration-surfaces-at-a-glance">Configuration surfaces at a glance</h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -93,16 +109,13 @@
 </tr>
 </tbody>
 </table></div>
-<h2>See also</h2>
+<h2 id="see-also">See also</h2>
 <ul>
 <li><a href="usage.html">usage.md</a> - the orchestrator workflow.</li>
 <li><a href="agents.html">agents.md</a> - the specialist roster.</li>
 <li><a href="skills.html">skills.md</a> - the skills that drive the roster.</li>
 </ul>
 </main>
-<footer class="doc"><div class="inner">
-<span>Switchboard · MIT licensed</span>
-<span><a href="https://github.com/cogghaus/switchboard">GitHub</a></span>
-</div></footer>
+</div>
 </body>
 </html>

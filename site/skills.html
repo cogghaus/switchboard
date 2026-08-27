@@ -11,19 +11,31 @@
 <link rel="stylesheet" href="docs.css">
 </head>
 <body>
-<header class="topbar"><div class="inner">
+<div class="layout">
+<aside class="sidebar">
 <a class="brand" href="index.html"><span class="dot"></span>Switchboard</a>
-<nav class="nav"><a href="index.html">Home</a><a href="usage.html">Usage</a><a href="agents.html">Agents</a><a href="skills.html" class="active">Skills</a><a href="install.html">Install</a></nav>
-</div></header>
+<nav class="docnav">
+<div class="navtitle">Documentation</div>
+<a href="usage.html">Usage</a>
+<a href="agents.html">Agents</a>
+<a href="skills.html" class="active">Skills</a>
+<a class="sub" href="#orchestrator-loop">orchestrator-loop</a>
+<a class="sub" href="#model-routing">model-routing</a>
+<a class="sub" href="#theme">theme</a>
+<a class="sub" href="#wireup">wireup</a>
+<a href="install.html">Install</a>
+</nav>
+<div class="sidebar-foot"><a href="index.html">Home</a> · <a href="https://github.com/cogghaus/switchboard">GitHub</a> · MIT</div>
+</aside>
 <main class="prose">
-<h1>Skills Reference</h1>
+<h1 id="skills-reference">Skills Reference</h1>
 <p>Skills are how you drive the Switchboard roster. Some auto-invoke - Claude reads a skill's
 description and decides, best-effort, whether the current task calls for it - and some you call
 explicitly by name with <code>/skill-name</code>. Switchboard ships four: <code>orchestrator-loop</code> (the default
 operating loop), <code>model-routing</code> (which model runs which task), <code>theme</code> (reskin the roster's
 names), and <code>wireup</code> (connect the roster to a specific project's config). This page is the
 newcomer reference for each.</p>
-<h2>orchestrator-loop</h2>
+<h2 id="orchestrator-loop">orchestrator-loop</h2>
 <p>The default operating loop for substantial work: frame the goal, decide direct-vs-delegate, route
 each piece to the right specialist at the right model, review what comes back, and report.</p>
 <p>The loop, run for every substantial task:</p>
@@ -54,7 +66,7 @@ existing <code>hooks</code> block rather than replacing it; removing the entry t
 choices, and the final plan/did/results report).</p>
 <p>See <code>skills/orchestrator-loop/SKILL.md</code> for the full text, and <code>session-start-framing.md</code> for the
 exact injected framing.</p>
-<h2>model-routing</h2>
+<h2 id="model-routing">model-routing</h2>
 <p>The model-selection matrix: which model a given task or agent should run on, so capable tiers are
 spent where quality compounds (design, ambiguity, orchestration, review) and cheap tiers absorb
 volume (large mechanical work, quick lookups). Security and dual-use work is pinned to
@@ -74,7 +86,7 @@ spawning any agent) reads <code>model-matrix.md</code> as part of routing step 3
 <p><strong>Output:</strong> no artifact of its own - it informs which model alias or full model ID gets used for a
 spawned agent.</p>
 <p>See <code>skills/model-routing/SKILL.md</code> for the full text.</p>
-<h2>theme</h2>
+<h2 id="theme">theme</h2>
 <p>Reskins the Switchboard agent roster to a naming theme (a show, game, universe, or any motif),
 without changing what any agent does.</p>
 <p><strong>The flow:</strong></p>
@@ -100,7 +112,7 @@ something that auto-fires mid-task.</p>
 <code>skills/model-routing/model-matrix.json</code> and <code>.md</code> (display names), <code>README.md</code> (roster list), and
 <code>theme.json</code> at the plugin root recording the applied theme for revertibility.</p>
 <p>See <code>skills/theme/SKILL.md</code> for the full text.</p>
-<h2>wireup</h2>
+<h2 id="wireup">wireup</h2>
 <p>Connects the portable Switchboard roster to a specific project by writing a reviewed, merge-safe
 overlay into the <strong>project's own config</strong> - never into the shipped plugin, since a plugin's
 sub-agents are forbidden from declaring <code>hooks</code>, <code>mcpServers</code>, or <code>permissionMode</code> themselves.
@@ -127,9 +139,6 @@ servers), plus hook scripts under <code>&lt;project&gt;/.claude/hooks/</code> wh
 recommendation only, never a silent <code>.lsp.json</code> write.</p>
 <p>See <code>skills/wireup/SKILL.md</code> for the full text.</p>
 </main>
-<footer class="doc"><div class="inner">
-<span>Switchboard · MIT licensed</span>
-<span><a href="https://github.com/cogghaus/switchboard">GitHub</a></span>
-</div></footer>
+</div>
 </body>
 </html>

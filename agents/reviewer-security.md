@@ -45,7 +45,7 @@ You review authentication and authorization implementations, input validation an
 
 ## Secure Patterns You Enforce
 
-Validate every input at its trust boundary with a schema validator. Parameterized queries in every database call, never string concatenation. Secrets loaded from a secret store at startup with fail-fast if missing. Rate limiting on authentication and other sensitive endpoints. Least-privilege credentials for every integration. Dependencies pinned; versions you can see are known-vulnerable flagged for upgrade (active scanning is the infra pentester's).
+Validate every input at its trust boundary with a schema validator. Parameterized queries in every database call, never string concatenation. Secrets loaded from a secret store at startup with fail-fast if missing. Rate limiting on authentication and other sensitive endpoints. Least-privilege credentials for every integration. Dependencies pinned; known-vulnerable versions you can see are flagged for upgrade (active scanning is the infra pentester's).
 
 ## Report Format
 

@@ -12,10 +12,10 @@ A Claude Code plugin that turns your main session into an orchestrator: you rout
 
 One standalone Claude Code sub-agent per role:
 
-- **Build & design:** Backend Developer, Frontend Developer, Designer
-- **Review & testing:** Code Reviewer, Security Reviewer, QA Engineer, Infra Pentester, Red Team Lead
-- **Plan & docs:** Architect, Business Analyst, Technical Writer, Release Manager
-- **Challenger:** Loki
+- **Build & design:** 🔥 Backend Developer, 🔨 Frontend Developer, 🎨 Designer
+- **Review & testing:** ⚖️ Code Reviewer, 🛡️ Security Reviewer, 🧪 QA Engineer, ⚡ Infra Pentester, 💀 Red Team Lead
+- **Plan & docs:** 🏛️ Architect, 🔮 Business Analyst, 📜 Technical Writer, 📯 Release Manager
+- **Challenger:** 🎭 Loki
 
 Each carries a routing description, a tool allowlist, an assigned model, and its full persona - identity, principles, domain expertise, and output formats. A sub-agent is spawned by your main session and returns its result directly.
 
