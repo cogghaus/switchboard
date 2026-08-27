@@ -4,6 +4,11 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.9.3] - 2026-08-26
+
+### Added
+- Public landing and setup site (`docs/index.html`, served via GitHub Pages): install walkthrough, roster overview, setup options, and links into the docs.
+
 ## [0.9.2] - 2026-08-26
 
 ### Added

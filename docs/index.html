@@ -1,0 +1,432 @@
+<title>Switchboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A Claude Code plugin that turns your session into an orchestrator: route each task to the right specialist sub-agent, at the right model.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #0E1820;
+    --panel: #16232C;
+    --card: #1D2E38;
+    --line: #2A3B45;
+    --line-soft: #1F2E37;
+    --text: #E7EEF1;
+    --muted: #93A4AD;
+    --faint: #647680;
+    --amber: #EBA82F;
+    --amber-soft: rgba(235,168,47,0.14);
+    --amber-line: rgba(235,168,47,0.35);
+    --display: "Archivo", system-ui, sans-serif;
+    --body: "IBM Plex Sans", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+    --maxw: 1000px;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.08; text-wrap: balance; margin: 0; }
+  a { color: var(--amber); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 3px; }
+
+  .eyebrow {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .muted { color: var(--muted); }
+
+  /* ---- Hero ---- */
+  .hero { position: relative; padding: 68px 0 40px; border-bottom: 1px solid var(--line); overflow: hidden; }
+  #cables { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.9; }
+  .hero .wrap { position: relative; z-index: 1; }
+  .wordmark { width: min(340px, 62vw); height: auto; color: var(--text); display: block; }
+  .wm-dot { fill: var(--amber); }
+  .wm-text { fill: currentColor; }
+  .thesis {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(34px, 6.2vw, 62px);
+    letter-spacing: -0.02em;
+    margin: 30px 0 0;
+    max-width: 15ch;
+  }
+  .thesis .hl { color: var(--amber); }
+  .lede { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 56ch; margin: 20px 0 0; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; align-items: center; }
+  .btn {
+    font-family: var(--display); font-weight: 700; font-size: 15px;
+    padding: 13px 22px; border-radius: 8px; display: inline-flex; align-items: center; gap: 9px;
+    border: 1px solid transparent; cursor: pointer;
+  }
+  .btn-primary { background: var(--amber); color: #17130a; }
+  .btn-primary:hover { background: #f3b74a; text-decoration: none; }
+  .btn-ghost { background: transparent; color: var(--text); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--amber-line); color: var(--text); text-decoration: none; }
+  .badges { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 26px; font-family: var(--mono); font-size: 13px; color: var(--faint); }
+  .badges b { color: var(--muted); font-weight: 500; }
+
+  /* ---- Sections ---- */
+  section { padding: 62px 0; border-bottom: 1px solid var(--line); }
+  .sec-head { max-width: 62ch; margin-bottom: 34px; }
+  .sec-head h2 { font-size: clamp(26px, 3.6vw, 36px); letter-spacing: -0.015em; margin-top: 12px; }
+  .sec-head p { color: var(--muted); margin: 14px 0 0; }
+
+  /* ---- Loop strip ---- */
+  .loop { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; counter-reset: step; }
+  .loop .cell { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 14px; }
+  .loop .cell .n { font-family: var(--mono); font-size: 12px; color: var(--amber); }
+  .loop .cell h4 { font-family: var(--display); font-weight: 600; font-size: 15px; margin: 8px 0 4px; }
+  .loop .cell p { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.45; }
+
+  /* ---- Roster ---- */
+  .groups { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .group { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px 22px 20px; }
+  .group h3 { font-size: 18px; display: flex; align-items: center; gap: 10px; }
+  .group h3::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 3px var(--amber-soft); flex: none; }
+  .lines { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+  .lines li { display: grid; grid-template-columns: 1fr auto; gap: 8px 14px; align-items: baseline; padding-bottom: 11px; border-bottom: 1px solid var(--line-soft); }
+  .lines li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .lines .role { font-weight: 600; font-size: 15px; }
+  .lines .desc { grid-column: 1 / -1; font-size: 13px; color: var(--muted); line-height: 1.45; }
+  .lines .model { font-family: var(--mono); font-size: 11.5px; color: var(--faint); white-space: nowrap; }
+
+  /* ---- Install steps ---- */
+  .steps { display: flex; flex-direction: column; gap: 26px; counter-reset: inst; }
+  .step { display: grid; grid-template-columns: 44px 1fr; gap: 20px; align-items: start; }
+  .step .marker {
+    counter-increment: inst; font-family: var(--display); font-weight: 800; font-size: 18px;
+    width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center;
+    background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-line);
+  }
+  .step .marker::before { content: counter(inst); }
+  .step h3 { font-size: 19px; margin-bottom: 6px; }
+  .step p { margin: 0 0 12px; color: var(--muted); }
+  .step p:last-child { margin-bottom: 0; }
+
+  pre {
+    margin: 0; background: #0A121822; background: #0B1319; border: 1px solid var(--line);
+    border-radius: 10px; padding: 15px 16px; overflow-x: auto;
+  }
+  pre code { font-family: var(--mono); font-size: 13.5px; color: #D7E2E7; line-height: 1.7; white-space: pre; }
+  .cmd .p { color: var(--amber); }
+  .cmd .c { color: var(--faint); }
+  code.inline { font-family: var(--mono); font-size: 0.86em; background: var(--panel); border: 1px solid var(--line); padding: 1px 6px; border-radius: 5px; color: #D7E2E7; }
+
+  /* ---- Setup cards ---- */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .setupcard { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; }
+  .setupcard .cmd-tag { font-family: var(--mono); font-size: 13px; color: var(--amber); }
+  .setupcard h3 { font-size: 17px; margin: 12px 0 8px; }
+  .setupcard p { font-size: 14px; color: var(--muted); margin: 0; flex: 1; }
+  .setupcard a { font-size: 13.5px; margin-top: 14px; font-family: var(--display); font-weight: 600; }
+
+  /* ---- Docs / footer ---- */
+  .doclinks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .doclink { display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; color: var(--text); }
+  .doclink:hover { border-color: var(--amber-line); text-decoration: none; }
+  .doclink b { font-family: var(--display); font-size: 16px; display: block; }
+  .doclink span { font-size: 13.5px; color: var(--muted); }
+  footer { padding: 40px 0 60px; }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; align-items: center; color: var(--faint); font-size: 13.5px; font-family: var(--mono); }
+
+  @media (max-width: 780px) {
+    .loop { grid-template-columns: repeat(2, 1fr); }
+    .groups, .cards, .doclinks { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<header class="hero">
+  <canvas id="cables" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <svg class="wordmark" viewBox="0 0 197.4 42" role="img" aria-label="Switchboard">
+      <path class="wm-dot" d="m54.2 9.4c-1.4 0-2.8 1.3-2.8 2.8s1.3 2.7 2.8 2.7 2.9-1.2 2.9-2.7-1.3-2.8-2.9-2.8z"/>
+      <path class="wm-text" d="m17 13.8c1.7 0 3.5 0.8 4.5 3l3.3-1.9c-1.4-3-4-4.9-7.8-4.9s-7 2.3-7 6.2c0 4.1 3.4 5.5 6.8 6.4 2.6 0.7 4.7 1.2 4.7 3.5 0 1.5-1.5 2.6-4 2.8-2.5 0-4.6-1.1-5.4-3.4l-3.1 1.8c1.1 3.3 4.2 5.4 8.5 5.4s7.9-2.1 7.9-6.2c0.3-4.6-3.9-5.8-7-6.6-2.7-0.8-4.9-1.3-4.9-3.5 0-1.4 1.1-2.6 3.5-2.6zm26.1 13.1-2.9-10.3h-3.9l-3 10.5-3.2-10.5h-3.9l4.9 15.7h3.8l3.3-10.4 3.1 10.5h3.8l5-15.8h-3.8l-3.2 10.3zm9.2-10.3v15.7h3.7v-15.6l-3.7-0.1zm12.8-4.2-3.8 1v3.2h-2.9v3.6h2.9v7.5c0 4 2.1 4.8 6.3 4.7h1.3v-3.4h-1.8c-1.4 0-1.9-0.6-1.9-1.6v-7.1h3.7v-3.7h-3.7l-0.1-4.2zm13.2 7.6c1.6 0 3.2 0.8 4.2 2.3l3.1-1.8c-1.4-2.4-3.9-4.2-7.2-4.2-4.6 0-8.2 3.4-8.2 8.2 0 4.9 3.6 8.2 8.3 8.2 3.1 0 5.4-1.2 7.1-4.1l-3.3-1.7c-0.7 1.3-2 2.2-4 2.2-2.6 0-4.4-1.8-4.4-4.4 0-2.3 1.6-4.7 4.4-4.7zm17.4-3.7c-2.1 0-3.6 0.8-4.6 2.1v-8h-3.6v22h3.6v-8.8c0-2.7 1.8-3.9 3.6-3.9 2 0 3.4 1 3.4 3.4v9.3h3.6v-9.8c0-4.2-2.8-6.3-6-6.3zm18 0c-2.3 0-4 0.9-5.4 2.5v-8.4h-3.7v22h3.8v-2c1.2 1.6 2.9 2.3 5.6 2.4 4-0.1 7.6-3.2 7.6-8.3-0.1-4.6-3.6-8.2-7.9-8.2zm-0.5 12.9c-2.6 0.1-4.8-2-4.8-4.5s1.8-4.8 4.8-4.8c2.7 0 4.6 2.1 4.6 4.7 0.1 2.6-1.9 4.6-4.6 4.6zm18.6-12.9c-4.4 0-8.3 3.6-8.3 8.3 0 4.8 3.8 8.1 8.3 8.1 4.2 0 8.3-3.2 8.3-8.2s-3.9-8.2-8.3-8.2zm0 12.8c-2.5 0.1-4.6-1.8-4.6-4.5s2-4.7 4.6-4.7 4.7 2.1 4.7 4.6-1.9 4.7-4.7 4.6zm23.5-10.3c-1.1-1.7-2.9-2.5-5.4-2.5-3.8 0-8 3-8 8.3s3.7 8.1 8 8.1c1.9 0 3.8-0.7 5.3-2.4v2.1h3.6v-15.8h-3.6l0.1 2.2zm-4.7 10.5c-2.8 0-4.8-2-4.8-4.7s1.9-4.7 4.7-4.7c2.7 0 4.8 2.1 4.8 4.7 0 2.7-2 4.7-4.7 4.7zm15.6-9.9v-2.8h-3.9v15.8h3.9v-7.9c0-2.6 2-4.1 4.9-4.1v-4.1c-2.2 0-3.8 1-4.9 3.1zm18.4-9v8.4c-1-1.6-3-2.5-4.9-2.5-3.9-0.1-7.9 2.8-8 8.3 0 4.9 3.4 8.2 7.9 8.2 2.3 0 3.9-0.8 5.1-2.4v2h3.6v-22h-3.7zm-4.7 18.9c-2.6 0.2-4.2-2.4-4.2-4.6-0.1-2.1 1.5-4.8 4.2-4.8 2.9-0.2 4.7 2.3 4.7 4.6 0 2.4-1.8 4.8-4.7 4.8z"/>
+    </svg>
+
+    <h1 class="thesis">Route each task to the <span class="hl">right specialist</span>.</h1>
+    <p class="lede">Switchboard is a Claude Code plugin that turns your main session into an orchestrator. You set direction; it patches each task through to the best-fit specialist sub-agent, at the model that gives the best result per token, and hands the work back reviewed.</p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#install">Install it</a>
+      <a class="btn btn-ghost" href="https://github.com/cogghaus/switchboard">View on GitHub</a>
+    </div>
+    <div class="badges">
+      <span><b>13</b> specialist agents</span>
+      <span><b>4</b> operating skills</span>
+      <span><b>MIT</b> licensed</span>
+      <span><b>Portable</b> &middot; no per-project setup</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">The operating loop</div>
+        <h2>You are the operator at the board</h2>
+        <p>Every substantial task runs the same six-step loop. You keep the thinking that compounds; the specialists carry the volume and the depth.</p>
+      </div>
+      <div class="loop">
+        <div class="cell"><div class="n">01</div><h4>Frame</h4><p>Restate the goal in one line, catching a bad framing early.</p></div>
+        <div class="cell"><div class="n">02</div><h4>Decide</h4><p>Direct for small work; delegate what is large or specialized.</p></div>
+        <div class="cell"><div class="n">03</div><h4>Route</h4><p>Pick the specialist and the model from the routing matrix.</p></div>
+        <div class="cell"><div class="n">04</div><h4>Delegate</h4><p>Brief by goal, file paths, constraints, acceptance criteria.</p></div>
+        <div class="cell"><div class="n">05</div><h4>Review</h4><p>Never relay a sub-agent's output unread; verify what matters.</p></div>
+        <div class="cell"><div class="n">06</div><h4>Report</h4><p>Plan, then what was done, then results and what remains.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="roster">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">The board</div>
+        <h2>Thirteen lines, each a specialist</h2>
+        <p>Every agent is a standalone sub-agent with its own tools and its own default model. Route a task to the line whose role fits.</p>
+      </div>
+      <div class="groups">
+        <div class="group">
+          <h3>Build &amp; design</h3>
+          <ul class="lines">
+            <li><span class="role">Backend Developer</span><span class="model">sonnet</span><span class="desc">APIs, services, data models, schema and migrations, backend tests.</span></li>
+            <li><span class="role">Frontend Developer</span><span class="model">sonnet</span><span class="desc">Components, pages, styling, UI state, interaction tests.</span></li>
+            <li><span class="role">Designer</span><span class="model">fable</span><span class="desc">User flows, wireframes, interaction and visual design, accessibility.</span></li>
+          </ul>
+        </div>
+        <div class="group">
+          <h3>Review &amp; testing</h3>
+          <ul class="lines">
+            <li><span class="role">Code Reviewer</span><span class="model">opus&nbsp;5</span><span class="desc">The quality gate: findings by severity, one clear verdict.</span></li>
+            <li><span class="role">Security Reviewer</span><span class="model">opus&nbsp;4.8</span><span class="desc">Defensive review of auth, input, secrets, uploads, dependencies.</span></li>
+            <li><span class="role">QA Engineer</span><span class="model">sonnet</span><span class="desc">Test design and execution, bug repro, Definition-of-Done.</span></li>
+            <li><span class="role">Infra Pentester</span><span class="model">opus&nbsp;4.8</span><span class="desc">Authorized infra testing: CVEs, CI/CD, containers, supply chain.</span></li>
+            <li><span class="role">Red Team Lead</span><span class="model">opus&nbsp;4.8</span><span class="desc">Authorized app-layer offensive testing and attack chains.</span></li>
+          </ul>
+        </div>
+        <div class="group">
+          <h3>Plan &amp; docs</h3>
+          <ul class="lines">
+            <li><span class="role">Architect</span><span class="model">fable</span><span class="desc">System design, trade-offs, and decision records.</span></li>
+            <li><span class="role">Business Analyst</span><span class="model">sonnet</span><span class="desc">Requirements, story breakdown, acceptance criteria, scope.</span></li>
+            <li><span class="role">Technical Writer</span><span class="model">sonnet</span><span class="desc">Architecture docs, ADRs, API references, runbooks.</span></li>
+            <li><span class="role">Release Manager</span><span class="model">sonnet</span><span class="desc">Version bumps, changelog, tagging, release gates.</span></li>
+          </ul>
+        </div>
+        <div class="group">
+          <h3>Challenger</h3>
+          <ul class="lines">
+            <li><span class="role">Loki</span><span class="model">fable</span><span class="desc">Invited in to challenge assumptions and surface alternatives before a decision locks in.</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:18px;font-size:14px">Security lines are pinned to a stable safety tier (<code class="inline">claude-opus-4-8</code>). Model choices come from the <a href="https://github.com/cogghaus/switchboard/blob/main/skills/model-routing/model-matrix.md">routing matrix</a>.</p>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Get started</div>
+        <h2>Install in two steps</h2>
+        <p>No marketplace required to try it. Point Claude Code at the plugin directory and confirm what loaded.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="marker"></div>
+          <div>
+            <h3>Get the plugin</h3>
+            <p>Clone the repository anywhere on your machine.</p>
+            <pre class="cmd"><code>git clone https://github.com/cogghaus/switchboard.git</code></pre>
+          </div>
+        </div>
+        <div class="step">
+          <div class="marker"></div>
+          <div>
+            <h3>Load it and verify</h3>
+            <p>Start Claude Code with the plugin directory, then check the inventory. You should see 13 agents and 4 skills.</p>
+            <pre class="cmd"><code><span class="p">claude</span> --plugin-dir &lt;path-to-switchboard&gt;
+<span class="p">claude</span> --plugin-dir &lt;path-to-switchboard&gt; plugin details switchboard</code></pre>
+          </div>
+        </div>
+        <div class="step">
+          <div class="marker"></div>
+          <div>
+            <h3>Start delegating</h3>
+            <p>Give your session a real task. The orchestrator loop auto-invokes on substantial work; to enter it deliberately, call it by name. Then set up the extras below.</p>
+            <pre class="cmd"><code><span class="c"># enter the orchestrator loop on demand</span>
+/orchestrator-loop</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="setup">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Make it yours</div>
+        <h2>Set it up for how you work</h2>
+        <p>Three optional steps, each its own skill. All are reviewed and reversible; none change what any agent actually does.</p>
+      </div>
+      <div class="cards">
+        <div class="setupcard">
+          <div class="cmd-tag">standing default</div>
+          <h3>Always-on mode</h3>
+          <p>Auto-invocation is best-effort. Add the opt-in per-user <code class="inline">SessionStart</code> hook to make the orchestrator loop your standing default on every session. Per-user, so it never affects teammates.</p>
+          <a href="https://github.com/cogghaus/switchboard/blob/main/skills/orchestrator-loop/SKILL.md">Set up the hook</a>
+        </div>
+        <div class="setupcard">
+          <div class="cmd-tag">/theme</div>
+          <h3>Theme the roster</h3>
+          <p>Keep the plain corporate roster, or name any subject and each role is reskinned to a fitting character. Cosmetic only: names change, tools and models and safety do not.</p>
+          <a href="https://github.com/cogghaus/switchboard/blob/main/skills/theme/SKILL.md">How theming works</a>
+        </div>
+        <div class="setupcard">
+          <div class="cmd-tag">/wireup</div>
+          <h3>Wire into a project</h3>
+          <p>Connect the roster to one codebase: convention hooks and project MCP servers written into the project's own config, as a reviewed, merge-safe overlay. Credentials stay env-var references.</p>
+          <a href="https://github.com/cogghaus/switchboard/blob/main/skills/wireup/SKILL.md">Wiring guide</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Read on</div>
+        <h2>Documentation</h2>
+        <p>The full reference lives in the repository.</p>
+      </div>
+      <div class="doclinks">
+        <a class="doclink" href="https://github.com/cogghaus/switchboard/blob/main/docs/usage.md"><b>Usage</b><span>The orchestrator workflow, direct vs delegate, a worked example.</span></a>
+        <a class="doclink" href="https://github.com/cogghaus/switchboard/blob/main/docs/agents.md"><b>Agents</b><span>The specialist roster, one entry per agent.</span></a>
+        <a class="doclink" href="https://github.com/cogghaus/switchboard/blob/main/docs/skills.md"><b>Skills</b><span>The four skills that drive the roster.</span></a>
+        <a class="doclink" href="https://github.com/cogghaus/switchboard/blob/main/docs/install.md"><b>Install &amp; setup</b><span>Install, team sharing, theming, and wiring in.</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>Switchboard &middot; MIT licensed</span>
+    <span><a href="https://github.com/cogghaus/switchboard">github.com/cogghaus/switchboard</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var canvas = document.getElementById('cables');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  // Specialist jacks down the right edge; one incoming task jack on the left.
+  var jacks = [];
+  function layout() {
+    var rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = Math.max(1, W * dpr); canvas.height = Math.max(1, H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    jacks = [];
+    var n = 6;
+    var top = H * 0.20, bottom = H * 0.86;
+    for (var i = 0; i < n; i++) {
+      jacks.push({ x: W - 46, y: top + (bottom - top) * (i / (n - 1)) });
+    }
+  }
+  var source = function () { return { x: 52, y: H * 0.52 }; };
+
+  function cable(a, b, t, glow) {
+    var midx = (a.x + b.x) / 2;
+    var sag = Math.min(90, Math.abs(b.y - a.y) * 0.35 + 24);
+    var cp1 = { x: a.x + (midx - a.x) * 0.5, y: a.y + sag };
+    var cp2 = { x: b.x - (b.x - midx) * 0.5, y: b.y + sag };
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, b.x, b.y);
+    ctx.strokeStyle = glow ? 'rgba(235,168,47,' + (0.30 + 0.45 * t) + ')' : 'rgba(148,164,173,0.10)';
+    ctx.lineWidth = glow ? 2 : 1.25;
+    ctx.stroke();
+    // travelling pulse
+    if (glow) {
+      var tt = t;
+      var mt = 1 - tt;
+      var px = mt*mt*mt*a.x + 3*mt*mt*tt*cp1.x + 3*mt*tt*tt*cp2.x + tt*tt*tt*b.x;
+      var py = mt*mt*mt*a.y + 3*mt*mt*tt*cp1.y + 3*mt*tt*tt*cp2.y + tt*tt*tt*b.y;
+      ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(235,168,47,0.95)'; ctx.fill();
+    }
+  }
+
+  function dot(p, on) {
+    ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
+    ctx.fillStyle = '#16232C'; ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = on ? '#EBA82F' : 'rgba(148,164,173,0.5)';
+    ctx.stroke();
+  }
+
+  var active = 0, prog = 0, start = null, HOLD = 2600;
+
+  function frame(ts) {
+    if (start === null) start = ts;
+    var elapsed = ts - start;
+    prog = Math.min(1, elapsed / 1100);
+    ctx.clearRect(0, 0, W, H);
+    var src = source();
+    for (var i = 0; i < jacks.length; i++) {
+      var glow = (i === active);
+      cable(src, jacks[i], glow ? prog : 0, glow);
+    }
+    for (var j = 0; j < jacks.length; j++) dot(jacks[j], j === active);
+    dot(src, true);
+    if (elapsed > HOLD) { start = ts; active = (active + 1) % jacks.length; }
+    raf = requestAnimationFrame(frame);
+  }
+
+  var raf = null;
+  function staticDraw() {
+    ctx.clearRect(0, 0, W, H);
+    var src = source();
+    for (var i = 0; i < jacks.length; i++) cable(src, jacks[i], i === 2 ? 1 : 0, i === 2);
+    for (var j = 0; j < jacks.length; j++) dot(jacks[j], j === 2);
+    dot(src, true);
+  }
+
+  function init() {
+    layout();
+    if (raf) cancelAnimationFrame(raf);
+    if (reduce) { staticDraw(); }
+    else { start = null; active = 0; raf = requestAnimationFrame(frame); }
+  }
+  init();
+  var to;
+  window.addEventListener('resize', function () { clearTimeout(to); to = setTimeout(init, 150); });
+})();
+</script>
