@@ -49,7 +49,9 @@ Palette: dark `#111B21`, amber `#EBA82F`.
 
 ## Documentation
 
-Full docs live in [`docs/`](docs/):
+Live site: **https://cogghaus.github.io/switchboard/** (built from `site/`).
+
+The markdown sources live in [`docs/`](docs/):
 
 - [usage.md](docs/usage.md) - the orchestrator workflow, direct-vs-delegate, and a worked example.
 - [agents.md](docs/agents.md) - the specialist roster, per agent.

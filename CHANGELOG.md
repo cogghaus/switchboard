@@ -4,6 +4,11 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.9.5] - 2026-08-27
+
+### Changed
+- Reorganized the website into its own `site/` folder; `docs/` now holds only the markdown sources. The site deploys via a GitHub Pages Actions workflow (`.github/workflows/pages.yml`) so the dedicated folder can be served, and the public URL is unchanged. `site/render.py` reads the markdown from `../docs`.
+
 ## [0.9.4] - 2026-08-27
 
 ### Added

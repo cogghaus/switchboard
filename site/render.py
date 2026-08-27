@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-"""Render the Switchboard markdown docs into styled in-site HTML pages.
+"""Render the Switchboard markdown docs into styled site HTML pages.
 
-Usage:  python docs/render.py   (run from the repo root or the docs/ folder)
+Usage:  python site/render.py   (run from anywhere)
 Requires: python-markdown  (pip install markdown)
 
-Each of the four docs becomes <name>.html sharing docs.css. Cross-links between
-the docs (foo.md) are rewritten to foo.html so navigation stays on the site;
-links into repo source (agents/*, skills/*, other *.md) are rewritten to GitHub.
+Reads the markdown sources from ../docs and writes <name>.html into this folder
+(site/), sharing docs.css. Cross-links between the docs (foo.md) are rewritten to
+foo.html so navigation stays on the site; links into repo source (agents/*,
+skills/*, other *.md) are rewritten to GitHub.
 """
 import os
 import re
 import markdown
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+MD_DIR = os.path.normpath(os.path.join(HERE, "..", "docs"))
 GH = "https://github.com/cogghaus/switchboard/blob/main/"
 DOCS = {
     "usage.md":   ("Usage",           "The Switchboard orchestrator workflow, direct vs delegate, a worked example."),
@@ -65,7 +67,7 @@ def rewrite_link(href):
 
 def render(md_name):
     title, desc = DOCS[md_name]
-    with open(os.path.join(HERE, md_name), encoding="utf-8") as fh:
+    with open(os.path.join(MD_DIR, md_name), encoding="utf-8") as fh:
         text = fh.read()
     html = markdown.markdown(text, extensions=["extra", "sane_lists"])
     # rewrite hrefs
