@@ -16,8 +16,11 @@ Remaining polish: detect-and-propose heuristics per stack could be broadened as 
 
 ## Also open
 
-- Make `orchestrator-loop` reliably the *invoked default* (broad-trigger skill tuning; validate it fires ambiently rather than being ignored).
 - Optional polish: slash commands for common flows; wire the icon in as a favicon / social-preview once there is a docs site.
+
+## Default operating mode (shipped, v0.8)
+
+`orchestrator-loop` is tuned for best-effort auto-invocation (trigger-rich description) and ships an opt-in `SessionStart` hook (`skills/orchestrator-loop/session-start-framing.md` + documented per-user settings block) for a deterministic always-on default, with no always-on footprint forced on coworkers. Findings that shaped this: a plugin skill's auto-invoke is model-driven and probabilistic (not guaranteed); a plugin cannot ship an always-loaded CLAUDE.md; the only deterministic always-on lever is a SessionStart hook. Open: empirical fire-rate measurement via `claude plugin eval` (a `tool_used: Skill` ablation grader) is blocked here because plugin eval is early-access-gated for this org - re-run the measurement once it is enabled and tighten the description from the data.
 
 ## Agent quality (DONE, v0.6)
 
