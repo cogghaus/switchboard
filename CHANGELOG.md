@@ -4,6 +4,11 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.9.4] - 2026-08-27
+
+### Added
+- Rendered in-site documentation pages (usage, agents, skills, install) styled to match the site, generated from the markdown by `docs/render.py` and sharing `docs/docs.css`. The landing page's Documentation section now links to these rendered pages instead of GitHub.
+
 ## [0.9.3] - 2026-08-26
 
 ### Added

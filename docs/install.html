@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Install & setup · Switchboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Install, share, theme, and wire Switchboard into a project.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar"><div class="inner">
+<a class="brand" href="index.html"><span class="dot"></span>Switchboard</a>
+<nav class="nav"><a href="index.html">Home</a><a href="usage.html">Usage</a><a href="agents.html">Agents</a><a href="skills.html">Skills</a><a href="install.html" class="active">Install</a></nav>
+</div></header>
+<main class="prose">
+<h1>Install and configuration</h1>
+<h2>Install locally (no marketplace)</h2>
+<p>Point Claude Code at the plugin directory:</p>
+<pre><code>claude --plugin-dir &lt;path-to-switchboard&gt;
+</code></pre>
+<p>That loads the roster and skills for the session. No marketplace or shared config is needed to try it. Confirm what loaded:</p>
+<pre><code>claude --plugin-dir &lt;path-to-switchboard&gt; plugin details switchboard
+</code></pre>
+<p>You should see 13 agents and 4 skills.</p>
+<h2>Share it with a team</h2>
+<p>Two ways to distribute:</p>
+<ul>
+<li><strong>Clone and <code>--plugin-dir</code>.</strong> Each person clones the repo and runs Claude Code with <code>--plugin-dir</code> pointing at their clone. Simplest for a small team.</li>
+<li><strong>Marketplace.</strong> Add the repo to a Claude Code marketplace and install by name. Better for wider distribution and updates.</li>
+</ul>
+<p>Either way, the plugin is portable: it ships no project-specific config and no always-on hooks, so enabling it never reshapes an unrelated session on its own.</p>
+<h2>Make orchestrator-loop your default</h2>
+<p>The <code>orchestrator-loop</code> skill auto-invokes on substantial tasks, but that is best-effort. For a deterministic always-on default, add the opt-in per-user <code>SessionStart</code> hook documented in <code>skills/orchestrator-loop/SKILL.md</code> (there is a POSIX form and a Windows form). It injects a short orchestrator framing at the start of each of your sessions and is per-user, so it never affects coworkers who install the plugin. Remove the hook entry to turn it off.</p>
+<h2>Theme the roster (optional)</h2>
+<p>Run the <code>theme</code> skill to reskin the roster to a naming theme. It asks whether to keep the plain corporate default or apply a custom theme; for custom, you name any subject (a show, game, universe, or motif) and each role is renamed to a fitting character. Theming is cosmetic - names and at most one flavor line per agent - and never changes an agent's tools, model, or safety instructions. The value <code>corporate</code> restores the shipped defaults. See <code>skills/theme/SKILL.md</code>.</p>
+<h2>Wire it into a project (optional)</h2>
+<p>Run the <code>wireup</code> skill inside a specific codebase to connect the roster to that project's toolchain, as a reviewed, merge-safe overlay on the project's own config:</p>
+<ul>
+<li><strong>Hooks</strong> are written to the project's own settings and enforce its conventions (formatter, linter, tests, guards). They are project-scoped, so they also apply to delegated sub-agents.</li>
+<li><strong>MCP servers</strong> are written to the project's own config to connect agents to its ecosystem (code index, issue tracker, CI, docs, database). Credentials are always referenced as environment variables, never inlined.</li>
+<li><strong>Code intelligence (LSP)</strong> is recommended rather than written, because that surface is plugin-only; <code>wireup</code> points you at a prebuilt LSP plugin, a companion per-stack plugin, or a fork.</li>
+</ul>
+<p>Nothing is written without your review, and re-running <code>wireup</code> changes nothing already in place. See <code>skills/wireup/SKILL.md</code>.</p>
+<h2>Configuration surfaces at a glance</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Where</th>
+<th>Set by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Which model each agent uses</td>
+<td><code>agents/&lt;name&gt;.md</code> frontmatter, per the matrix</td>
+<td>edit the file / the matrix</td>
+</tr>
+<tr>
+<td>Model routing policy</td>
+<td><code>skills/model-routing/model-matrix.json</code> (source) + <code>.md</code> (view)</td>
+<td>edit the JSON, regenerate the view</td>
+</tr>
+<tr>
+<td>Agent names / theme</td>
+<td><code>agents/&lt;name&gt;.md</code> + <code>theme.json</code></td>
+<td>the <code>theme</code> skill</td>
+</tr>
+<tr>
+<td>Always-on orchestrator mode</td>
+<td>your own <code>SessionStart</code> hook</td>
+<td>opt-in, see above</td>
+</tr>
+<tr>
+<td>Project hooks / MCP / LSP</td>
+<td>the project's own config</td>
+<td>the <code>wireup</code> skill</td>
+</tr>
+</tbody>
+</table></div>
+<h2>See also</h2>
+<ul>
+<li><a href="usage.html">usage.md</a> - the orchestrator workflow.</li>
+<li><a href="agents.html">agents.md</a> - the specialist roster.</li>
+<li><a href="skills.html">skills.md</a> - the skills that drive the roster.</li>
+</ul>
+</main>
+<footer class="doc"><div class="inner">
+<span>Switchboard · MIT licensed</span>
+<span><a href="https://github.com/cogghaus/switchboard">GitHub</a></span>
+</div></footer>
+</body>
+</html>

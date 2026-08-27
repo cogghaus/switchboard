@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agents · Switchboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The Switchboard specialist roster, one entry per agent.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar"><div class="inner">
+<a class="brand" href="index.html"><span class="dot"></span>Switchboard</a>
+<nav class="nav"><a href="index.html">Home</a><a href="usage.html">Usage</a><a href="agents.html" class="active">Agents</a><a href="skills.html">Skills</a><a href="install.html">Install</a></nav>
+</div></header>
+<main class="prose">
+<h1>Agent Reference</h1>
+<p>Switchboard's roster is 13 specialist sub-agents living in <code>agents/</code>. Each one is a standalone Claude Code sub-agent that the orchestrator spawns for a specific kind of work - it is not a persona switch inside one conversation, but a separate agent with its own context, its own tool allowlist, and its own default model drawn from the model-routing matrix (<code>skills/model-routing/model-matrix.md</code>). The orchestrator routes a task to the agent whose domain fits, the agent works within its allowlisted tools, and it returns its result directly rather than persisting state on its own.</p>
+<h2>Reference table</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>slug</th>
+<th>Default model</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend Developer</td>
+<td><code>developer-backend</code></td>
+<td>claude-sonnet-5</td>
+<td>Building or modifying backend code - routes, middleware, services, data models, schema/migrations, backend tests</td>
+</tr>
+<tr>
+<td>Frontend Developer</td>
+<td><code>developer-frontend</code></td>
+<td>claude-sonnet-5</td>
+<td>Building or modifying frontend UI - components, pages, styling, UI state/hooks, interaction tests</td>
+</tr>
+<tr>
+<td>Designer</td>
+<td><code>designer</code></td>
+<td>claude-fable-5</td>
+<td>Product/UX design - journeys, wireframes, interaction and visual design, accessibility - ahead of or alongside frontend work</td>
+</tr>
+<tr>
+<td>Code Reviewer</td>
+<td><code>reviewer-code</code></td>
+<td>claude-opus-5</td>
+<td>Code review with an explicit verdict, AC verification, and a Critical/Important/Minor findings list</td>
+</tr>
+<tr>
+<td>Security Reviewer</td>
+<td><code>reviewer-security</code></td>
+<td>claude-opus-4-8</td>
+<td>Defensive security review of auth, input handling, secrets, uploads, integrations, or dependencies</td>
+</tr>
+<tr>
+<td>QA Engineer</td>
+<td><code>testing-qa</code></td>
+<td>claude-sonnet-5</td>
+<td>Test design and execution, bug hunting/reproduction, edge-case coverage, Definition-of-Done enforcement</td>
+</tr>
+<tr>
+<td>Infra Pentester</td>
+<td><code>testing-pentester</code></td>
+<td>claude-opus-4-8</td>
+<td>Authorized infra-focused security testing - CVEs, CI/CD, secret exposure, containers, supply chain</td>
+</tr>
+<tr>
+<td>Red Team Lead</td>
+<td><code>testing-red-team</code></td>
+<td>claude-opus-4-8</td>
+<td>Authorized application-layer offensive testing - OWASP Top 10, auth attacks, business logic abuse, prompt injection</td>
+</tr>
+<tr>
+<td>Architect</td>
+<td><code>architect</code></td>
+<td>claude-fable-5</td>
+<td>System architecture decisions, tech/vendor evaluation, cross-cutting design, ADRs</td>
+</tr>
+<tr>
+<td>Business Analyst</td>
+<td><code>business-analyst</code></td>
+<td>claude-sonnet-5</td>
+<td>Requirements before implementation - problem framing, story breakdown, acceptance criteria, scope discipline</td>
+</tr>
+<tr>
+<td>Technical Writer</td>
+<td><code>writer-technical</code></td>
+<td>claude-sonnet-5</td>
+<td>Maintaining the project knowledge base - architecture docs, ADRs, API references, runbooks, staleness audits</td>
+</tr>
+<tr>
+<td>Release Manager</td>
+<td><code>release-manager</code></td>
+<td>claude-sonnet-5</td>
+<td>Coordinating a release - semver bumps, CHANGELOG, tagging, pre-release gates, deploy coordination</td>
+</tr>
+<tr>
+<td>Loki</td>
+<td><code>loki</code></td>
+<td>claude-fable-5</td>
+<td>Invitation-only: challenging assumptions and surfacing alternatives in brainstorms, design reviews, premortems, post-mortems</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Build &amp; design</h2>
+<p><strong>Backend Developer</strong> (<code>developer-backend</code>) owns the server side: API route handlers, middleware, the service/business-logic layer, data models, database schema and migrations, and backend tests. It works schema-first, validates everything crossing a trust boundary, and treats migrations as largely one-way - a destructive schema change on a table with data gets flagged for an explicit backup confirmation rather than run silently. Route backend implementation work here; see <code>agents/developer-backend.md</code> for the full definition.</p>
+<p><strong>Frontend Developer</strong> (<code>developer-frontend</code>) owns components, pages, styling, UI state/hooks, and component-level tests. It builds accessibility-first (targeting WCAG 2.1 AA) and performance-aware, following the existing design system rather than inventing new patterns. Route UI implementation work here; see <code>agents/developer-frontend.md</code>.</p>
+<p><strong>Designer</strong> (<code>designer</code>) produces the design spec the Frontend Developer builds from: user flows, annotated wireframes, states (empty/loading/error/success), design-system tokens and components, and accessibility requirements. It works before or alongside frontend implementation, not after. Route UX/visual design work here; see <code>agents/designer.md</code>.</p>
+<h2>Review &amp; testing</h2>
+<p><strong>Code Reviewer</strong> (<code>reviewer-code</code>) is the quality gate: it verifies acceptance criteria, lists findings by Critical/Important/Minor with file:line evidence, and issues exactly one verdict (APPROVED / CHANGES REQUESTED / BLOCKED). It reviews only - it never implements a fix itself. Route completed work here before merge; see <code>agents/reviewer-code.md</code>.</p>
+<p><strong>Security Reviewer</strong> (<code>reviewer-security</code>) audits authentication/authorization, input handling and queries, file uploads, external integrations, secrets handling, and dependencies, returning a severity-classified (CRITICAL/HIGH/MEDIUM/LOW) findings report with concrete remediations. It is defensive and advisory - remediation is implemented by a builder agent. Route any change touching those areas here; see <code>agents/reviewer-security.md</code>.</p>
+<p><strong>QA Engineer</strong> (<code>testing-qa</code>) designs and runs unit, integration, and end-to-end tests, hunts and reproduces bugs, and enforces Definition-of-Done before a task is called ready for review. It owns all test files, fixtures, and coverage configuration. Route test design/execution and bug investigation here; see <code>agents/testing-qa.md</code>.</p>
+<p><strong>Infra Pentester</strong> (<code>testing-pentester</code>) runs authorized infrastructure-focused security testing: dependency and CVE scanning, CI/CD pipeline security, secret-exposure detection, container security, supply-chain analysis, and resilience probes, strictly within a pre-authorized engagement scope. Route infra-layer offensive testing here; see <code>agents/testing-pentester.md</code>.</p>
+<p><strong>Red Team Lead</strong> (<code>testing-red-team</code>) runs authorized application-layer offensive testing - OWASP Top 10, auth/authz attacks, business logic abuse, and prompt-injection testing - producing an evidence-based engagement report with attack chains, proof of concept, and a remediation roadmap. Route application-layer offensive testing here; see <code>agents/testing-red-team.md</code>.</p>
+<h2>Plan &amp; docs</h2>
+<p><strong>Architect</strong> (<code>architect</code>) is the advisory owner of technical design: system architecture decisions, technology/vendor evaluation, cross-cutting concern design (auth, logging, caching, resilience), technical debt assessment, and ADRs weighed against maintainability, scalability, cost, and team capability. It analyzes and recommends; implementation is routed elsewhere. Route significant design decisions here; see <code>agents/architect.md</code>.</p>
+<p><strong>Business Analyst</strong> (<code>business-analyst</code>) defines requirements before implementation begins: problem framing, epic/story breakdown with testable acceptance criteria, user research synthesis, prioritization, and scope discipline against feature creep. Route "what should we build, for whom, and why" here before work starts; see <code>agents/business-analyst.md</code>.</p>
+<p><strong>Technical Writer</strong> (<code>writer-technical</code>) curates the living knowledge base: creating or updating architecture docs, ADRs, API references, and runbooks after a significant change, and auditing existing docs for staleness, contradiction, and redundancy. It writes for current state, not history. Route doc maintenance here after a significant change or for a doc audit; see <code>agents/writer-technical.md</code>.</p>
+<p><strong>Release Manager</strong> (<code>release-manager</code>) coordinates a release end to end: semver version bumps, CHANGELOG maintenance, git tagging, pre-release gate checks, and deploy coordination, following a checklist that never bypasses a failed gate. It does not write feature code. Route release coordination here; see <code>agents/release-manager.md</code>.</p>
+<h2>Challenger</h2>
+<p><strong>Loki</strong> (<code>loki</code>) is invitation-only: it challenges assumptions and surfaces lateral alternatives during planning brainstorms, design reviews, premortems, and post-mortems. It offers two or three short provocations (challenge, alternative, inversion) and then yields the floor - no implementation plans, no day-to-day task work. Route it in deliberately when a decision needs stress-testing before it locks in; see <code>agents/loki.md</code>.</p>
+<h2>Model assignments</h2>
+<p>The three security agents - Security Reviewer, Red Team Lead, and Infra Pentester - are pinned to <code>claude-opus-4-8</code> by full model ID, not by alias, so security and dual-use work always lands on that tier regardless of how aliases move between model versions elsewhere. All model assignments in this document, including these three, come from <code>skills/model-routing/model-matrix.md</code> (the human-readable derived view of <code>skills/model-routing/model-matrix.json</code>, the source of truth) - consult it directly for the current routing rules and rationale rather than treating this reference as authoritative for future changes.</p>
+</main>
+<footer class="doc"><div class="inner">
+<span>Switchboard · MIT licensed</span>
+<span><a href="https://github.com/cogghaus/switchboard">GitHub</a></span>
+</div></footer>
+</body>
+</html>

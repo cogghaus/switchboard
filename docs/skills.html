@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Skills · Switchboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The four skills that drive the Switchboard roster.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<header class="topbar"><div class="inner">
+<a class="brand" href="index.html"><span class="dot"></span>Switchboard</a>
+<nav class="nav"><a href="index.html">Home</a><a href="usage.html">Usage</a><a href="agents.html">Agents</a><a href="skills.html" class="active">Skills</a><a href="install.html">Install</a></nav>
+</div></header>
+<main class="prose">
+<h1>Skills Reference</h1>
+<p>Skills are how you drive the Switchboard roster. Some auto-invoke - Claude reads a skill's
+description and decides, best-effort, whether the current task calls for it - and some you call
+explicitly by name with <code>/skill-name</code>. Switchboard ships four: <code>orchestrator-loop</code> (the default
+operating loop), <code>model-routing</code> (which model runs which task), <code>theme</code> (reskin the roster's
+names), and <code>wireup</code> (connect the roster to a specific project's config). This page is the
+newcomer reference for each.</p>
+<h2>orchestrator-loop</h2>
+<p>The default operating loop for substantial work: frame the goal, decide direct-vs-delegate, route
+each piece to the right specialist at the right model, review what comes back, and report.</p>
+<p>The loop, run for every substantial task:</p>
+<ol>
+<li><strong>Understand and frame</strong> - restate the goal in one line, to catch a bad framing before executing.</li>
+<li><strong>Decide direct vs. delegate</strong> - small and quick work is done directly; large, mechanical,
+   parallelizable, or specialized work is delegated.</li>
+<li><strong>Route</strong> - consult the <code>model-routing</code> skill to pick the model and the specialist whose role fits.</li>
+<li><strong>Delegate</strong> with a clear spec (goal, input paths, constraints, acceptance criteria), forbidding
+   re-delegation.</li>
+<li><strong>Review</strong> - never relay a sub-agent's output unread; high-stakes or dual-use work gets a second
+   agent to verify.</li>
+<li><strong>Report</strong> - plan, then did (one line per action), then results and outstanding.</li>
+</ol>
+<p><strong>Invocation:</strong> auto-invokes on substantial development tasks (building a feature, cross-file bug
+fixes, refactoring, codebase research, planning, multi-step or delegatable work) - this is
+model-driven and best-effort, so it is not guaranteed to fire every time. It can also be entered
+explicitly with <code>/orchestrator-loop</code>.</p>
+<p><strong>Making it the standing default:</strong> auto-invocation alone isn't a guarantee. If you want the loop
+to be your operating mode on every session, add a per-user <code>SessionStart</code> hook to your own
+<code>~/.claude/settings.json</code> (or a project's <code>.claude/settings.json</code>) that injects the framing text
+shipped in <code>session-start-framing.md</code> (next to the skill's <code>SKILL.md</code>) - a POSIX (<code>cat</code>) and a
+Windows (<code>type</code>) command form are both provided in the SKILL.md, with <code>&lt;SWITCHBOARD&gt;</code> swapped for
+your installed plugin path. This is opt-in and per-user: the shipped plugin adds no always-on hook
+by design, so installing it never reframes someone else's session. Merge the hook into any
+existing <code>hooks</code> block rather than replacing it; removing the entry turns it off.</p>
+<p><strong>Output:</strong> no artifact of its own - it shapes how the session behaves (framing, delegation
+choices, and the final plan/did/results report).</p>
+<p>See <code>skills/orchestrator-loop/SKILL.md</code> for the full text, and <code>session-start-framing.md</code> for the
+exact injected framing.</p>
+<h2>model-routing</h2>
+<p>The model-selection matrix: which model a given task or agent should run on, so capable tiers are
+spent where quality compounds (design, ambiguity, orchestration, review) and cheap tiers absorb
+volume (large mechanical work, quick lookups). Security and dual-use work is pinned to
+<code>claude-opus-4-8</code> by explicit full model ID in the agent's definition, overriding every table -
+this is a hard rule, not a default that can be routed around.</p>
+<p>Two files carry the matrix:</p>
+<ul>
+<li><code>model-matrix.json</code> - the machine-readable source of truth (tiers, per-agent defaults, the
+  trigger model).</li>
+<li><code>model-matrix.md</code> - the human-readable view generated from it, with the hard rules on top and a
+  per-tier and per-agent table below.</li>
+</ul>
+<p>To change routing, edit <code>model-matrix.json</code> first, then update <code>model-matrix.md</code> to match - the
+JSON is the single source for each agent's <code>model:</code> frontmatter.</p>
+<p><strong>Invocation:</strong> consulted, not run standalone - the <code>orchestrator-loop</code> skill (and you, before
+spawning any agent) reads <code>model-matrix.md</code> as part of routing step 3.</p>
+<p><strong>Output:</strong> no artifact of its own - it informs which model alias or full model ID gets used for a
+spawned agent.</p>
+<p>See <code>skills/model-routing/SKILL.md</code> for the full text.</p>
+<h2>theme</h2>
+<p>Reskins the Switchboard agent roster to a naming theme (a show, game, universe, or any motif),
+without changing what any agent does.</p>
+<p><strong>The flow:</strong></p>
+<ol>
+<li>Ask the user: keep the default corporate roster, or apply a custom theme? If custom, ask for a
+   subject.</li>
+<li>Map each role to a name from that subject that fits the role's function (a guardian for the
+   security reviewer, an adversary for the red-teamer, and so on).</li>
+<li>Present the proposed role -&gt; themed-name table for the user to veto or swap before anything is
+   written.</li>
+<li>On approval, apply it: update each agent file's <code>name:</code> frontmatter and <code># H1</code> title, optionally
+   add one short flavor line, then keep the model matrix, <code>README.md</code>, and <code>theme.json</code> (the
+   revertible record of the applied theme and mapping) consistent with the new names.</li>
+</ol>
+<p>Reskinning is strictly cosmetic - names, and at most one flavor line, per agent. It never touches
+<code>tools</code>, <code>model</code>, <code>description</code>, or any functional or safety instruction; the security agents keep
+<code>model: claude-opus-4-8</code> under whatever name they're given. The one intentional exception to the
+plain corporate baseline is the challenger role, which ships already named <strong>Loki</strong> rather than a
+neutral role word.</p>
+<p><strong>Invocation:</strong> by name, <code>/theme</code> - it's a deliberate, conversational, approval-gated action, not
+something that auto-fires mid-task.</p>
+<p><strong>Output:</strong> edits to each <code>agents/*.md</code> file's <code>name:</code>/<code># H1</code> (and optional flavor line),
+<code>skills/model-routing/model-matrix.json</code> and <code>.md</code> (display names), <code>README.md</code> (roster list), and
+<code>theme.json</code> at the plugin root recording the applied theme for revertibility.</p>
+<p>See <code>skills/theme/SKILL.md</code> for the full text.</p>
+<h2>wireup</h2>
+<p>Connects the portable Switchboard roster to a specific project by writing a reviewed, merge-safe
+overlay into the <strong>project's own config</strong> - never into the shipped plugin, since a plugin's
+sub-agents are forbidden from declaring <code>hooks</code>, <code>mcpServers</code>, or <code>permissionMode</code> themselves.
+Project-level hooks and MCP servers apply to the whole session including delegated Agent-tool
+subagents, which is exactly the roster wireup is trying to sharpen.</p>
+<p>Three surfaces, only two of which wireup writes:</p>
+<ul>
+<li><strong>Hooks</strong> -&gt; <code>&lt;project&gt;/.claude/settings.json</code> (project-scoped, applies to subagents too).</li>
+<li><strong>MCP servers</strong> -&gt; <code>&lt;project&gt;/.mcp.json</code> (project-scoped, committed and shared with the team;
+  every credential is referenced as an <code>${ENV_VAR}</code>, never inlined as a real token).</li>
+<li><strong>LSP / code intelligence</strong> -&gt; <code>.lsp.json</code>, a plugin-only surface that cannot be set per project.
+  Wireup recommends options (a prebuilt LSP plugin, a companion stack-specific plugin, or your own
+  fork) rather than silently writing it.</li>
+</ul>
+<p><strong>The flow:</strong> detect the stack (package/build files, test runner, CI, git remote host, infra
+config) -&gt; propose an overlay for each surface -&gt; get explicit per-surface approval (hooks execute
+commands and MCP servers reach external services, so nothing is written until approved) -&gt; merge
+into existing config without clobbering anything already there -&gt; verify the result (JSON parses,
+MCP server reachable) and report what was written and what was skipped. Running wireup twice on an
+already-wired project changes nothing the second time.</p>
+<p><strong>Invocation:</strong> by name, <code>/wireup</code> - run once per codebase, or again when the toolchain changes.</p>
+<p><strong>Output:</strong> edits to <code>&lt;project&gt;/.claude/settings.json</code> (hooks) and <code>&lt;project&gt;/.mcp.json</code> (MCP
+servers), plus hook scripts under <code>&lt;project&gt;/.claude/hooks/</code> when a hook needs one; an LSP
+recommendation only, never a silent <code>.lsp.json</code> write.</p>
+<p>See <code>skills/wireup/SKILL.md</code> for the full text.</p>
+</main>
+<footer class="doc"><div class="inner">
+<span>Switchboard · MIT licensed</span>
+<span><a href="https://github.com/cogghaus/switchboard">GitHub</a></span>
+</div></footer>
+</body>
+</html>
