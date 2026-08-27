@@ -252,24 +252,24 @@
       <div class="sec-head">
         <div class="eyebrow">Get started</div>
         <h2>Install in two steps</h2>
-        <p>No marketplace required to try it. Point Claude Code at the plugin directory and confirm what loaded.</p>
+        <p>Install by name from the marketplace, then confirm the inventory. You should see 13 agents and 4 skills.</p>
       </div>
       <div class="steps">
         <div class="step">
           <div class="marker"></div>
           <div>
-            <h3>Get the plugin</h3>
-            <p>Clone the repository anywhere on your machine.</p>
-            <pre class="cmd"><code>git clone https://github.com/cogghaus/switchboard.git</code></pre>
+            <h3>Add the marketplace</h3>
+            <p>Register the Switchboard marketplace with Claude Code.</p>
+            <pre class="cmd"><code><span class="p">claude</span> plugin marketplace add cogghaus/switchboard</code></pre>
           </div>
         </div>
         <div class="step">
           <div class="marker"></div>
           <div>
-            <h3>Load it and verify</h3>
-            <p>Start Claude Code with the plugin directory, then check the inventory. You should see 13 agents and 4 skills.</p>
-            <pre class="cmd"><code><span class="p">claude</span> --plugin-dir &lt;path-to-switchboard&gt;
-<span class="p">claude</span> --plugin-dir &lt;path-to-switchboard&gt; plugin details switchboard</code></pre>
+            <h3>Install and verify</h3>
+            <p>Install the plugin by name, then check the inventory. You should see 13 agents and 4 skills.</p>
+            <pre class="cmd"><code><span class="p">claude</span> plugin install switchboard@switchboard
+<span class="p">claude</span> plugin details switchboard</code></pre>
           </div>
         </div>
         <div class="step">

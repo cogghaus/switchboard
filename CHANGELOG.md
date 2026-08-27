@@ -4,6 +4,14 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.9.10] - 2026-08-27
+
+### Added
+- The repo is now a one-plugin **marketplace** (`.claude-plugin/marketplace.json`), so it installs by name and persists: `claude plugin marketplace add cogghaus/switchboard` then `claude plugin install switchboard@switchboard`.
+
+### Changed
+- Install docs (install.md, README, site landing) lead with the marketplace install. Clarified that `--plugin-dir` is the plugin's own directory and session-only, not a parent "plugins" folder that gets scanned.
+
 ## [0.9.9] - 2026-08-27
 
 ### Added

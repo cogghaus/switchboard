@@ -1,29 +1,37 @@
 # Install and configuration
 
-## Install locally (no marketplace)
+## Install (recommended: marketplace)
 
-Point Claude Code at the plugin directory:
+Switchboard's repo is also a one-plugin marketplace, so you and your team install it **by name** - persistent across sessions, no flags:
+
+```
+claude plugin marketplace add cogghaus/switchboard
+claude plugin install switchboard@switchboard
+```
+
+`switchboard@switchboard` is `plugin@marketplace` (the repo is both). Installed plugins persist and show in `claude plugin list`. Confirm the inventory:
+
+```
+claude plugin details switchboard
+```
+
+You should see 13 agents and 4 skills. This is the path for a mixed team - everyone runs the same two commands.
+
+## Try it without installing (session-only)
+
+To kick the tires without a persistent install, point Claude Code at the plugin's **own** directory:
 
 ```
 claude --plugin-dir <path-to-switchboard>
 ```
 
-That loads the roster and skills for the session. No marketplace or shared config is needed to try it. Confirm what loaded:
+Two things to know about `--plugin-dir`: it takes the plugin's own directory - the one containing `.claude-plugin/` - **not** a parent "plugins" folder (a parent is not scanned), and it loads for that **session only** (it is repeatable: `--plugin-dir A --plugin-dir B`). Session-loaded plugins do not appear in `claude plugin list`; verify with:
 
 ```
 claude --plugin-dir <path-to-switchboard> plugin details switchboard
 ```
 
-You should see 13 agents and 4 skills.
-
-## Share it with a team
-
-Two ways to distribute:
-
-- **Clone and `--plugin-dir`.** Each person clones the repo and runs Claude Code with `--plugin-dir` pointing at their clone. Simplest for a small team.
-- **Marketplace.** Add the repo to a Claude Code marketplace and install by name. Better for wider distribution and updates.
-
-Either way, the plugin is portable: it ships no project-specific config and no always-on hooks, so enabling it never reshapes an unrelated session on its own.
+The plugin is portable either way: it ships no project-specific config and no always-on hooks, so enabling it never reshapes an unrelated session on its own.
 
 ## Make orchestrator-loop your default
 

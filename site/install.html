@@ -20,8 +20,8 @@
 <a href="agents.html">Agents</a>
 <a href="skills.html">Skills</a>
 <a href="install.html" class="active">Install</a>
-<a class="sub" href="#install-locally-no-marketplace">Install locally (no marketplace)</a>
-<a class="sub" href="#share-it-with-a-team">Share it with a team</a>
+<a class="sub" href="#install-recommended-marketplace">Install (recommended: marketplace)</a>
+<a class="sub" href="#try-it-without-installing-session-only">Try it without installing (session-only)</a>
 <a class="sub" href="#make-orchestrator-loop-your-default">Make orchestrator-loop your default</a>
 <a class="sub" href="#see-which-agent-is-working">See which agent is working</a>
 <a class="sub" href="#theme-the-roster-optional">Theme the roster (optional)</a>
@@ -34,21 +34,23 @@
 </aside>
 <main class="prose">
 <h1 id="install-and-configuration">Install and configuration</h1>
-<h2 id="install-locally-no-marketplace">Install locally (no marketplace)</h2>
-<p>Point Claude Code at the plugin directory:</p>
+<h2 id="install-recommended-marketplace">Install (recommended: marketplace)</h2>
+<p>Switchboard's repo is also a one-plugin marketplace, so you and your team install it <strong>by name</strong> - persistent across sessions, no flags:</p>
+<pre><code>claude plugin marketplace add cogghaus/switchboard
+claude plugin install switchboard@switchboard
+</code></pre>
+<p><code>switchboard@switchboard</code> is <code>plugin@marketplace</code> (the repo is both). Installed plugins persist and show in <code>claude plugin list</code>. Confirm the inventory:</p>
+<pre><code>claude plugin details switchboard
+</code></pre>
+<p>You should see 13 agents and 4 skills. This is the path for a mixed team - everyone runs the same two commands.</p>
+<h2 id="try-it-without-installing-session-only">Try it without installing (session-only)</h2>
+<p>To kick the tires without a persistent install, point Claude Code at the plugin's <strong>own</strong> directory:</p>
 <pre><code>claude --plugin-dir &lt;path-to-switchboard&gt;
 </code></pre>
-<p>That loads the roster and skills for the session. No marketplace or shared config is needed to try it. Confirm what loaded:</p>
+<p>Two things to know about <code>--plugin-dir</code>: it takes the plugin's own directory - the one containing <code>.claude-plugin/</code> - <strong>not</strong> a parent "plugins" folder (a parent is not scanned), and it loads for that <strong>session only</strong> (it is repeatable: <code>--plugin-dir A --plugin-dir B</code>). Session-loaded plugins do not appear in <code>claude plugin list</code>; verify with:</p>
 <pre><code>claude --plugin-dir &lt;path-to-switchboard&gt; plugin details switchboard
 </code></pre>
-<p>You should see 13 agents and 4 skills.</p>
-<h2 id="share-it-with-a-team">Share it with a team</h2>
-<p>Two ways to distribute:</p>
-<ul>
-<li><strong>Clone and <code>--plugin-dir</code>.</strong> Each person clones the repo and runs Claude Code with <code>--plugin-dir</code> pointing at their clone. Simplest for a small team.</li>
-<li><strong>Marketplace.</strong> Add the repo to a Claude Code marketplace and install by name. Better for wider distribution and updates.</li>
-</ul>
-<p>Either way, the plugin is portable: it ships no project-specific config and no always-on hooks, so enabling it never reshapes an unrelated session on its own.</p>
+<p>The plugin is portable either way: it ships no project-specific config and no always-on hooks, so enabling it never reshapes an unrelated session on its own.</p>
 <h2 id="make-orchestrator-loop-your-default">Make orchestrator-loop your default</h2>
 <p>The <code>orchestrator-loop</code> skill auto-invokes on substantial tasks, but that is best-effort. For a deterministic always-on default, add the opt-in per-user <code>SessionStart</code> hook documented in <code>skills/orchestrator-loop/SKILL.md</code> (there is a POSIX form and a Windows form). It injects a short orchestrator framing at the start of each of your sessions and is per-user, so it never affects coworkers who install the plugin. Remove the hook entry to turn it off.</p>
 <h2 id="see-which-agent-is-working">See which agent is working</h2>

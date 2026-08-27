@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "switchboard",
+  "description": "Switchboard: route each task to the right specialist sub-agent, at the right model.",
+  "owner": {
+    "name": "cogghaus",
+    "url": "https://github.com/cogghaus"
+  },
+  "plugins": [
+    {
+      "name": "switchboard",
+      "description": "Turn your Claude Code session into an orchestrator: a roster of specialist sub-agents plus routing and operating skills for delegating each task to the best-fit model.",
+      "source": "./",
+      "category": "development",
+      "homepage": "https://cogghaus.github.io/switchboard/"
+    }
+  ]
+}

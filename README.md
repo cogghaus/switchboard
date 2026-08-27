@@ -26,13 +26,14 @@ Each carries a routing description, a tool allowlist, an assigned model, and its
 - **`theme`** - reskin the roster to any naming theme: keep the plain corporate default, or name a subject (a show, game, universe, or motif) and each role is renamed to a fitting character, its function unchanged.
 - **`wireup`** - connect the roster to a specific project: set up hooks, MCP servers, and code intelligence (LSP) as a reviewed overlay on the project's own config. Optional, once per codebase.
 
-## Install (local, no marketplace)
+## Install
 
 ```
-claude --plugin-dir <path-to-switchboard>
+claude plugin marketplace add cogghaus/switchboard
+claude plugin install switchboard@switchboard
 ```
 
-Then run `/help` to see the roster and skills. No marketplace or shared config is required to test locally.
+Installs by name and persists across sessions (`switchboard@switchboard` is `plugin@marketplace` - the repo is both); run `claude plugin details switchboard` to confirm 13 agents and 4 skills. To try it without installing, point Claude Code at the plugin's own directory for one session: `claude --plugin-dir <path-to-switchboard>`. Full guide: [docs/install.md](docs/install.md).
 
 ## Model assignments
 
