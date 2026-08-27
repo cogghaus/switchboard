@@ -4,6 +4,11 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-08-26
+
+### Added
+- MIT LICENSE file and a matching `license` field in the plugin manifest, making reuse terms explicit ahead of going public.
+
 ## [0.9.0] - 2026-08-26
 
 ### Changed

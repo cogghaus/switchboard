@@ -1,10 +1,11 @@
 {
   "name": "switchboard",
   "displayName": "Switchboard",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Switchboard - route each task to the right specialist. A roster of specialist sub-agents plus routing and operating skills for a person who delegates work to the best-fit model per task.",
   "author": { "name": "cogghaus" },
   "homepage": "https://github.com/cogghaus/switchboard",
   "repository": "https://github.com/cogghaus/switchboard",
-  "keywords": ["claude-code", "plugin", "orchestration", "sub-agents", "agents", "delegation", "model-routing"]
+  "keywords": ["claude-code", "plugin", "orchestration", "sub-agents", "agents", "delegation", "model-routing"],
+  "license": "MIT"
 }

@@ -12,5 +12,4 @@ Switchboard is the **portable orchestration layer**: a roster of specialist sub-
 ## Before making the repo public
 
 - Full documentation (usage, each agent, each skill, install, configuration).
-- A LICENSE file plus a matching `license` field in the manifest (license choice pending).
 - A full repo secret-and-issue scan before the repo goes public.
