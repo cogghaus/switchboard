@@ -33,21 +33,21 @@ Edit model-matrix.json, then regenerate or hand-update this file to match. See S
 Note: the security/dual-use tier is agent-definition-only (see hard rule 2).
 
 ## Per-agent defaults
-|      agent_id      |    display_name    |  default_model  | alias  |
-|--------------------|--------------------|-----------------|--------|
-| reviewer-security  | Security Reviewer  | claude-opus-4-8 | n/a    |
-| testing-red-team   | Red Team Lead      | claude-opus-4-8 | n/a    |
-| testing-pentester  | Infra Pentester    | claude-opus-4-8 | n/a    |
-| developer-frontend | Frontend Developer | claude-sonnet-5 | sonnet |
-| developer-backend  | Backend Developer  | claude-sonnet-5 | sonnet |
-| testing-qa         | QA Engineer        | claude-sonnet-5 | sonnet |
-| reviewer-code      | Code Reviewer      | claude-opus-5   | opus   |
-| architect          | Architect          | claude-fable-5  | fable  |
-| designer           | Designer           | claude-fable-5  | fable  |
-| business-analyst   | Business Analyst   | claude-sonnet-5 | sonnet |
-| writer-technical   | Technical Writer   | claude-sonnet-5 | sonnet |
-| release-manager    | Release Manager    | claude-sonnet-5 | sonnet |
-| loki               | Loki               | claude-fable-5  | fable  |
+| emoji |      agent_id      |    display_name    |  default_model  | alias  |
+|-------|--------------------|--------------------|-----------------|--------|
+| 🛡️    | reviewer-security  | Security Reviewer  | claude-opus-4-8 | n/a    |
+| 💀     | testing-red-team   | Red Team Lead      | claude-opus-4-8 | n/a    |
+| ⚡     | testing-pentester  | Infra Pentester    | claude-opus-4-8 | n/a    |
+| 🔨     | developer-frontend | Frontend Developer | claude-sonnet-5 | sonnet |
+| 🔥     | developer-backend  | Backend Developer  | claude-sonnet-5 | sonnet |
+| 🧪     | testing-qa         | QA Engineer        | claude-sonnet-5 | sonnet |
+| ⚖️    | reviewer-code      | Code Reviewer      | claude-opus-5   | opus   |
+| 🏛️    | architect          | Architect          | claude-fable-5  | fable  |
+| 🎨     | designer           | Designer           | claude-fable-5  | fable  |
+| 🔮     | business-analyst   | Business Analyst   | claude-sonnet-5 | sonnet |
+| 📜     | writer-technical   | Technical Writer   | claude-sonnet-5 | sonnet |
+| 📯     | release-manager    | Release Manager    | claude-sonnet-5 | sonnet |
+| 🎭     | loki               | Loki               | claude-fable-5  | fable  |
 
 ## Notes
 - Model surfaces: a sub-agent definition's model: frontmatter accepts a full model ID; the live Agent tool takes only aliases {fable, opus, sonnet, haiku}. Aliases can move between model versions and are not guaranteed to resolve to a specific model, so never rely on an alias to reach a security-critical tier - pin claude-opus-4-8 by full ID in the definition and re-verify periodically.

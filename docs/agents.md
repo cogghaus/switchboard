@@ -4,21 +4,21 @@ Switchboard's roster is 13 specialist sub-agents living in `agents/`. Each one i
 
 ## Reference table
 
-| Agent | slug | Default model | Use when |
-|---|---|---|---|
-| 🔥 Backend Developer | `developer-backend` | claude-sonnet-5 | Building or modifying backend code - routes, middleware, services, data models, schema/migrations, backend tests |
-| 🔨 Frontend Developer | `developer-frontend` | claude-sonnet-5 | Building or modifying frontend UI - components, pages, styling, UI state/hooks, interaction tests |
-| 🎨 Designer | `designer` | claude-fable-5 | Product/UX design - journeys, wireframes, interaction and visual design, accessibility - ahead of or alongside frontend work |
-| ⚖️ Code Reviewer | `reviewer-code` | claude-opus-5 | Code review with an explicit verdict, AC verification, and a Critical/Important/Minor findings list |
-| 🛡️ Security Reviewer | `reviewer-security` | claude-opus-4-8 | Defensive security review of auth, input handling, secrets, uploads, integrations, or dependencies |
-| 🧪 QA Engineer | `testing-qa` | claude-sonnet-5 | Test design and execution, bug hunting/reproduction, edge-case coverage, Definition-of-Done enforcement |
-| ⚡ Infra Pentester | `testing-pentester` | claude-opus-4-8 | Authorized infra-focused security testing - CVEs, CI/CD, secret exposure, containers, supply chain |
-| 💀 Red Team Lead | `testing-red-team` | claude-opus-4-8 | Authorized application-layer offensive testing - OWASP Top 10, auth attacks, business logic abuse, prompt injection |
-| 🏛️ Architect | `architect` | claude-fable-5 | System architecture decisions, tech/vendor evaluation, cross-cutting design, ADRs |
-| 🔮 Business Analyst | `business-analyst` | claude-sonnet-5 | Requirements before implementation - problem framing, story breakdown, acceptance criteria, scope discipline |
-| 📜 Technical Writer | `writer-technical` | claude-sonnet-5 | Maintaining the project knowledge base - architecture docs, ADRs, API references, runbooks, staleness audits |
-| 📯 Release Manager | `release-manager` | claude-sonnet-5 | Coordinating a release - semver bumps, CHANGELOG, tagging, pre-release gates, deploy coordination |
-| 🎭 Loki | `loki` | claude-fable-5 | Invitation-only: challenging assumptions and surfacing alternatives in brainstorms, design reviews, premortems, post-mortems |
+|  | Agent | slug | Default model | Use when |
+|---|---|---|---|---|
+| 🔥 | Backend Developer | `developer-backend` | claude-sonnet-5 | Building or modifying backend code - routes, middleware, services, data models, schema/migrations, backend tests |
+| 🔨 | Frontend Developer | `developer-frontend` | claude-sonnet-5 | Building or modifying frontend UI - components, pages, styling, UI state/hooks, interaction tests |
+| 🎨 | Designer | `designer` | claude-fable-5 | Product/UX design - journeys, wireframes, interaction and visual design, accessibility - ahead of or alongside frontend work |
+| ⚖️ | Code Reviewer | `reviewer-code` | claude-opus-5 | Code review with an explicit verdict, AC verification, and a Critical/Important/Minor findings list |
+| 🛡️ | Security Reviewer | `reviewer-security` | claude-opus-4-8 | Defensive security review of auth, input handling, secrets, uploads, integrations, or dependencies |
+| 🧪 | QA Engineer | `testing-qa` | claude-sonnet-5 | Test design and execution, bug hunting/reproduction, edge-case coverage, Definition-of-Done enforcement |
+| ⚡ | Infra Pentester | `testing-pentester` | claude-opus-4-8 | Authorized infra-focused security testing - CVEs, CI/CD, secret exposure, containers, supply chain |
+| 💀 | Red Team Lead | `testing-red-team` | claude-opus-4-8 | Authorized application-layer offensive testing - OWASP Top 10, auth attacks, business logic abuse, prompt injection |
+| 🏛️ | Architect | `architect` | claude-fable-5 | System architecture decisions, tech/vendor evaluation, cross-cutting design, ADRs |
+| 🔮 | Business Analyst | `business-analyst` | claude-sonnet-5 | Requirements before implementation - problem framing, story breakdown, acceptance criteria, scope discipline |
+| 📜 | Technical Writer | `writer-technical` | claude-sonnet-5 | Maintaining the project knowledge base - architecture docs, ADRs, API references, runbooks, staleness audits |
+| 📯 | Release Manager | `release-manager` | claude-sonnet-5 | Coordinating a release - semver bumps, CHANGELOG, tagging, pre-release gates, deploy coordination |
+| 🎭 | Loki | `loki` | claude-fable-5 | Invitation-only: challenging assumptions and surfacing alternatives in brainstorms, design reviews, premortems, post-mortems |
 
 ## Build & design
 

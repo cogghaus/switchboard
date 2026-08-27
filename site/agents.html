@@ -33,9 +33,10 @@
 <h1 id="agent-reference">Agent Reference</h1>
 <p>Switchboard's roster is 13 specialist sub-agents living in <code>agents/</code>. Each one is a standalone Claude Code sub-agent that the orchestrator spawns for a specific kind of work - it is not a persona switch inside one conversation, but a separate agent with its own context, its own tool allowlist, and its own default model drawn from the model-routing matrix (<code>skills/model-routing/model-matrix.md</code>). Each agent carries an emoji so you can tell at a glance which specialist is working. The orchestrator routes a task to the agent whose domain fits, the agent works within its allowlisted tools, and it returns its result directly rather than persisting state on its own.</p>
 <h2 id="reference-table">Reference table</h2>
-<div class="table-wrap"><table>
+<div class="table-wrap"><table class="roster">
 <thead>
 <tr>
+<th></th>
 <th>Agent</th>
 <th>slug</th>
 <th>Default model</th>
@@ -44,79 +45,92 @@
 </thead>
 <tbody>
 <tr>
-<td>🔥 Backend Developer</td>
+<td>🔥</td>
+<td>Backend Developer</td>
 <td><code>developer-backend</code></td>
 <td>claude-sonnet-5</td>
 <td>Building or modifying backend code - routes, middleware, services, data models, schema/migrations, backend tests</td>
 </tr>
 <tr>
-<td>🔨 Frontend Developer</td>
+<td>🔨</td>
+<td>Frontend Developer</td>
 <td><code>developer-frontend</code></td>
 <td>claude-sonnet-5</td>
 <td>Building or modifying frontend UI - components, pages, styling, UI state/hooks, interaction tests</td>
 </tr>
 <tr>
-<td>🎨 Designer</td>
+<td>🎨</td>
+<td>Designer</td>
 <td><code>designer</code></td>
 <td>claude-fable-5</td>
 <td>Product/UX design - journeys, wireframes, interaction and visual design, accessibility - ahead of or alongside frontend work</td>
 </tr>
 <tr>
-<td>⚖️ Code Reviewer</td>
+<td>⚖️</td>
+<td>Code Reviewer</td>
 <td><code>reviewer-code</code></td>
 <td>claude-opus-5</td>
 <td>Code review with an explicit verdict, AC verification, and a Critical/Important/Minor findings list</td>
 </tr>
 <tr>
-<td>🛡️ Security Reviewer</td>
+<td>🛡️</td>
+<td>Security Reviewer</td>
 <td><code>reviewer-security</code></td>
 <td>claude-opus-4-8</td>
 <td>Defensive security review of auth, input handling, secrets, uploads, integrations, or dependencies</td>
 </tr>
 <tr>
-<td>🧪 QA Engineer</td>
+<td>🧪</td>
+<td>QA Engineer</td>
 <td><code>testing-qa</code></td>
 <td>claude-sonnet-5</td>
 <td>Test design and execution, bug hunting/reproduction, edge-case coverage, Definition-of-Done enforcement</td>
 </tr>
 <tr>
-<td>⚡ Infra Pentester</td>
+<td>⚡</td>
+<td>Infra Pentester</td>
 <td><code>testing-pentester</code></td>
 <td>claude-opus-4-8</td>
 <td>Authorized infra-focused security testing - CVEs, CI/CD, secret exposure, containers, supply chain</td>
 </tr>
 <tr>
-<td>💀 Red Team Lead</td>
+<td>💀</td>
+<td>Red Team Lead</td>
 <td><code>testing-red-team</code></td>
 <td>claude-opus-4-8</td>
 <td>Authorized application-layer offensive testing - OWASP Top 10, auth attacks, business logic abuse, prompt injection</td>
 </tr>
 <tr>
-<td>🏛️ Architect</td>
+<td>🏛️</td>
+<td>Architect</td>
 <td><code>architect</code></td>
 <td>claude-fable-5</td>
 <td>System architecture decisions, tech/vendor evaluation, cross-cutting design, ADRs</td>
 </tr>
 <tr>
-<td>🔮 Business Analyst</td>
+<td>🔮</td>
+<td>Business Analyst</td>
 <td><code>business-analyst</code></td>
 <td>claude-sonnet-5</td>
 <td>Requirements before implementation - problem framing, story breakdown, acceptance criteria, scope discipline</td>
 </tr>
 <tr>
-<td>📜 Technical Writer</td>
+<td>📜</td>
+<td>Technical Writer</td>
 <td><code>writer-technical</code></td>
 <td>claude-sonnet-5</td>
 <td>Maintaining the project knowledge base - architecture docs, ADRs, API references, runbooks, staleness audits</td>
 </tr>
 <tr>
-<td>📯 Release Manager</td>
+<td>📯</td>
+<td>Release Manager</td>
 <td><code>release-manager</code></td>
 <td>claude-sonnet-5</td>
 <td>Coordinating a release - semver bumps, CHANGELOG, tagging, pre-release gates, deploy coordination</td>
 </tr>
 <tr>
-<td>🎭 Loki</td>
+<td>🎭</td>
+<td>Loki</td>
 <td><code>loki</code></td>
 <td>claude-fable-5</td>
 <td>Invitation-only: challenging assumptions and surfacing alternatives in brainstorms, design reviews, premortems, post-mortems</td>

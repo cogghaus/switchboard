@@ -96,7 +96,8 @@ def render(md_name):
         text = fh.read()
     html = markdown.markdown(text, extensions=["extra", "sane_lists", "toc"])
     html = re.sub(r'href="([^"]+)"', lambda m: 'href="%s"' % rewrite_link(m.group(1)), html)
-    html = html.replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
+    open_tag = '<table class="roster">' if md_name == "agents.md" else "<table>"
+    html = html.replace("<table>", '<div class="table-wrap">' + open_tag).replace("</table>", "</table></div>")
     out_name = md_name[:-3] + ".html"
     nav = build_nav(out_name, extract_sections(html))
     page = PAGE.format(title=title, desc=desc, nav=nav, body=html)

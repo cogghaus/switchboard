@@ -4,6 +4,12 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.9.8] - 2026-08-27
+
+### Changed
+- Emoji added to the model-routing matrix: a leading `emoji` field in `model-matrix.json` and an `emoji` column in the generated `model-matrix.md`.
+- Agents reference table restructured so the emoji is its own leading column (emoji | Agent | slug | model | use when) and enlarged for visual clarity.
+
 ## [0.9.7] - 2026-08-27
 
 ### Changed

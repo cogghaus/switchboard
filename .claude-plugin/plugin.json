@@ -1,7 +1,7 @@
 {
   "name": "switchboard",
   "displayName": "Switchboard",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "Switchboard - route each task to the right specialist. A roster of specialist sub-agents plus routing and operating skills for a person who delegates work to the best-fit model per task.",
   "author": { "name": "cogghaus" },
   "homepage": "https://github.com/cogghaus/switchboard",
