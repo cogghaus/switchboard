@@ -8,12 +8,12 @@ A Claude Code plugin that turns your main session into an orchestrator: you rout
 
 ## What is bundled
 
-### `agents/` - the roster (13 specialist sub-agents)
+### `agents/` - the roster (14 specialist sub-agents)
 
 One standalone Claude Code sub-agent per role:
 
 - **Build & design:** 🔥 Backend Developer, 🔨 Frontend Developer, 🎨 Designer
-- **Review & testing:** ⚖️ Code Reviewer, 🛡️ Security Reviewer, 🧪 QA Engineer, ⚡ Infra Pentester, 💀 Red Team Lead
+- **Review & testing:** ⚖️ Code Reviewer, 🧭 UX Reviewer, 🛡️ Security Reviewer, 🧪 QA Engineer, ⚡ Infra Pentester, 💀 Red Team Lead
 - **Plan & docs:** 🏛️ Architect, 🔮 Business Analyst, 📜 Technical Writer, 📯 Release Manager
 - **Challenger:** 🎭 Loki
 
@@ -33,7 +33,7 @@ claude plugin marketplace add cogghaus/switchboard
 claude plugin install switchboard@switchboard
 ```
 
-Installs by name and persists across sessions (`switchboard@switchboard` is `plugin@marketplace` - the repo is both); run `claude plugin details switchboard` to confirm 13 agents and 4 skills. To try it without installing, point Claude Code at the plugin's own directory for one session: `claude --plugin-dir <path-to-switchboard>`. Full guide: [docs/install.md](docs/install.md).
+Installs by name and persists across sessions (`switchboard@switchboard` is `plugin@marketplace` - the repo is both); run `claude plugin details switchboard` to confirm 14 agents and 4 skills. To try it without installing, point Claude Code at the plugin's own directory for one session: `claude --plugin-dir <path-to-switchboard>`. Full guide: [docs/install.md](docs/install.md).
 
 ## Model assignments
 

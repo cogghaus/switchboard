@@ -15,7 +15,7 @@ claude plugin install switchboard@switchboard
 claude plugin details switchboard
 ```
 
-You should see 13 agents and 4 skills. This is the path for a mixed team - everyone runs the same two commands.
+You should see 14 agents and 4 skills. This is the path for a mixed team - everyone runs the same two commands.
 
 ## Try it without installing (session-only)
 

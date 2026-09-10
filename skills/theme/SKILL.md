@@ -24,6 +24,7 @@ Switchboard ships with a mostly plain corporate roster (Security Reviewer, Backe
 - designer - product and UX design, user journeys and wireframes; the visionary / artisan.
 - testing-qa - finds defects; the all-seeing inspector.
 - reviewer-code - the quality gate, issues verdicts; the judge.
+- reviewer-ux - judges the interface against named standards; the inspector.
 - architect - system design and trade-offs; the master planner.
 - business-analyst - requirements and what to build; the seer / interpreter.
 - writer-technical - docs and the knowledge base; the chronicler / scribe.
