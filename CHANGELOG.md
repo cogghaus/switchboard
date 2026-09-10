@@ -4,8 +4,13 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-09-10
+
 ### Added
 - **🧭 UX Reviewer** (`reviewer-ux`, claude-opus-5) - the roster's fourteenth agent and the missing counterpart to the Code and Security Reviewers: it reviews a UI decision, design spec, or built interface against WCAG 2.1 AA by success criterion, ARIA Authoring Practices patterns, Nielsen's heuristics, and enterprise form and data-grid conventions, and issues the same three-verdict quality gate the Code Reviewer uses. Every finding must name the standard it violates and a concrete user-facing failure; preference is explicitly not a finding, and stated non-goals are not findings. It reviews only - the Designer authors, the Frontend Developer implements - and it declares that it cannot see rendered output, so contrast and layout checks are flagged for a human or tool rather than asserted from source. Matrix row, roster count, docs, orchestrator emoji line, and theme role list updated to match.
+
+### Changed
+- `roster-smith`'s roadmap entry now names its honest hard part: where a minted specialist lands (a user overlay that composes with the installed plugin and survives an update) and how its matrix row merges with the shipped `model-matrix.json`. Records that roster state lives in eight places, not one, which is the argument for landing `doctor` before the generator.
 
 ## [0.9.10] - 2026-08-27
 
