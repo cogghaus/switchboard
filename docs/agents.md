@@ -1,6 +1,6 @@
 # Agent Reference
 
-Switchboard's roster is 13 specialist sub-agents living in `agents/`. Each one is a standalone Claude Code sub-agent that the orchestrator spawns for a specific kind of work - it is not a persona switch inside one conversation, but a separate agent with its own context, its own tool allowlist, and its own default model drawn from the model-routing matrix (`skills/model-routing/model-matrix.md`). Each agent carries an emoji so you can tell at a glance which specialist is working. The orchestrator routes a task to the agent whose domain fits, the agent works within its allowlisted tools, and it returns its result directly rather than persisting state on its own.
+Switchboard's roster is 14 specialist sub-agents living in `agents/`. Each one is a standalone Claude Code sub-agent that the orchestrator spawns for a specific kind of work - it is not a persona switch inside one conversation, but a separate agent with its own context, its own tool allowlist, and its own default model drawn from the model-routing matrix (`skills/model-routing/model-matrix.md`). Each agent carries an emoji so you can tell at a glance which specialist is working. The orchestrator routes a task to the agent whose domain fits, the agent works within its allowlisted tools, and it returns its result directly rather than persisting state on its own.
 
 ## Reference table
 
@@ -10,6 +10,7 @@ Switchboard's roster is 13 specialist sub-agents living in `agents/`. Each one i
 | 🔨 | Frontend Developer | `developer-frontend` | claude-sonnet-5 | Building or modifying frontend UI - components, pages, styling, UI state/hooks, interaction tests |
 | 🎨 | Designer | `designer` | claude-fable-5 | Product/UX design - journeys, wireframes, interaction and visual design, accessibility - ahead of or alongside frontend work |
 | ⚖️ | Code Reviewer | `reviewer-code` | claude-opus-5 | Code review with an explicit verdict, AC verification, and a Critical/Important/Minor findings list |
+| 🧭 | UX Reviewer | `reviewer-ux` | claude-opus-5 | UX and accessibility review of a decision, spec, or interface against WCAG 2.1 AA, ARIA APG, and Nielsen, with an explicit verdict |
 | 🛡️ | Security Reviewer | `reviewer-security` | claude-opus-4-8 | Defensive security review of auth, input handling, secrets, uploads, integrations, or dependencies |
 | 🧪 | QA Engineer | `testing-qa` | claude-sonnet-5 | Test design and execution, bug hunting/reproduction, edge-case coverage, Definition-of-Done enforcement |
 | ⚡ | Infra Pentester | `testing-pentester` | claude-opus-4-8 | Authorized infra-focused security testing - CVEs, CI/CD, secret exposure, containers, supply chain |
@@ -31,6 +32,8 @@ Switchboard's roster is 13 specialist sub-agents living in `agents/`. Each one i
 ## Review & testing
 
 **⚖️ Code Reviewer** (`reviewer-code`) is the quality gate: it verifies acceptance criteria, lists findings by Critical/Important/Minor with file:line evidence, and issues exactly one verdict (APPROVED / CHANGES REQUESTED / BLOCKED). It reviews only - it never implements a fix itself. Route completed work here before merge; see `agents/reviewer-code.md`.
+
+**🧭 UX Reviewer** (`reviewer-ux`) is the interaction quality gate: it reviews a decision, design spec, or built interface against WCAG 2.1 AA by success criterion, ARIA Authoring Practices patterns, Nielsen's heuristics, and enterprise form and data-grid conventions, returning Critical/Important/Minor findings and exactly one verdict (APPROVED / CHANGES REQUESTED / BLOCKED). Every finding names the rule it violates and a concrete failure; preference is never reported as a finding. It reviews only - the Designer authors and the Frontend Developer implements - and it cannot see rendered pixels, so it flags contrast and layout checks for a human or tool. Route a UI decision here before it is built and an interface here before it ships; see `agents/reviewer-ux.md`.
 
 **🛡️ Security Reviewer** (`reviewer-security`) audits authentication/authorization, input handling and queries, file uploads, external integrations, secrets handling, and dependency usage, returning a severity-classified (CRITICAL/HIGH/MEDIUM/LOW) findings report with concrete remediations. It is defensive and advisory (read-only), and it routes active scanning to the Infra Pentester. Route any change touching those areas here; see `agents/reviewer-security.md`.
 

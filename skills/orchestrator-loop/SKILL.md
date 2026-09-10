@@ -40,7 +40,7 @@ So the human can see which specialist or skill is doing the work, announce it as
 - When you relay a specialist's result, lead with the same emoji so the report is attributable at a glance.
 - When a skill drives the work, name it with its emoji: `🧭 orchestrator-loop`, `🧮 model-routing`, `🖌️ theme`, `🔌 wireup`.
 
-Agent emojis: 🏛️ architect · 🔮 business-analyst · 🎨 designer · 🔥 developer-backend · 🔨 developer-frontend · ⚖️ reviewer-code · 🛡️ reviewer-security · 🧪 testing-qa · ⚡ testing-pentester · 💀 testing-red-team · 📜 writer-technical · 📯 release-manager · 🎭 loki
+Agent emojis: 🏛️ architect · 🔮 business-analyst · 🎨 designer · 🔥 developer-backend · 🔨 developer-frontend · ⚖️ reviewer-code · 🧭 reviewer-ux · 🛡️ reviewer-security · 🧪 testing-qa · ⚡ testing-pentester · 💀 testing-red-team · 📜 writer-technical · 📯 release-manager · 🎭 loki
 
 For a live indicator in the subagent panel (not just the transcript), enable the optional status-line script shipped in `scripts/` - see [install.md](../../docs/install.md).
 

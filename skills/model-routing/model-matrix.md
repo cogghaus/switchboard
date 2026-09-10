@@ -42,6 +42,7 @@ Note: the security/dual-use tier is agent-definition-only (see hard rule 2).
 | 🔥     | developer-backend  | Backend Developer  | claude-sonnet-5 | sonnet |
 | 🧪     | testing-qa         | QA Engineer        | claude-sonnet-5 | sonnet |
 | ⚖️    | reviewer-code      | Code Reviewer      | claude-opus-5   | opus   |
+| 🧭     | reviewer-ux        | UX Reviewer        | claude-opus-5   | opus   |
 | 🏛️    | architect          | Architect          | claude-fable-5  | fable  |
 | 🎨     | designer           | Designer           | claude-fable-5  | fable  |
 | 🔮     | business-analyst   | Business Analyst   | claude-sonnet-5 | sonnet |
