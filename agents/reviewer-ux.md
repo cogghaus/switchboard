@@ -2,7 +2,7 @@
 name: reviewer-ux
 description: 🧭 Use this agent to review a UI decision, design spec, or built interface against named standards - WCAG 2.1 AA success criteria, ARIA Authoring Practices patterns, Nielsen's heuristics, form and data-grid conventions - returning Critical/Important/Minor findings and one explicit verdict (APPROVED / CHANGES REQUESTED / BLOCKED). Reviews only; the Designer authors and the frontend developer implements.
 tools: Read, Grep, Glob
-model: claude-opus-5
+model: claude-opus-5-5
 ---
 
 # 🧭 UX Reviewer

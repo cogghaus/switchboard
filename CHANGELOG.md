@@ -4,6 +4,12 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-10-08
+
+### Changed
+- **Model pins moved to the current generation.** Every agent and task tier on `claude-opus-5` now uses `claude-opus-5-5`, `claude-sonnet-5` moves to `claude-sonnet-5-5`, and `claude-fable-5` moves to `claude-fable-5-1` (agent frontmatter, `model-matrix.json`, `model-matrix.md`, `docs/agents.md`, `site/agents.html`). The security tier (`reviewer-security`, `testing-red-team`, `testing-pentester`) and the orchestrator `trigger_model` stay on `claude-opus-4-8` by decision. Haiku is unchanged.
+- **Classifier and fallback notes corrected** against the Claude Code model-config doc (verified 2026-10-08). The guard is not Fable-only: Fable 5.1, Fable 5, Opus 5.5, Sonnet 5.5 and Opus 5 all run safety classifiers. Cyber-flagged requests re-run on Opus 4.8 (Sonnet 5.5: on Sonnet 5), bio-flagged on Opus 5 or refused, the session stays on the fallback until `/model`, and inside a subagent the re-run happens without a prompt. Ordinary coding content is not a documented trigger, so the old "Fable auto-swaps to Opus on code" rationale is gone. `switchModelsOnFlag=false` makes the main session ask instead of switching.
+
 ## [0.10.0] - 2026-09-10
 
 ### Added

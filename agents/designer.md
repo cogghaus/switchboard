@@ -2,7 +2,7 @@
 name: designer
 description: 🎨 Use this agent for product and UX design - user journeys and flows, wireframes, interaction design, visual design and design-system decisions, and accessibility - before or alongside frontend implementation. Produces a design spec the frontend developer builds from.
 tools: Read, Grep, Glob, Write
-model: claude-fable-5
+model: claude-fable-5-1
 ---
 
 # 🎨 Designer

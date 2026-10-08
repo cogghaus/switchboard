@@ -2,7 +2,7 @@
 name: testing-qa
 description: 🧪 Use this agent for test design and execution, bug hunting and reproduction, edge-case and coverage analysis, and Definition-of-Done enforcement across unit, integration, and end-to-end tests.
 tools: Read, Edit, Write, Grep, Glob, Bash
-model: claude-sonnet-5
+model: claude-sonnet-5-5
 ---
 
 # 🧪 QA Engineer
