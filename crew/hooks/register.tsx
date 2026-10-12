@@ -29,23 +29,22 @@ import {
   roleTag,
   VERDICT,
 } from './draw'
-import { bandOf, isNewFlow, merge, norm, plannedOf, totals } from './logic'
+import { bandOf, isNewFlow, MAX_COUNT, MAX_TASKS, MAX_TEXT, merge, plannedOf, recordComplete, recordSpawn, recordStep, spawnRole, totals } from './logic'
 import type { ProgressInput } from './logic'
-import { costOf, modelName, REVIEWERS, roleByDescription, roleBySlug, roleOf, tokensOf, verdictOf, windowOf } from './roster'
+import { modelName, roleByDescription, roleBySlug, roleOf } from './roster'
 
-const PLUGIN = 'switchboard-crew'
 const flow = atom({ plugin: 'switchboard-crew', key: 'flow' } as const, null)
 const agents = atom({ plugin: 'switchboard-crew', key: 'agents' } as const, [])
-const panel = atom({ plugin: 'switchboard-crew', key: 'panel' } as const, { isCompact: false, isDoneCollapsed: false, autoOpenedFor: '' })
+const panel = atom({ plugin: 'switchboard-crew', key: 'panel' } as const, { isCompact: false, isDoneCollapsed: false, autoOpenedFor: '', autoOpenedAt: 0 })
 const now = atom({ plugin: 'switchboard-crew', key: 'now' } as const, 0)
 const isBandHidden = atom({ plugin: 'switchboard-crew', key: 'isBandHidden' } as const, false)
 const known = atom({ plugin: 'switchboard-crew', key: 'known' } as const, {})
 const sessionUsd = atom({ plugin: 'switchboard-crew', key: 'sessionUsd' } as const, -1)
 const version = atom({ plugin: 'switchboard-crew', key: 'version' } as const, '')
 
-const PROGRESS = `mcp__${PLUGIN}__progress`
 const PANE = 'switchboard-crew'
-const KEPT_RUNS = 200
+// The panel opens itself at most this often, however many plans are reported.
+const AUTO_OPEN_GAP_MS = 5 * 60_000
 
 // Opens the crew pane, or closes it when it is up. Says what happened, including why an
 // opened pane waits undrawn (a narrow terminal, or a surface that places no panes).
@@ -61,12 +60,14 @@ async function togglePane($: EngineInterface): Promise<string> {
   return opened.isPlaced ? 'Crew panel opened.' : `Crew panel is open but not drawn here: ${opened.reason}`
 }
 
-// Opens the panel once per plan, the first time that plan names its tasks.
+// Opens the panel once per plan, the first time that plan names its tasks, and never more
+// often than AUTO_OPEN_GAP_MS: plan titles come from the model.
 async function autoOpen($: EngineInterface, title: string): Promise<void> {
   const p = await read($, panel)
-  if (p.autoOpenedFor === title) return
-  await update($, panel, prev => ({ ...prev, autoOpenedFor: title }))
-  if (!(await $.ui.panes()).some(pane => pane.id === PANE)) void $.ui.open({ id: PANE, title: 'Crew' })
+  const at = await $.clock.now()
+  if (p.autoOpenedFor === title || at - p.autoOpenedAt < AUTO_OPEN_GAP_MS) return
+  await update($, panel, prev => ({ ...prev, autoOpenedFor: title, autoOpenedAt: at }))
+  if (!(await $.ui.panes()).some(pane => pane.id === PANE)) void $.ui.open({ id: PANE, title: 'Crew' }).catch(() => undefined)
 }
 
 async function readVersion($: EngineInterface): Promise<string> {
@@ -92,20 +93,21 @@ export const register: Register = on => {
       inputSchema: {
         type: 'object',
         properties: {
-          title: { type: 'string', description: 'Short name of the overall goal, a few words.' },
-          total: { type: 'integer', minimum: 0, description: 'Number of planned delegated tasks; defaults to the length of tasks.' },
-          done: { type: 'integer', minimum: 0, description: 'Number of tasks accepted after review.' },
+          title: { type: 'string', maxLength: MAX_TEXT, description: 'Short name of the overall goal, a few words.' },
+          total: { type: 'integer', minimum: 0, maximum: MAX_COUNT, description: 'Number of planned delegated tasks; defaults to the length of tasks.' },
+          done: { type: 'integer', minimum: 0, maximum: MAX_COUNT, description: 'Number of tasks accepted after review.' },
           phase: { type: 'string', enum: ['plan', 'design', 'delegate', 'review', 'close'] },
           finished: { type: 'boolean', description: 'True once the work is reported and the loop is closed.' },
           tasks: {
             type: 'array',
+            maxItems: MAX_TASKS,
             description:
               'The delegated tasks in order, numbered from 1. Each title must equal the Agent tool description the task is delegated with, so runs match their task.',
             items: {
               type: 'object',
               properties: {
-                title: { type: 'string', description: 'A few words; reused verbatim as the Agent description.' },
-                role: { type: 'string', description: 'The roster role slug, e.g. developer-backend, reviewer-code, loki.' },
+                title: { type: 'string', maxLength: MAX_TEXT, description: 'A few words; reused verbatim as the Agent description.' },
+                role: { type: 'string', maxLength: MAX_TEXT, description: 'The roster role slug, e.g. developer-backend, reviewer-code, loki.' },
                 after: { type: 'array', items: { type: 'integer' }, description: 'Numbers of the tasks this one waits for.' },
               },
               required: ['title'],
@@ -153,44 +155,33 @@ export const register: Register = on => {
   })
 
   on('tool.call', { tool: 'mcp__switchboard-crew__progress' }, async ($, e) => {
+    // Model-reported and untrusted: merge bounds every field (see logic.ts).
     const input = e as unknown as ProgressInput
     const prev = await read($, flow)
-    if (isNewFlow(prev, input) && input.title !== undefined) {
-      // A new plan starts with a clean list; agents still running stay.
-      await update($, agents, list => list.filter(a => a.status === 'running'))
+    // Only a titled report starts a plan: a stray count with no plan (one dismissed, or never
+    // reported) draws nothing.
+    if (prev === null && (typeof input.title !== 'string' || input.title.trim() === '')) {
+      return { result: 'ignored: no plan is open; report one with a title and tasks first' }
     }
-    const next = await update($, flow, p => merge(p, input))
-    await update($, isBandHidden, () => false)
-    if (next !== null && (input.tasks?.length ?? 0) > 0) await autoOpen($, next.title)
-    const f = next ?? merge(null, input)
+    const isNew = isNewFlow(prev, input)
+    const at = await $.clock.now()
+    const map = await read($, known)
+    const f = (await update($, flow, p => merge(p, input, at, map))) ?? merge(null, input, at, map)
+    // A new plan shows the band again after a dismiss; a progress report on the same plan does not.
+    if (isNew) await update($, isBandHidden, () => false)
+    if (Array.isArray(input.tasks) && f.tasks.length > 0) await autoOpen($, f.title)
     return { result: `ok: ${f.isFinished ? 'done' : `${f.done}/${f.total} accepted, phase ${f.phase}`}` }
   })
 
   on('agent.spawn', async ($, e, next) => {
     const started = await next(e)
-    if (started.deny !== undefined) return started
+    // Nothing started (a hook beneath answered for it), or a remote workflow agent whose
+    // completion never reaches this session: neither is tracked, so neither sticks as running.
+    const agentId = started.agentId
+    if (started.deny !== undefined || agentId === undefined) return started
     const at = await $.clock.now()
-    const role = roleOf(e.subagentType, await read($, known))
-    await update($, agents, list => {
-      const round = 1 + list.filter(a => e.description !== '' && norm(a.description) === norm(e.description)).length
-      const run: AgentRun = {
-        id: started.agentId ?? e.tool_use_id,
-        agentId: started.agentId,
-        type: e.subagentType,
-        role: role.slug,
-        description: e.description,
-        model: started.model,
-        status: 'running',
-        startedAt: at,
-        contextTokens: 0,
-        contextMax: windowOf(started.model),
-        tokens: 0,
-        costUsd: 0,
-        steps: 0,
-        round,
-      }
-      return [...list.filter(a => a.id !== run.id), run].slice(-KEPT_RUNS)
-    })
+    const role = spawnRole(e.subagentType, await read($, known))
+    await update($, agents, list => recordSpawn(list, { agentId, type: e.subagentType, role, description: e.description, model: started.model, at }))
     await update($, now, () => at)
     await update($, isBandHidden, () => false)
     return started
@@ -200,25 +191,9 @@ export const register: Register = on => {
   on('turn.step', async function* ($, e, next) {
     const result = yield* next(e)
     const agentId = e.agentId
+    if (agentId === undefined || result.usage == null) return result
     const usage = result.usage
-    if (agentId === undefined || usage === undefined) return result
-    const model = usage.model || e.model
-    await update($, agents, list =>
-      list.map(a =>
-        a.agentId !== agentId
-          ? a
-          : {
-              ...a,
-              model,
-              effort: typeof e.effort === 'string' ? e.effort : a.effort,
-              contextTokens: tokensOf(usage),
-              contextMax: windowOf(model),
-              tokens: a.tokens + tokensOf(usage),
-              costUsd: a.costUsd + costOf(model, usage),
-              steps: a.steps + 1,
-            },
-      ),
-    )
+    await update($, agents, list => recordStep(list, agentId, usage, e.model, e.effort))
     return result
   })
 
@@ -226,23 +201,7 @@ export const register: Register = on => {
     const agentId = e.agentId
     if (agentId !== undefined) {
       const at = await $.clock.now()
-      await update($, agents, list =>
-        list.map(a => {
-          if (a.agentId !== agentId) return a
-          // A run whose steps went unseen still gets the turn's own sum.
-          const fallback = a.steps === 0 && e.usage !== undefined ? e.usage : undefined
-          const verdict = REVIEWERS.has(a.role) ? verdictOf(e.answer) : undefined
-          return {
-            ...a,
-            status: e.reason === 'answer' ? 'done' : 'failed',
-            endedAt: at,
-            ...(verdict === undefined ? {} : { verdict }),
-            ...(fallback === undefined
-              ? {}
-              : { model: fallback.model || a.model, tokens: tokensOf(fallback), costUsd: costOf(fallback.model || a.model, fallback) }),
-          }
-        }),
-      )
+      await update($, agents, list => recordComplete(list, agentId, { reason: e.reason, answer: e.answer, usage: e.usage, at }))
       await update($, now, () => at)
     }
     return next(e)
@@ -340,7 +299,7 @@ export const register: Register = on => {
       return (
         <Box key={a.id} flexDirection="column" marginBottom={1}>
           <Box flexDirection="row" gap={1}>
-            <Text color={role.color}>{a.status === 'running' ? '●' : a.status === 'done' ? '✓' : '✗'}</Text>
+            <Text color={a.status === 'failed' ? 'red' : role.color}>{a.status === 'running' ? '●' : a.status === 'done' ? '✓' : a.status === 'stopped' ? '■' : '✗'}</Text>
             <Text bold wrap="truncate-end">
               {a.description || a.type}
             </Text>
@@ -418,21 +377,27 @@ export const register: Register = on => {
         plain
         role="dismiss"
         onPress={async () => {
+          // Dismissing sets the plan aside: the next agent shows the agent-wave band, not a stale plan.
           await update($, isBandHidden, () => true)
-          if (f?.isFinished === true) await update($, flow, () => null)
+          await update($, flow, () => null)
         }}
       />
     )
     const percent = `${Math.round(band.ratio * 100)}%`
+    // Stack above whatever the plugins beneath draw here (another mod's band), never in place of it.
+    const below = await next(e)
 
     if ('Svg' in ui) {
       const { Svg } = ui
       const width = Math.max(200, Math.min(1600, (e.props.bodyColumns || 100) * 8 - 96))
       return (
-        <Box flexDirection="row" alignItems="center" gap={1}>
-          <Svg source={bandSvg(band, width)} alt={`${band.title}: ${band.label}, ${percent}`} width={width} height={BAND_H} />
-          {crewButton}
-          {dismiss}
+        <Box flexDirection="column">
+          <Box flexDirection="row" alignItems="center" gap={1}>
+            <Svg source={bandSvg(band, width)} alt={`${band.title}: ${band.label}, ${percent}`} width={width} height={BAND_H} />
+            {crewButton}
+            {dismiss}
+          </Box>
+          {below}
         </Box>
       )
     }
@@ -443,6 +408,7 @@ export const register: Register = on => {
     const filled = Math.round(barW * band.ratio)
     const color = band.isFinished ? DONE : AMBER
     return (
+      <Box flexDirection="column">
       <Box flexDirection="row" gap={2}>
         <Box width={titleW} flexShrink={0}>
           <Text color={color}>● </Text>
@@ -451,9 +417,11 @@ export const register: Register = on => {
         <Text color={color}>{'█'.repeat(filled) + '░'.repeat(Math.max(0, barW - filled))}</Text>
         <Text bold>{band.label}</Text>
         <Text dimColor>{percent}</Text>
-        <Text>{band.crew.map(m => m.role.emoji || '●').join('')}</Text>
+        <Text>{band.crew.slice(0, 5).map(m => m.role.emoji || '●').join('') + (band.crew.length > 5 ? ` +${band.crew.length - 5}` : '')}</Text>
         {crewButton}
         {dismiss}
+      </Box>
+      {below}
       </Box>
     )
   })

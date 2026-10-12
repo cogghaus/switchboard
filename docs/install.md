@@ -62,10 +62,10 @@ The panel then shows each running sub-agent with its emoji, for example `🔥 de
 claude plugin install switchboard-crew@switchboard
 ```
 
-- **The band above the prompt** shows the plan `orchestrator-loop` reports (accepted tasks out of planned, the phase) with the specialists at work walking at its end. With no plan reported it follows the agents running right now and leaves when they finish. `✕` dismisses it until the next plan or agent.
-- **The crew panel** (`/crew`, or the `×N` button on the band) lists every subagent of the session: its crab, role, model and effort, context fill, estimated cost and time, and for the Code, UX and Security Reviewers the verdict they returned. Planned tasks not yet started show dimmed. The header totals the agents' estimated cost beside the session's own total from Claude Code, and shows the mod's version.
+- **The band above the prompt** shows the plan `orchestrator-loop` reports (accepted tasks out of planned, the phase) with the specialists at work walking at its end. With no plan reported it follows the agents running right now and leaves when they finish. It stacks with other mods' bands. `✕` sets the plan aside until the next plan or agent.
+- **The crew panel** (`/crew`, or the `×N` button on the band; it also opens by itself when a plan is reported) lists every subagent of the session: its crab, role, model and effort, context fill, estimated cost and time, and for the Code, UX and Security Reviewers the verdict they returned. Planned tasks not yet started show dimmed. The header totals the agents' estimated cost beside the session's own total from Claude Code, and shows the mod's version.
 
-It only observes: no hook changes a tool call, a prompt or an agent. Per-agent cost is an estimate from token counts and a list-price table (`crew/hooks/roster.ts`); the session total is Claude Code's own. Mods run on Claude Code's early-access function-hooks API (tested on 2.1.291 and 2.1.295), which may change between releases; the core plugin does not depend on it, so the crew view ships separately. Themed rosters are recognised by each agent's description emoji, so a reskin keeps its costumes.
+It only observes: no hook changes a tool call, a prompt or an agent. Per-agent cost is an estimate from token counts and a list-price table (`crew/hooks/roster.ts`); the session total is Claude Code's own. Mods run on Claude Code's early-access function-hooks API, which may change between releases: the crew view needs Claude Code 2.1.291 or later (tested on 2.1.291 and 2.1.295); the core plugin does not depend on it, so the crew view ships separately. Themed rosters are recognised by each agent's description emoji, so a reskin keeps its costumes.
 
 ## Theme the roster (optional)
 

@@ -18,9 +18,12 @@ export type Flow = {
   phase: Phase
   isFinished: boolean
   tasks: PlannedTask[]
+  /** When the plan was first reported: runs started since belong to it. */
+  startedAt: number
 }
 
-export type AgentStatus = 'running' | 'done' | 'failed'
+/** `stopped`: the person interrupted it; `failed`: a refusal or an API error ended it. */
+export type AgentStatus = 'running' | 'done' | 'failed' | 'stopped'
 
 export type AgentRun = {
   id: string
@@ -47,8 +50,10 @@ export type AgentRun = {
 export type Panel = {
   isCompact: boolean
   isDoneCollapsed: boolean
-  /** The flow title the panel last opened itself for, so it opens once per flow. */
+  /** The plan title the panel last opened itself for, so it opens once per plan. */
   autoOpenedFor: string
+  /** When it last opened itself: at most once every few minutes, whatever the titles. */
+  autoOpenedAt: number
 }
 
 declare module 'claude-code' {

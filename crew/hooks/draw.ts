@@ -113,8 +113,10 @@ export const bandSvg = (b: BandModel, W: number): string => {
     }
   }
   const ticks: string[] = []
-  for (let i = 1; i < b.ticks; i++) {
-    const x = Math.round((barW * i) / b.ticks)
+  // One mark per planned task, never more than the bar can show (the count is model-reported).
+  const tickCount = Number.isFinite(b.ticks) ? Math.min(b.ticks, 100) : 0
+  for (let i = 1; i < tickCount; i++) {
+    const x = Math.round((barW * i) / tickCount)
     if (x > fillW + 4) ticks.push(`<rect x="${x}" y="${BAR_H / 2 - 4}" width="1.5" height="8" rx="0.75"/>`)
   }
   const pillW = Math.round(18 + textWidth(b.label, 11))
@@ -182,6 +184,7 @@ ${tiles.map(tile).join('')}`,
 const statusMark = (x: number, y: number, status: string, color: string): string => {
   if (status === 'running') return `<circle class="live" cx="${x}" cy="${y}" r="3.5" fill="${color}"/>`
   if (status === 'done') return `<path d="M${x - 5} ${y}l3.5 3.5 6.5-7" fill="none" stroke="#3B9C5F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`
+  if (status === 'stopped') return `<rect x="${x - 4}" y="${y - 4}" width="8" height="8" rx="1.5" fill="#9a9a96"/>`
   if (status === 'failed') return `<path d="M${x - 4} ${y - 4}l8 8M${x + 4} ${y - 4}l-8 8" stroke="#D0453F" stroke-width="1.8" stroke-linecap="round"/>`
   return `<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="#9a9a96" stroke-width="1.4"/><path d="M${x} ${y - 2.5}v2.8l1.8 1.2" fill="none" stroke="#9a9a96" stroke-width="1.4" stroke-linecap="round"/>`
 }
@@ -201,6 +204,7 @@ export const agentSvg = (W: number, a: AgentRun, at: number): string => {
   const meta = [a.effort === undefined ? modelName(a.model) : `${modelName(a.model)} · ${a.effort}`]
   if (a.round > 1) meta.push(`round ${a.round}`)
   if (a.status === 'failed') meta.push('error')
+  if (a.status === 'stopped') meta.push('stopped')
   const ctx = ctxOf(a)
   const stats = `ctx ${ctx}% · ${fmtTokens(a.contextTokens)}  ≈${fmtCost(a.costUsd)}  ${fmtTime(elapsed(a, at))}`
   const isDone = a.status === 'done'
