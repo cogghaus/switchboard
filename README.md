@@ -26,12 +26,18 @@ Each carries a routing description, a tool allowlist, an assigned model, and its
 - **`theme`** - reskin the roster to any naming theme: keep the plain corporate default, or name a subject (a show, game, universe, or motif) and each role is renamed to a fitting character, its function unchanged.
 - **`wireup`** - connect the roster to a specific project: set up hooks, MCP servers, and code intelligence (LSP) as a reviewed overlay on the project's own config. Optional, once per codebase.
 
+### `crew/` - the crew view (optional companion mod)
+
+**`switchboard-crew`** draws the roster at work as pixel crabs, one costume per role: a progress band above the prompt that follows the orchestrator's plan, and a `/crew` panel of every subagent with its role, model, context, cost, time and reviewer verdict. A separate plugin in the same marketplace, so the core stays hook-free; see [crew/README.md](crew/README.md).
+
 ## Install
 
 ```
 claude plugin marketplace add cogghaus/switchboard
 claude plugin install switchboard@switchboard
 ```
+
+Optionally, the crew view: `claude plugin install switchboard-crew@switchboard`.
 
 Installs by name and persists across sessions (`switchboard@switchboard` is `plugin@marketplace` - the repo is both); run `claude plugin details switchboard` to confirm 14 agents and 4 skills. To try it without installing, point Claude Code at the plugin's own directory for one session: `claude --plugin-dir <path-to-switchboard>`. Full guide: [docs/install.md](docs/install.md).
 

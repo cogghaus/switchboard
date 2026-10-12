@@ -1,6 +1,6 @@
 ---
 name: orchestrator-loop
-description: Use at the start of ANY substantial development task - building a feature, fixing a bug across files, refactoring, researching or understanding a codebase, planning, or any multi-step, delegatable, or parallelizable work - to operate as an orchestrator: frame the goal, decide direct-vs-delegate, route each piece to the best-fit specialist sub-agent at the best token-to-quality model, review what returns, and report. This is the default operating loop; consult it before doing substantial work yourself or spawning any agent.
+description: "Use at the start of ANY substantial development task - building a feature, fixing a bug across files, refactoring, researching or understanding a codebase, planning, or any multi-step, delegatable, or parallelizable work - to operate as an orchestrator: frame the goal, decide direct-vs-delegate, route each piece to the best-fit specialist sub-agent at the best token-to-quality model, review what returns, and report. This is the default operating loop; consult it before doing substantial work yourself or spawning any agent."
 ---
 
 # Orchestrator Loop
@@ -43,6 +43,16 @@ So the human can see which specialist or skill is doing the work, announce it as
 Agent emojis: 🏛️ architect · 🔮 business-analyst · 🎨 designer · 🔥 developer-backend · 🔨 developer-frontend · ⚖️ reviewer-code · 🧭 reviewer-ux · 🛡️ reviewer-security · 🧪 testing-qa · ⚡ testing-pentester · 💀 testing-red-team · 📜 writer-technical · 📯 release-manager · 🎭 loki
 
 For a live indicator in the subagent panel (not just the transcript), enable the optional status-line script shipped in `scripts/` - see [install.md](../../docs/install.md).
+
+## Report the plan to the crew band (when installed)
+
+If the companion `switchboard-crew` mod is installed, its `mcp__switchboard-crew__progress` tool is listed (deferred: load it through ToolSearch once). It draws the plan as a progress band above the prompt, with each specialist as a costumed crab. Without it, skip this section; nothing else depends on it.
+
+- **After decomposing** a task into two or more delegations, call it once with `title` (the goal in a few words), `phase: "delegate"`, and `tasks`: one entry per delegation in order, each with `title` (reused verbatim as the Agent tool's `description`, so runs match their task), `role` (the roster slug, e.g. `developer-backend`), and `after` for dependencies.
+- **After reviewing** each returned result, call it with the new `done` count of accepted tasks. Switch `phase` to `review` while verifying, and send updated `tasks` if you re-plan.
+- **When you report**, call it once with `finished: true`.
+
+Calls are cheap and silent; they only draw. A single small delegation needs no plan report: the band follows running agents on its own.
 
 ## Report discipline
 

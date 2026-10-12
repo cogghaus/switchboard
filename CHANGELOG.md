@@ -4,6 +4,14 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+### Added
+- **`switchboard-crew`, a companion mod** (`crew/`, listed in this marketplace as its own plugin): the roster at work as pixel crabs, one costume per role. A band above the prompt follows the plan `orchestrator-loop` reports, or the agents running when none is reported; the `/crew` panel lists every subagent of the session with its role, model and effort, context, estimated cost and time, and the verdict each reviewer returned. Themed rosters keep their costumes (agents are recognised by their description emoji). It only observes, and ships separately so the core plugin stays free of always-on hooks and of the early-access mods API. Crab body and walk adapted from savvy-progress (MIT); see `crew/NOTICE`.
+- `orchestrator-loop` gains a short "Report the plan to the crew band" section: when the crew mod is installed, report the plan, each accepted task and the close through its `progress` tool. Skipped entirely when the mod is absent.
+
+### Fixed
+- **`orchestrator-loop` frontmatter now parses.** Its unquoted `description` held `: `, which YAML reads as a nested mapping, so the skill loaded with empty metadata and its description never reached the model's skill listing (`claude plugin validate .` reported it). The description is now quoted; the text is unchanged.
+- **Docs site regenerated.** `site/agents.html` still showed the 13-agent roster: the 0.10.0 UX Reviewer and its row never reached the rendered page.
+
 ## [0.10.1] - 2026-10-08
 
 ### Changed
