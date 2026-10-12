@@ -54,11 +54,11 @@ export const roleByDescription = (description: string): Role | undefined => {
  * (`known`, from `agent.offer`).
  */
 export const roleOf = (type: string, known: Readonly<Record<string, string>> = {}): Role => {
-  const slug = type.replace(/^[^:]*:/, '')
-  const direct = BY_SLUG.get(slug)
-  if (direct !== undefined) return direct
+  // A themed name the listing mapped wins, even where it happens to equal another role's slug.
   const fromKnown = known[type] === undefined ? undefined : BY_SLUG.get(known[type])
   if (fromKnown !== undefined) return fromKnown
+  const direct = BY_SLUG.get(type.replace(/^[^:]*:/, ''))
+  if (direct !== undefined) return direct
   return type === 'Explore' ? EXPLORE : OTHER
 }
 
@@ -67,19 +67,26 @@ export const roleBySlug = (slug: string): Role => BY_SLUG.get(slug) ?? OTHER
 export const isRosterRole = (role: Role): boolean => BY_SLUG.has(role.slug)
 
 /**
- * A reviewer's verdict from its report: the Code and UX Reviewers write
- * `### Verdict: APPROVED | CHANGES REQUESTED | BLOCKED`; the Security Reviewer
- * closes with an overall verdict of clean or blocked. Undefined when none is found.
+ * A reviewer's verdict from its report. The Code and UX Reviewers close with a
+ * `### Verdict: APPROVED | CHANGES REQUESTED | BLOCKED` heading, which wins wherever it
+ * stands; otherwise the last verdict the report states counts, since a report may quote
+ * the options or an earlier round first. The Security Reviewer closes with an overall
+ * verdict of clean or blocked ("not clean" reads as blocked). Undefined when none is found.
  */
 export const verdictOf = (answer: string): Verdict | undefined => {
-  const formal = /verdict\W{0,6}(APPROVED|CHANGES REQUESTED|BLOCKED)\b/i.exec(answer)
-  if (formal !== null) {
-    const word = (formal[1] ?? '').toUpperCase()
-    return word === 'APPROVED' ? 'approved' : word === 'BLOCKED' ? 'blocked' : 'changes'
+  const word = (w: string): Verdict => {
+    const up = w.toUpperCase()
+    return up === 'APPROVED' ? 'approved' : up === 'BLOCKED' ? 'blocked' : 'changes'
   }
-  const security = /verdict[^\n]{0,40}?\b(clean|blocked)\b/i.exec(answer)
-  if (security !== null) return (security[1] ?? '').toLowerCase() === 'clean' ? 'approved' : 'blocked'
-  return undefined
+  const heading = [...answer.matchAll(/^#{1,6}\s*verdict\s*:?\s*\**\s*(APPROVED|CHANGES REQUESTED|BLOCKED)\b/gim)].at(-1)
+  if (heading !== undefined) return word(heading[1] ?? '')
+  const stated = [...answer.matchAll(/verdict\W{0,6}(APPROVED|CHANGES REQUESTED|BLOCKED)\b/gi)].at(-1)
+  if (stated !== undefined) return word(stated[1] ?? '')
+  const line = [...answer.matchAll(/verdict[^\n]*/gi)].at(-1)?.[0]
+  if (line === undefined) return undefined
+  const last = [...line.matchAll(/\b(not\s+|un)?(clean|blocked)\b/gi)].at(-1)
+  if (last === undefined) return undefined
+  return (last[2] ?? '').toLowerCase() === 'clean' && last[1] === undefined ? 'approved' : 'blocked'
 }
 
 export const PHASES: readonly Phase[] = ['plan', 'design', 'delegate', 'review', 'close']

@@ -6,12 +6,12 @@ A companion mod for [Switchboard](../README.md): the roster at work, drawn as pi
 claude plugin install switchboard-crew@switchboard
 ```
 
-Restart Claude Code afterwards. Needs a Claude Code build with function hooks (mods); tested on 2.1.291 and 2.1.295.
+Restart Claude Code afterwards. Needs Claude Code **2.1.291 or later** (the function-hooks API it is built on; 2.1.251 lacks the events it uses). Tested on 2.1.291 and 2.1.295.
 
 ## What it shows
 
-- **A band above the prompt.** When `orchestrator-loop` reports a plan, the band shows its title, accepted tasks out of planned, the phase, and the specialists at work walking at its end. With no plan it follows the agents running right now and leaves once they finish. `×N` opens the crew panel; `✕` dismisses the band until the next plan or agent.
-- **The crew panel** (`/crew`). Every subagent of the session with its crab, role, model and effort, context fill, estimated cost and time, and for the reviewers the verdict they returned (APPROVED, CHANGES REQUESTED, BLOCKED). Planned tasks not yet started show dimmed, with their dependencies. The header totals the agents' estimated cost and tokens beside the session's own total from Claude Code, and shows the mod's version. `Collapse` folds it to one row of crabs.
+- **A band above the prompt.** When `orchestrator-loop` reports a plan, the band shows its title, accepted tasks out of planned, the phase, and the specialists at work walking at its end. With no plan it follows the agents running right now and leaves once they finish. It stacks above any other mod's band rather than replacing it. `×N` toggles the crew panel; `✕` sets the plan aside and hides the band until the next plan or agent. The plan is model-reported: the band shows what the orchestrator says, while the panel's rows come from the agents themselves.
+- **The crew panel** (`/crew`). It opens by itself when a plan with tasks is reported (at most once every five minutes). Every subagent of the session with its crab, role, model and effort, context fill, estimated cost and time, and for the reviewers the verdict they returned (APPROVED, CHANGES REQUESTED, BLOCKED; the closing verdict counts). A run the person interrupted shows as stopped. Planned tasks not yet started show dimmed, with their dependencies. The header totals the agents' estimated cost and tokens beside the session's own total from Claude Code, and shows the mod's version. `Collapse` folds it to one row of crabs.
 
 ## The costumes
 
@@ -36,10 +36,11 @@ Claude Code's own Explore agent carries a spyglass; any other agent is a plain c
 
 ## How it works
 
-- `hooks/register.tsx` registers the `progress` tool (`mcp__switchboard-crew__progress`) that `orchestrator-loop` calls to report its plan, and the `/crew` command. It observes `agent.spawn`, `turn.step` and `turn.complete` to track each subagent, and draws the `AbovePrompt` band and the panel on the desktop (SVG) and the terminal (text).
+- `hooks/register.tsx` registers the `progress` tool (`mcp__switchboard-crew__progress`) that `orchestrator-loop` calls to report its plan, and the `/crew` command. It observes `agent.spawn`, `turn.step` and `turn.complete` to track each subagent, `agent.offer` to learn a themed roster's names and `session.measure` for the session's cost, and draws the `AbovePrompt` band and the panel on the desktop (SVG) and the terminal (text). The tracking itself is pure functions in `hooks/logic.ts`.
+- The `progress` tool is model-callable, so its input is untrusted: counts, task lists and texts are bounded (99, 50 tasks, 120 characters) whatever the schema let through.
 - Every hook passes the engine's input on unchanged: the mod never alters a tool call, a prompt or an agent.
 - Per-agent cost is an estimate from token counts and the list-price table in `hooks/roster.ts`; the session total comes from Claude Code itself.
-- Adding a role to the roster means a row in `hooks/roster.ts` and a costume in `hooks/crabs.ts`; the tests fail until both exist.
+- Adding a role to the roster means a row in `hooks/roster.ts`, a costume in `hooks/crabs.ts`, and the roster count in `hooks/crew.test.tsx`; the tests fail until all three agree.
 
 ## Developing
 

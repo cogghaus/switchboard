@@ -4,8 +4,10 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-12
+
 ### Added
-- **`switchboard-crew`, a companion mod** (`crew/`, listed in this marketplace as its own plugin): the roster at work as pixel crabs, one costume per role. A band above the prompt follows the plan `orchestrator-loop` reports, or the agents running when none is reported; the `/crew` panel lists every subagent of the session with its role, model and effort, context, estimated cost and time, and the verdict each reviewer returned. Themed rosters keep their costumes (agents are recognised by their description emoji). It only observes, and ships separately so the core plugin stays free of always-on hooks and of the early-access mods API. Crab body and walk adapted from savvy-progress (MIT); see `crew/NOTICE`.
+- **`switchboard-crew`, a companion mod** (`crew/`, listed in this marketplace as its own plugin): the roster at work as pixel crabs, one costume per role. A band above the prompt follows the plan `orchestrator-loop` reports, or the agents running when none is reported; the `/crew` panel lists every subagent of the session with its role, model and effort, context, estimated cost and time, and the verdict each reviewer returned. Themed rosters keep their costumes (agents are recognised by their description emoji). It only observes, and ships separately so the core plugin stays free of always-on hooks and of the early-access mods API. Needs Claude Code 2.1.291 or later. Its model-callable `progress` tool bounds every count, list and text it is given. Crab body and walk adapted from savvy-progress (MIT); see `crew/NOTICE`.
 - `orchestrator-loop` gains a short "Report the plan to the crew band" section: when the crew mod is installed, report the plan, each accepted task and the close through its `progress` tool. Skipped entirely when the mod is absent.
 
 ### Fixed
