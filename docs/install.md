@@ -54,6 +54,19 @@ For a live indicator in Claude Code's subagent panel as agents run, enable the o
 
 The panel then shows each running sub-agent with its emoji, for example `🔥 developer-backend · running`. This is per-user and optional; the plugin ships it off by default. Status-line behavior in the IDE surfaces is not yet documented, so treat the live panel as best-effort - the transcript announcements above always work.
 
+### The crew view (optional companion mod)
+
+`switchboard-crew` is a second plugin in this marketplace: a Claude Code mod that draws the roster at work as pixel crabs, one costume per role (the Architect's blueprint, the Code Reviewer's wig and gavel, the Security Reviewer's helm and shield, Loki's jester cap, and so on).
+
+```
+claude plugin install switchboard-crew@switchboard
+```
+
+- **The band above the prompt** shows the plan `orchestrator-loop` reports (accepted tasks out of planned, the phase) with the specialists at work walking at its end. With no plan reported it follows the agents running right now and leaves when they finish. `✕` dismisses it until the next plan or agent.
+- **The crew panel** (`/crew`, or the `×N` button on the band) lists every subagent of the session: its crab, role, model and effort, context fill, estimated cost and time, and for the Code, UX and Security Reviewers the verdict they returned. Planned tasks not yet started show dimmed. The header totals the agents' estimated cost beside the session's own total from Claude Code, and shows the mod's version.
+
+It only observes: no hook changes a tool call, a prompt or an agent. Per-agent cost is an estimate from token counts and a list-price table (`crew/hooks/roster.ts`); the session total is Claude Code's own. Mods run on Claude Code's early-access function-hooks API (tested on 2.1.291 and 2.1.295), which may change between releases; the core plugin does not depend on it, so the crew view ships separately. Themed rosters are recognised by each agent's description emoji, so a reskin keeps its costumes.
+
 ## Theme the roster (optional)
 
 Run the `theme` skill to reskin the roster to a naming theme. It asks whether to keep the plain corporate default or apply a custom theme; for custom, you name any subject (a show, game, universe, or motif) and each role is renamed to a fitting character. Theming is cosmetic - names and at most one flavor line per agent - and never changes an agent's tools, model, or safety instructions. The value `corporate` restores the shipped defaults. See `skills/theme/SKILL.md`.
@@ -77,6 +90,7 @@ Nothing is written without your review, and re-running `wireup` changes nothing 
 | Agent names / theme | `agents/<name>.md` + `theme.json` | the `theme` skill |
 | Always-on orchestrator mode | your own `SessionStart` hook | opt-in, see above |
 | Project hooks / MCP / LSP | the project's own config | the `wireup` skill |
+| Crew band and panel | the `switchboard-crew` companion mod | `claude plugin install switchboard-crew@switchboard` |
 
 ## See also
 

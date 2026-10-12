@@ -32,7 +32,7 @@
 </aside>
 <main class="prose">
 <h1 id="agent-reference">Agent Reference</h1>
-<p>Switchboard's roster is 13 specialist sub-agents living in <code>agents/</code>. Each one is a standalone Claude Code sub-agent that the orchestrator spawns for a specific kind of work - it is not a persona switch inside one conversation, but a separate agent with its own context, its own tool allowlist, and its own default model drawn from the model-routing matrix (<code>skills/model-routing/model-matrix.md</code>). Each agent carries an emoji so you can tell at a glance which specialist is working. The orchestrator routes a task to the agent whose domain fits, the agent works within its allowlisted tools, and it returns its result directly rather than persisting state on its own.</p>
+<p>Switchboard's roster is 14 specialist sub-agents living in <code>agents/</code>. Each one is a standalone Claude Code sub-agent that the orchestrator spawns for a specific kind of work - it is not a persona switch inside one conversation, but a separate agent with its own context, its own tool allowlist, and its own default model drawn from the model-routing matrix (<code>skills/model-routing/model-matrix.md</code>). Each agent carries an emoji so you can tell at a glance which specialist is working. The orchestrator routes a task to the agent whose domain fits, the agent works within its allowlisted tools, and it returns its result directly rather than persisting state on its own.</p>
 <h2 id="reference-table">Reference table</h2>
 <div class="table-wrap"><table class="roster">
 <thead>
@@ -72,6 +72,13 @@
 <td><code>reviewer-code</code></td>
 <td>claude-opus-5-5</td>
 <td>Code review with an explicit verdict, AC verification, and a Critical/Important/Minor findings list</td>
+</tr>
+<tr>
+<td>🧭</td>
+<td>UX Reviewer</td>
+<td><code>reviewer-ux</code></td>
+<td>claude-opus-5-5</td>
+<td>UX and accessibility review of a decision, spec, or interface against WCAG 2.1 AA, ARIA APG, and Nielsen, with an explicit verdict</td>
 </tr>
 <tr>
 <td>🛡️</td>
@@ -144,6 +151,7 @@
 <p><strong>🎨 Designer</strong> (<code>designer</code>) produces the design spec the Frontend Developer builds from: user flows, annotated wireframes, states (empty/loading/error/success), design-system tokens and components, and accessibility requirements. It works before or alongside frontend implementation, not after. Route UX/visual design work here; see <code>agents/designer.md</code>.</p>
 <h2 id="review-testing">Review &amp; testing</h2>
 <p><strong>⚖️ Code Reviewer</strong> (<code>reviewer-code</code>) is the quality gate: it verifies acceptance criteria, lists findings by Critical/Important/Minor with file:line evidence, and issues exactly one verdict (APPROVED / CHANGES REQUESTED / BLOCKED). It reviews only - it never implements a fix itself. Route completed work here before merge; see <code>agents/reviewer-code.md</code>.</p>
+<p><strong>🧭 UX Reviewer</strong> (<code>reviewer-ux</code>) is the interaction quality gate: it reviews a decision, design spec, or built interface against WCAG 2.1 AA by success criterion, ARIA Authoring Practices patterns, Nielsen's heuristics, and enterprise form and data-grid conventions, returning Critical/Important/Minor findings and exactly one verdict (APPROVED / CHANGES REQUESTED / BLOCKED). Every finding names the rule it violates and a concrete failure; preference is never reported as a finding. It reviews only - the Designer authors and the Frontend Developer implements - and it cannot see rendered pixels, so it flags contrast and layout checks for a human or tool. Route a UI decision here before it is built and an interface here before it ships; see <code>agents/reviewer-ux.md</code>.</p>
 <p><strong>🛡️ Security Reviewer</strong> (<code>reviewer-security</code>) audits authentication/authorization, input handling and queries, file uploads, external integrations, secrets handling, and dependency usage, returning a severity-classified (CRITICAL/HIGH/MEDIUM/LOW) findings report with concrete remediations. It is defensive and advisory (read-only), and it routes active scanning to the Infra Pentester. Route any change touching those areas here; see <code>agents/reviewer-security.md</code>.</p>
 <p><strong>🧪 QA Engineer</strong> (<code>testing-qa</code>) designs and runs unit, integration, and end-to-end tests, hunts and reproduces bugs, and enforces Definition-of-Done before a task is called ready for review. It owns all test files, fixtures, and coverage configuration. Route test design/execution and bug investigation here; see <code>agents/testing-qa.md</code>.</p>
 <p><strong>⚡ Infra Pentester</strong> (<code>testing-pentester</code>) runs authorized infrastructure-focused security testing: dependency and CVE scanning, CI/CD pipeline security, secret-exposure detection, container security, supply-chain analysis, and resilience probes, strictly within a pre-authorized engagement scope. Route infra-layer offensive testing here; see <code>agents/testing-pentester.md</code>.</p>

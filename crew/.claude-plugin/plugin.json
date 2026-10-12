@@ -1,0 +1,11 @@
+{
+  "name": "switchboard-crew",
+  "displayName": "Switchboard Crew",
+  "version": "0.1.0",
+  "description": "The Switchboard roster at work, as costumed pixel crabs: a progress band above the prompt and a crew panel (/crew) with each subagent's role, model, context, cost, time and reviewer verdict.",
+  "author": { "name": "cogghaus" },
+  "homepage": "https://github.com/cogghaus/switchboard",
+  "repository": "https://github.com/cogghaus/switchboard",
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}

@@ -42,7 +42,7 @@ claude plugin install switchboard@switchboard
 <p><code>switchboard@switchboard</code> is <code>plugin@marketplace</code> (the repo is both). Installed plugins persist and show in <code>claude plugin list</code>. Confirm the inventory:</p>
 <pre><code>claude plugin details switchboard
 </code></pre>
-<p>You should see 13 agents and 4 skills. This is the path for a mixed team - everyone runs the same two commands.</p>
+<p>You should see 14 agents and 4 skills. This is the path for a mixed team - everyone runs the same two commands.</p>
 <h2 id="try-it-without-installing-session-only">Try it without installing (session-only)</h2>
 <p>To kick the tires without a persistent install, point Claude Code at the plugin's <strong>own</strong> directory:</p>
 <pre><code>claude --plugin-dir &lt;path-to-switchboard&gt;
@@ -65,6 +65,15 @@ claude plugin install switchboard@switchboard
 }
 </code></pre>
 <p>The panel then shows each running sub-agent with its emoji, for example <code>🔥 developer-backend · running</code>. This is per-user and optional; the plugin ships it off by default. Status-line behavior in the IDE surfaces is not yet documented, so treat the live panel as best-effort - the transcript announcements above always work.</p>
+<h3 id="the-crew-view-optional-companion-mod">The crew view (optional companion mod)</h3>
+<p><code>switchboard-crew</code> is a second plugin in this marketplace: a Claude Code mod that draws the roster at work as pixel crabs, one costume per role (the Architect's blueprint, the Code Reviewer's wig and gavel, the Security Reviewer's helm and shield, Loki's jester cap, and so on).</p>
+<pre><code>claude plugin install switchboard-crew@switchboard
+</code></pre>
+<ul>
+<li><strong>The band above the prompt</strong> shows the plan <code>orchestrator-loop</code> reports (accepted tasks out of planned, the phase) with the specialists at work walking at its end. With no plan reported it follows the agents running right now and leaves when they finish. <code>✕</code> dismisses it until the next plan or agent.</li>
+<li><strong>The crew panel</strong> (<code>/crew</code>, or the <code>×N</code> button on the band) lists every subagent of the session: its crab, role, model and effort, context fill, estimated cost and time, and for the Code, UX and Security Reviewers the verdict they returned. Planned tasks not yet started show dimmed. The header totals the agents' estimated cost beside the session's own total from Claude Code, and shows the mod's version.</li>
+</ul>
+<p>It only observes: no hook changes a tool call, a prompt or an agent. Per-agent cost is an estimate from token counts and a list-price table (<code>crew/hooks/roster.ts</code>); the session total is Claude Code's own. Mods run on Claude Code's early-access function-hooks API (tested on 2.1.291 and 2.1.295), which may change between releases; the core plugin does not depend on it, so the crew view ships separately. Themed rosters are recognised by each agent's description emoji, so a reskin keeps its costumes.</p>
 <h2 id="theme-the-roster-optional">Theme the roster (optional)</h2>
 <p>Run the <code>theme</code> skill to reskin the roster to a naming theme. It asks whether to keep the plain corporate default or apply a custom theme; for custom, you name any subject (a show, game, universe, or motif) and each role is renamed to a fitting character. Theming is cosmetic - names and at most one flavor line per agent - and never changes an agent's tools, model, or safety instructions. The value <code>corporate</code> restores the shipped defaults. See <code>skills/theme/SKILL.md</code>.</p>
 <h2 id="wire-it-into-a-project-optional">Wire it into a project (optional)</h2>
@@ -109,6 +118,11 @@ claude plugin install switchboard@switchboard
 <td>Project hooks / MCP / LSP</td>
 <td>the project's own config</td>
 <td>the <code>wireup</code> skill</td>
+</tr>
+<tr>
+<td>Crew band and panel</td>
+<td>the <code>switchboard-crew</code> companion mod</td>
+<td><code>claude plugin install switchboard-crew@switchboard</code></td>
 </tr>
 </tbody>
 </table></div>

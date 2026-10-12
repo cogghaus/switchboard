@@ -13,6 +13,13 @@
       "source": "./",
       "category": "development",
       "homepage": "https://cogghaus.github.io/switchboard/"
+    },
+    {
+      "name": "switchboard-crew",
+      "description": "Companion mod: the roster at work as costumed pixel crabs, with a progress band above the prompt and a /crew panel of every subagent. Needs a Claude Code build with function hooks (mods).",
+      "source": "./crew",
+      "category": "development",
+      "homepage": "https://cogghaus.github.io/switchboard/"
     }
   ]
 }
