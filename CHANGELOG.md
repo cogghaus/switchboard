@@ -4,6 +4,11 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-11-17
+
+### Changed
+- **`reviewer-code` gains the Write tool, for probe files only.** A reviewer that needed a few lines to reproduce a bug had Bash but no Write, so it built the file through the shell (a heredoc, a redirect, an interpreter one-liner), which is fragile on quoting and is refused by shell guards that block file edits from the command line. It now writes probe files with Write, only under a temp or scratch directory, runs them by path, and lists each one at the end of the review. The trade, stated plainly: the Code Reviewer is no longer read-only by construction, only by instruction. It still never changes a file in the project. `reviewer-security` and `reviewer-ux` are unchanged (no Bash, no Write).
+
 ## [0.11.0] - 2026-10-12
 
 ### Added
