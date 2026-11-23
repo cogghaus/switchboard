@@ -2,9 +2,10 @@
 
 Skills are how you drive the Switchboard roster. Some auto-invoke - Claude reads a skill's
 description and decides, best-effort, whether the current task calls for it - and some you call
-explicitly by name with `/skill-name`. Switchboard ships four: `orchestrator-loop` (the default
-operating loop), `model-routing` (which model runs which task), `theme` (reskin the roster's
-names), and `wireup` (connect the roster to a specific project's config). This page is the
+explicitly by name with `/skill-name`. Switchboard ships five: `orchestrator-loop` (the default
+operating loop), `model-routing` (which model runs which task), `spec-review` (spec first, reviewed
+to approval before building), `theme` (reskin the roster's names), and `wireup` (connect the roster
+to a specific project's config). This page is the
 newcomer reference for each.
 
 ## orchestrator-loop
@@ -69,6 +70,26 @@ spawning any agent) reads `model-matrix.md` as part of routing step 3.
 spawned agent.
 
 See `skills/model-routing/SKILL.md` for the full text.
+
+## spec-review
+
+Spec first for any feature big enough that a builder could get the design wrong. The orchestrator
+writes the spec into the project's design docs (marks `[V]` verified, `[I]` inferred, `[Q]` open
+question) plus an ADR for any architecture choice, then spawns a fresh Fable reviewer (the
+`architect` agent, read-only) with a fixed brief. The reviewer returns a `VERDICT:` line and numbered
+findings with severity and file:line evidence; the orchestrator answers each one (accept, or push
+back with tested evidence), commits the revision and sends it to the same reviewer until it
+approves. A disagreement still open after two rounds goes to the user. The approved spec is then
+presented (summary, decisions on each `[Q]`, open risks, implied version bump) and building starts
+on the user's go, or at once if the user said "build once approved".
+
+**Invocation:** auto-invokes when a spec or design doc is asked for or a substantial feature needs
+one; `orchestrator-loop` routes such features here first. Also `/spec-review`.
+
+**Output:** the spec and ADR in the project's docs, committed; the review exchange itself lives in
+the session.
+
+See `skills/spec-review/SKILL.md` for the full text and the reviewer brief.
 
 ## theme
 

@@ -16,6 +16,10 @@ You are the orchestrator. The human sets direction; you decompose the work, dele
 5. **Review.** Never relay a sub-agent's output unread. For high-stakes or dual-use work, have a second agent verify.
 6. **Report.** Plan, then did (one line per action), then results and outstanding.
 
+## Substantial features: spec first
+
+A feature big enough that a builder could get the design wrong (open questions, new architecture, several files or layers) is not delegated to a builder yet. Run it through the `spec-review` skill first: you write the spec, a fresh Fable reviewer converses with you to an approved spec, the user sees it, and only then does building start.
+
 ## Direct vs delegate
 
 - **Delegate:** large mechanical passes, parallel independent work, specialized domains, broad research, adversarial verification.
