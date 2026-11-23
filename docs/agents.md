@@ -6,20 +6,20 @@ Switchboard's roster is 14 specialist sub-agents living in `agents/`. Each one i
 
 |  | Agent | slug | Default model | Use when |
 |---|---|---|---|---|
-| 🔥 | Backend Developer | `developer-backend` | claude-sonnet-5-5 | Building or modifying backend code - routes, middleware, services, data models, schema/migrations, backend tests |
-| 🔨 | Frontend Developer | `developer-frontend` | claude-sonnet-5-5 | Building or modifying frontend UI - components, pages, styling, UI state/hooks, interaction tests |
-| 🎨 | Designer | `designer` | claude-fable-5-1 | Product/UX design - journeys, wireframes, interaction and visual design, accessibility - ahead of or alongside frontend work |
-| ⚖️ | Code Reviewer | `reviewer-code` | claude-opus-5-5 | Code review with an explicit verdict, AC verification, and a Critical/Important/Minor findings list |
-| 🧭 | UX Reviewer | `reviewer-ux` | claude-opus-5-5 | UX and accessibility review of a decision, spec, or interface against WCAG 2.1 AA, ARIA APG, and Nielsen, with an explicit verdict |
-| 🛡️ | Security Reviewer | `reviewer-security` | claude-opus-4-8 | Defensive security review of auth, input handling, secrets, uploads, integrations, or dependencies |
-| 🧪 | QA Engineer | `testing-qa` | claude-sonnet-5-5 | Test design and execution, bug hunting/reproduction, edge-case coverage, Definition-of-Done enforcement |
-| ⚡ | Infra Pentester | `testing-pentester` | claude-opus-4-8 | Authorized infra-focused security testing - CVEs, CI/CD, secret exposure, containers, supply chain |
-| 💀 | Red Team Lead | `testing-red-team` | claude-opus-4-8 | Authorized application-layer offensive testing - OWASP Top 10, auth attacks, business logic abuse, prompt injection |
-| 🏛️ | Architect | `architect` | claude-fable-5-1 | System architecture decisions, tech/vendor evaluation, cross-cutting design, ADRs |
-| 🔮 | Business Analyst | `business-analyst` | claude-sonnet-5-5 | Requirements before implementation - problem framing, story breakdown, acceptance criteria, scope discipline |
-| 📜 | Technical Writer | `writer-technical` | claude-sonnet-5-5 | Maintaining the project knowledge base - architecture docs, ADRs, API references, runbooks, staleness audits |
-| 📯 | Release Manager | `release-manager` | claude-sonnet-5-5 | Coordinating a release - semver bumps, CHANGELOG, tagging, pre-release gates, deploy coordination |
-| 🎭 | Loki | `loki` | claude-fable-5-1 | Invitation-only: challenging assumptions and surfacing alternatives in brainstorms, design reviews, premortems, post-mortems |
+| 🔥 | Backend Developer | `developer-backend` | `sonnet` (Sonnet 5.5) | Building or modifying backend code - routes, middleware, services, data models, schema/migrations, backend tests |
+| 🔨 | Frontend Developer | `developer-frontend` | `sonnet` (Sonnet 5.5) | Building or modifying frontend UI - components, pages, styling, UI state/hooks, interaction tests |
+| 🎨 | Designer | `designer` | `fable` (Fable 5.2) | Product/UX design - journeys, wireframes, interaction and visual design, accessibility - ahead of or alongside frontend work |
+| ⚖️ | Code Reviewer | `reviewer-code` | `claude-opus-5-5` (pinned) | Code review with an explicit verdict, AC verification, and a Critical/Important/Minor findings list |
+| 🧭 | UX Reviewer | `reviewer-ux` | `claude-opus-5-5` (pinned) | UX and accessibility review of a decision, spec, or interface against WCAG 2.1 AA, ARIA APG, and Nielsen, with an explicit verdict |
+| 🛡️ | Security Reviewer | `reviewer-security` | `claude-opus-4-8` (pinned) | Defensive security review of auth, input handling, secrets, uploads, integrations, or dependencies |
+| 🧪 | QA Engineer | `testing-qa` | `sonnet` (Sonnet 5.5) | Test design and execution, bug hunting/reproduction, edge-case coverage, Definition-of-Done enforcement |
+| ⚡ | Infra Pentester | `testing-pentester` | `claude-opus-4-8` (pinned) | Authorized infra-focused security testing - CVEs, CI/CD, secret exposure, containers, supply chain |
+| 💀 | Red Team Lead | `testing-red-team` | `claude-opus-4-8` (pinned) | Authorized application-layer offensive testing - OWASP Top 10, auth attacks, business logic abuse, prompt injection |
+| 🏛️ | Architect | `architect` | `fable` (Fable 5.2) | System architecture decisions, tech/vendor evaluation, cross-cutting design, ADRs, and the second-mind spec review in `spec-review` |
+| 🔮 | Business Analyst | `business-analyst` | `sonnet` (Sonnet 5.5) | Requirements before implementation - problem framing, story breakdown, acceptance criteria, scope discipline |
+| 📜 | Technical Writer | `writer-technical` | `sonnet` (Sonnet 5.5) | Maintaining the project knowledge base - architecture docs, ADRs, API references, runbooks, staleness audits |
+| 📯 | Release Manager | `release-manager` | `sonnet` (Sonnet 5.5) | Coordinating a release - semver bumps, CHANGELOG, tagging, pre-release gates, deploy coordination |
+| 🎭 | Loki | `loki` | `fable` (Fable 5.2) | Invitation-only: challenging assumptions and surfacing alternatives in brainstorms, design reviews, premortems, post-mortems |
 
 ## Build & design
 
@@ -39,19 +39,19 @@ Switchboard's roster is 14 specialist sub-agents living in `agents/`. Each one i
 
 **🧪 QA Engineer** (`testing-qa`) designs and runs unit, integration, and end-to-end tests, hunts and reproduces bugs, and enforces Definition-of-Done before a task is called ready for review. It owns all test files, fixtures, and coverage configuration. Route test design/execution and bug investigation here; see `agents/testing-qa.md`.
 
-**⚡ Infra Pentester** (`testing-pentester`) runs authorized infrastructure-focused security testing: dependency and CVE scanning, CI/CD pipeline security, secret-exposure detection, container security, supply-chain analysis, and resilience probes, strictly within a pre-authorized engagement scope. Route infra-layer offensive testing here; see `agents/testing-pentester.md`.
+**⚡ Infra Pentester** (`testing-pentester`) runs authorized infrastructure-focused security testing: dependency and CVE scanning, CI/CD pipeline security, secret-exposure detection, container security, supply-chain analysis, and resilience probes, strictly within a pre-authorized engagement scope: the brief carries a scope block (targets, owner, allowed techniques, exclusions, time window), the human approves before the engagement in the conversation, and without a scope block it stays on the local repository and local instances, never production or third-party hosts. Network use is limited to registry and advisory lookups for CVE data, secret probing prints names, locations or fingerprints only, and it holds Write for scratch-directory probe files only. Route infra-layer offensive testing here; see `agents/testing-pentester.md`.
 
-**💀 Red Team Lead** (`testing-red-team`) runs authorized application-layer offensive testing - OWASP Top 10, auth/authz attacks, business logic abuse, and prompt-injection testing - producing an evidence-based engagement report with attack chains, proof of concept, and a remediation roadmap. Route application-layer offensive testing here; see `agents/testing-red-team.md`.
+**💀 Red Team Lead** (`testing-red-team`) runs authorized application-layer offensive testing - OWASP Top 10, auth/authz attacks, business logic abuse, and prompt-injection testing - producing an evidence-based engagement report with attack chains, proof of concept, and a remediation roadmap. Like the Infra Pentester it needs a scope block in the brief (targets, owner, allowed techniques, exclusions, time window), has the human's approval given before the engagement, defaults to the local repository and local instances only, prints no secret values, and holds Write for scratch-directory probe files only. Route application-layer offensive testing here; see `agents/testing-red-team.md`.
 
 ## Plan & docs
 
-**🏛️ Architect** (`architect`) is the advisory owner of technical design: system architecture decisions, technology/vendor evaluation, cross-cutting concern design (auth, logging, caching, resilience), technical debt assessment, and ADRs weighed against maintainability, scalability, cost, and team capability. It analyzes and recommends; implementation is routed elsewhere. Route significant design decisions here; see `agents/architect.md`.
+**🏛️ Architect** (`architect`) is the advisory owner of technical design: system architecture decisions, technology/vendor evaluation, cross-cutting concern design (auth, logging, caching, resilience), technical debt assessment, and ADRs weighed against maintainability, scalability, cost, and team capability. It analyzes and recommends; implementation is routed elsewhere. It also has a spec-review mode: the `spec-review` skill spawns it as the fresh second mind on a spec the orchestrator wrote, and in that mode it stays read-only and returns a `VERDICT:` line (APPROVED only when nothing Blocking or Important is open) followed by evidenced findings. Route significant design decisions here; see `agents/architect.md`.
 
 **🔮 Business Analyst** (`business-analyst`) defines requirements before implementation begins: problem framing, epic/story breakdown with testable acceptance criteria, user research synthesis, prioritization, and scope discipline against feature creep. Route "what should we build, for whom, and why" here before work starts; see `agents/business-analyst.md`.
 
 **📜 Technical Writer** (`writer-technical`) curates the living knowledge base: creating or updating architecture docs, ADRs, API references, and runbooks after a significant change, and auditing existing docs for staleness, contradiction, and redundancy. It writes for current state, not history. Route doc maintenance here after a significant change or for a doc audit; see `agents/writer-technical.md`.
 
-**📯 Release Manager** (`release-manager`) coordinates a release end to end: semver version bumps, CHANGELOG maintenance, git tagging, pre-release gate checks, and deploy coordination, following a checklist that never bypasses a failed gate. It does not write feature code. Route release coordination here; see `agents/release-manager.md`.
+**📯 Release Manager** (`release-manager`) coordinates a release end to end: semver version bumps, CHANGELOG maintenance, git tagging, pre-release gate checks, and deploy coordination, following a checklist that never bypasses a failed gate. It makes the release commit, pushes it, and tags it (annotated `v<version>` on the release commit on main, pushed with the release, never moved once published). It does not write feature code. Route release coordination here; see `agents/release-manager.md`.
 
 ## Challenger
 
@@ -59,4 +59,4 @@ Switchboard's roster is 14 specialist sub-agents living in `agents/`. Each one i
 
 ## Model assignments
 
-The three security agents - 🛡️ Security Reviewer, 💀 Red Team Lead, and ⚡ Infra Pentester - are pinned to `claude-opus-4-8` by full model ID, not by alias, so security and dual-use work always lands on that tier regardless of how aliases move between model versions elsewhere. All model assignments in this document, including these three, come from `skills/model-routing/model-matrix.md` (the human-readable derived view of `skills/model-routing/model-matrix.json`, the source of truth) - consult it directly for the current routing rules and rationale rather than treating this reference as authoritative for future changes.
+The three security agents - 🛡️ Security Reviewer, 💀 Red Team Lead, and ⚡ Infra Pentester - are pinned to `claude-opus-4-8` by full model ID, not by alias, so security and dual-use work always lands on that tier regardless of how aliases move between model versions elsewhere. The Code Reviewer and UX Reviewer are pinned to `claude-opus-5-5` by full ID too, for a different reason: an alias follows the parent session's model when the parent is the same family, and the recommended orchestrator is Opus 4.8, so `opus` would silently run both gates on 4.8. The other nine carry the alias (`fable` or `sonnet`) in their frontmatter, so each follows the current model of its tier; the table shows what the alias resolves to today on the Anthropic API (checked 2026-11-23; Bedrock and Foundry resolve aliases to older models). The same-family rule applies to them as well: under a Fable main session the `fable` agents run on that session's Fable version, under a Sonnet main session the `sonnet` agents follow it; the recommended Opus 4.8 main session avoids both. All model assignments in this document, including these three, come from `skills/model-routing/model-matrix.md` (the human-readable derived view of `skills/model-routing/model-matrix.json`, the source of truth) - consult it directly for the current routing rules and rationale rather than treating this reference as authoritative for future changes.

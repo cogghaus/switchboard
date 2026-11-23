@@ -44,7 +44,7 @@ Installs by name and persists across sessions (`switchboard@switchboard` is `plu
 
 ## Model assignments
 
-Each agent's `model:` is set from the routing matrix: security agents on a stable safety-carrying tier, design and lateral work on the frontier tier, mechanical and build work on a mid tier, lookups on a small tier. See `skills/model-routing/model-matrix.md`.
+Each agent's `model:` is set from the routing matrix: security agents pinned by full ID to Opus 4.8, design and lateral work on the frontier tier (`fable`, today Fable 5.2), review pinned by full ID to Opus 5.5 (an `opus` alias would follow an Opus 4.8 main session), mechanical and build work on `sonnet` (Sonnet 5.5), lookups on `haiku` (Haiku 5.5). Nine agents carry the alias, so each follows the current model of its tier; the three security agents and the two reviewers keep an explicit full ID. See `skills/model-routing/model-matrix.md`.
 
 ## Brand
 

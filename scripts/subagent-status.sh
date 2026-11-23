@@ -23,6 +23,7 @@ emoji_for() {
     developer-backend)  printf '🔥'  ;;
     developer-frontend) printf '🔨'  ;;
     reviewer-code)      printf '⚖️'  ;;
+    reviewer-ux)        printf '🧭'  ;;
     reviewer-security)  printf '🛡️'  ;;
     testing-qa)         printf '🧪'  ;;
     testing-pentester)  printf '⚡'  ;;

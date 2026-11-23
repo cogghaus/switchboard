@@ -132,7 +132,7 @@
   code.inline { font-family: var(--mono); font-size: 0.86em; background: var(--panel); border: 1px solid var(--line); padding: 1px 6px; border-radius: 5px; color: #D7E2E7; }
 
   /* ---- Setup cards ---- */
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .setupcard { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; }
   .setupcard .cmd-tag { font-family: var(--mono); font-size: 13px; color: var(--amber); }
   .setupcard h3 { font-size: 17px; margin: 12px 0 8px; }
@@ -174,8 +174,8 @@
       <a class="btn btn-ghost" href="https://github.com/cogghaus/switchboard">View on GitHub</a>
     </div>
     <div class="badges">
-      <span><b>13</b> specialist agents</span>
-      <span><b>4</b> operating skills</span>
+      <span><b>14</b> specialist agents</span>
+      <span><b>5</b> operating skills</span>
       <span><b>MIT</b> licensed</span>
       <span><b>Portable</b> &middot; no per-project setup</span>
     </div>
@@ -188,7 +188,7 @@
       <div class="sec-head">
         <div class="eyebrow">The operating loop</div>
         <h2>You are the operator at the board</h2>
-        <p>Every substantial task runs the same six-step loop. You keep the thinking that compounds; the specialists carry the volume and the depth.</p>
+        <p>Every substantial task runs the same six-step loop. You keep the thinking that compounds; the specialists carry the volume and the depth. A feature with unsettled design goes through <code class="inline">spec-review</code> first: you write the spec, a fresh Fable reviewer attacks it, and nothing is built until it is approved.</p>
       </div>
       <div class="loop">
         <div class="cell"><div class="n">01</div><h4>Frame</h4><p>Restate the goal in one line, catching a bad framing early.</p></div>
@@ -205,7 +205,7 @@
     <div class="wrap">
       <div class="sec-head">
         <div class="eyebrow">The board</div>
-        <h2>Thirteen lines, each a specialist</h2>
+        <h2>Fourteen lines, each a specialist</h2>
         <p>Every agent is a standalone sub-agent with its own tools and its own default model. Route a task to the line whose role fits.</p>
       </div>
       <div class="groups">
@@ -220,7 +220,8 @@
         <div class="group">
           <h3>Review &amp; testing</h3>
           <ul class="lines">
-            <li><span class="role">⚖️ Code Reviewer</span><span class="model">opus&nbsp;5</span><span class="desc">The quality gate: findings by severity, one clear verdict.</span></li>
+            <li><span class="role">⚖️ Code Reviewer</span><span class="model">opus&nbsp;5.5</span><span class="desc">The quality gate: findings by severity, one clear verdict.</span></li>
+            <li><span class="role">🧭 UX Reviewer</span><span class="model">opus&nbsp;5.5</span><span class="desc">UX and accessibility gate: WCAG, ARIA patterns and heuristics, one clear verdict.</span></li>
             <li><span class="role">🛡️ Security Reviewer</span><span class="model">opus&nbsp;4.8</span><span class="desc">Defensive review of auth, input, secrets, uploads, dependencies.</span></li>
             <li><span class="role">🧪 QA Engineer</span><span class="model">sonnet</span><span class="desc">Test design and execution, bug repro, Definition-of-Done.</span></li>
             <li><span class="role">⚡ Infra Pentester</span><span class="model">opus&nbsp;4.8</span><span class="desc">Authorized infra testing: CVEs, CI/CD, containers, supply chain.</span></li>
@@ -230,7 +231,7 @@
         <div class="group">
           <h3>Plan &amp; docs</h3>
           <ul class="lines">
-            <li><span class="role">🏛️ Architect</span><span class="model">fable</span><span class="desc">System design, trade-offs, and decision records.</span></li>
+            <li><span class="role">🏛️ Architect</span><span class="model">fable</span><span class="desc">System design, trade-offs, decision records, and the second-mind spec review.</span></li>
             <li><span class="role">🔮 Business Analyst</span><span class="model">sonnet</span><span class="desc">Requirements, story breakdown, acceptance criteria, scope.</span></li>
             <li><span class="role">📜 Technical Writer</span><span class="model">sonnet</span><span class="desc">Architecture docs, ADRs, API references, runbooks.</span></li>
             <li><span class="role">📯 Release Manager</span><span class="model">sonnet</span><span class="desc">Version bumps, changelog, tagging, release gates.</span></li>
@@ -243,7 +244,7 @@
           </ul>
         </div>
       </div>
-      <p class="muted" style="margin-top:18px;font-size:14px">Security lines are pinned to a stable safety tier (<code class="inline">claude-opus-4-8</code>). Model choices come from the <a href="https://github.com/cogghaus/switchboard/blob/main/skills/model-routing/model-matrix.md">routing matrix</a>.</p>
+      <p class="muted" style="margin-top:18px;font-size:14px">The three security lines are pinned by full ID to <code class="inline">claude-opus-4-8</code> and the two reviewers to <code class="inline">claude-opus-5-5</code>; every other line carries a tier alias (<code class="inline">fable</code> or <code class="inline">sonnet</code>) and follows that tier's current model. Model choices come from the <a href="https://github.com/cogghaus/switchboard/blob/main/skills/model-routing/model-matrix.md">routing matrix</a>.</p>
     </div>
   </section>
 
@@ -252,7 +253,7 @@
       <div class="sec-head">
         <div class="eyebrow">Get started</div>
         <h2>Install in two steps</h2>
-        <p>Install by name from the marketplace, then confirm the inventory. You should see 13 agents and 4 skills.</p>
+        <p>Install by name from the marketplace, then confirm the inventory. You should see 14 agents and 5 skills.</p>
       </div>
       <div class="steps">
         <div class="step">
@@ -267,7 +268,7 @@
           <div class="marker"></div>
           <div>
             <h3>Install and verify</h3>
-            <p>Install the plugin by name, then check the inventory. You should see 13 agents and 4 skills.</p>
+            <p>Install the plugin by name, then check the inventory. You should see 14 agents and 5 skills.</p>
             <pre class="cmd"><code><span class="p">claude</span> plugin install switchboard@switchboard
 <span class="p">claude</span> plugin details switchboard</code></pre>
           </div>
@@ -290,7 +291,7 @@
       <div class="sec-head">
         <div class="eyebrow">Make it yours</div>
         <h2>Set it up for how you work</h2>
-        <p>Three optional steps, each its own skill. All are reviewed and reversible; none change what any agent actually does.</p>
+        <p>Four optional steps. The theme and wireup skills are reviewed and reversible; none change what any agent actually does.</p>
       </div>
       <div class="cards">
         <div class="setupcard">
@@ -311,6 +312,12 @@
           <p>Connect the roster to one codebase: convention hooks and project MCP servers written into the project's own config, as a reviewed, merge-safe overlay. Credentials stay env-var references.</p>
           <a href="https://github.com/cogghaus/switchboard/blob/main/skills/wireup/SKILL.md">Wiring guide</a>
         </div>
+        <div class="setupcard">
+          <div class="cmd-tag">switchboard-crew</div>
+          <h3>Watch the crew</h3>
+          <p>An optional companion mod draws the roster at work as costumed pixel crabs: a progress band above the prompt that follows the plan, and a <code class="inline">/crew</code> panel with each subagent's model, cost, time and verdict. It only observes.</p>
+          <a href="https://github.com/cogghaus/switchboard/blob/main/crew/README.md">About the crew view</a>
+        </div>
       </div>
     </div>
   </section>
@@ -325,7 +332,7 @@
       <div class="doclinks">
         <a class="doclink" href="https://cogghaus.github.io/switchboard/usage.html"><b>Usage</b><span>The orchestrator workflow, direct vs delegate, a worked example.</span></a>
         <a class="doclink" href="https://cogghaus.github.io/switchboard/agents.html"><b>Agents</b><span>The specialist roster, one entry per agent.</span></a>
-        <a class="doclink" href="https://cogghaus.github.io/switchboard/skills.html"><b>Skills</b><span>The four skills that drive the roster.</span></a>
+        <a class="doclink" href="https://cogghaus.github.io/switchboard/skills.html"><b>Skills</b><span>The five skills that drive the roster.</span></a>
         <a class="doclink" href="https://cogghaus.github.io/switchboard/install.html"><b>Install &amp; setup</b><span>Install, team sharing, theming, and wiring in.</span></a>
         <a class="doclink" href="https://cogghaus.github.io/switchboard/roadmap.html"><b>Roadmap</b><span>Ranked skill and feature backlog, and how to vote.</span></a>
       </div>

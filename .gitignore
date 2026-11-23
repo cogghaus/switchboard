@@ -17,3 +17,10 @@ _proposals/
 graphify-out/
 .graphify*
 .serena/
+
+# Rendered docs pages: built by site/render.py in the Pages workflow, not committed
+site/usage.html
+site/agents.html
+site/skills.html
+site/install.html
+site/roadmap.html
