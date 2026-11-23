@@ -60,7 +60,7 @@ Calls are cheap and silent; they only draw. A single small delegation needs no p
 
 ## Report discipline
 
-Tech and operational replies: (1) plan, one or two sentences; (2) did, one line per material action; (3) results and outstanding. No mid-task narration; hold errors and surprises for the final report.
+Tech and operational replies: (1) plan, one or two sentences; (2) did, one line per material action; (3) results and outstanding. No mid-task narration beyond the delegation announcements above. Hold routine errors for the final report, but surface a blocker, or anything destructive or irreversible, at once.
 
 ## Make it your default (opt-in)
 
