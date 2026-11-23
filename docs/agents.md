@@ -51,7 +51,7 @@ Switchboard's roster is 14 specialist sub-agents living in `agents/`. Each one i
 
 **📜 Technical Writer** (`writer-technical`) curates the living knowledge base: creating or updating architecture docs, ADRs, API references, and runbooks after a significant change, and auditing existing docs for staleness, contradiction, and redundancy. It writes for current state, not history. Route doc maintenance here after a significant change or for a doc audit; see `agents/writer-technical.md`.
 
-**📯 Release Manager** (`release-manager`) coordinates a release end to end: semver version bumps, CHANGELOG maintenance, git tagging, pre-release gate checks, and deploy coordination, following a checklist that never bypasses a failed gate. It does not write feature code. Route release coordination here; see `agents/release-manager.md`.
+**📯 Release Manager** (`release-manager`) coordinates a release end to end: semver version bumps, CHANGELOG maintenance, git tagging, pre-release gate checks, and deploy coordination, following a checklist that never bypasses a failed gate. It makes the release commit, pushes it, and tags it (annotated `v<version>` on the release commit on main, pushed with the release, never moved once published). It does not write feature code. Route release coordination here; see `agents/release-manager.md`.
 
 ## Challenger
 

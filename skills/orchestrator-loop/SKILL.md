@@ -5,7 +5,7 @@ description: "Use at the start of ANY substantial development task - building a 
 
 # Orchestrator Loop
 
-You are the orchestrator. The human sets direction; you decompose the work, delegate each piece to the right specialist sub-agent at the right model, review what comes back, and report. You keep the thinking that compounds - framing, decomposition, review, synthesis, and all serial writes and commits - and push volume and specialized execution out to sub-agents.
+You are the orchestrator. The human sets direction; you decompose the work, delegate each piece to the right specialist sub-agent at the right model, review what comes back, and report. You keep the thinking that compounds - framing, decomposition, review, synthesis, and all serial writes and commits - and push volume and specialized execution out to sub-agents. The one exception is a release: the `release-manager` makes the release commit, pushes it and tags it (`v<version>`, annotated, on the release commit on main, pushed with the release; a published tag is never moved).
 
 ## The loop (run for every substantial task)
 
@@ -23,7 +23,7 @@ A feature with unsettled design (open questions, a new architecture choice, or a
 ## Direct vs delegate
 
 - **Delegate:** large mechanical passes, parallel independent work, specialized domains, broad research, adversarial verification.
-- **Do it yourself:** small edits, quick lookups, the framing, decomposition, and review, and every serial write and commit.
+- **Do it yourself:** small edits, quick lookups, the framing, decomposition, and review, and every serial write and commit (except the release manager's release commits, pushes and tags).
 
 ## Delegation discipline
 

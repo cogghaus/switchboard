@@ -19,7 +19,7 @@ A feature with unsettled design (open questions, a new architecture choice, a de
 
 ## Direct vs delegate
 
-- **Do it yourself:** small edits, quick lookups, the framing and decomposition, the review, and every serial write and commit.
+- **Do it yourself:** small edits, quick lookups, the framing and decomposition, the review, and every serial write and commit - except a release, where the `release-manager` makes the release commit, pushes it and tags it.
 - **Delegate:** large mechanical passes, independent work that can run in parallel, specialized domains, broad research, and adversarial verification.
 
 Delegation is not free - a brief and a review cost time - so it pays off when the work is genuinely large, parallel, or specialized, not for a two-line change.
@@ -42,6 +42,10 @@ Each agent ships with a default model chosen for its work (see the `model-routin
 4. **Review:** read the diff and the test result. If the change touches auth or abuse surfaces, have `reviewer-security` verify.
 5. **Delegate the doc:** brief `writer-technical` to document the new behavior once the code is settled.
 6. **Report:** summarize what shipped, the test outcome, and anything deferred; make the commit yourself.
+
+## Releases and tags
+
+A release is the one place a sub-agent commits and pushes: the `release-manager` checks the gates, bumps the version, updates the CHANGELOG, makes the release commit, and pushes it. Every release gets an annotated tag `v<version>` (for example `v0.13.0`) on the release commit on main, pushed with the release. A published tag is never moved; a mistake is fixed by the next patch release. Releases before 0.13.0 are untagged.
 
 ## Making it automatic
 
