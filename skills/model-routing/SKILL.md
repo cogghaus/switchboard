@@ -19,7 +19,9 @@ Read `model-matrix.md` in this skill's folder - hard rules on top, a per-tier an
 
 ## Why aliases
 
-The 11 non-security agents carry the alias in their frontmatter (`model: fable`, `opus`, `sonnet`), so each follows the current model of its tier and a new generation needs no edit to those files; the matrix records what each alias resolves to today. The three security agents (`reviewer-security`, `testing-red-team`, `testing-pentester`) stay on the explicit full ID `claude-opus-4-8`: an alias can move to a classifier-carrying tier, and a security pin must not. `trigger_model` is advice only; the main session's model is set with `/model`.
+Nine agents carry the alias in their frontmatter (`model: fable` or `sonnet`), so each follows the current model of its tier and a new generation needs no edit to those files; the matrix records what each alias resolves to today (on the Anthropic API; Bedrock and Foundry resolve aliases to older models). The three security agents (`reviewer-security`, `testing-red-team`, `testing-pentester`) stay on the explicit full ID `claude-opus-4-8`: an alias can move to a classifier-carrying tier, and a security pin must not.
+
+`reviewer-code` and `reviewer-ux` are pinned by full ID `claude-opus-5-5`, an exception to the alias rule, because of the same-family rule: an alias follows the parent session's model when the parent is the same family (Claude Code subagent docs, "Which version a model alias selects"). The recommended orchestrator is Opus 4.8, so `model: opus` would silently run both review gates on 4.8. The same exposure applies to any alias agent whose tier matches the main session: under a Fable main session the `fable` agents run on that session's Fable version, under a Sonnet main session the `sonnet` agents follow it. With the recommended Opus 4.8 main session neither happens, but changing `trigger_model` changes what the alias agents run on. `trigger_model` is advice only; the main session's model is set with `/model`.
 
 ## Short form
 
