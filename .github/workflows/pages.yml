@@ -6,6 +6,7 @@ on:
     paths:
       - "site/**"
       - "docs/**"
+      - "skills/**"
       - "ROADMAP.md"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
