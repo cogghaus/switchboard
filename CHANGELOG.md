@@ -4,6 +4,16 @@ All notable changes to Switchboard are documented here. The format follows [Keep
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-11-23
+
+### Added
+- **`spec-review` skill.** The orchestrator writes the spec (marks `[V]` verified, `[I]` inferred, `[Q]` open) and any ADR, a fresh Fable reviewer (`architect` agent, `model: "fable"`) critiques it with a verdict line and evidenced findings, and the two iterate on the same reviewer through `SendMessage` until both approve; disagreements still open after two rounds go to the user. The approved spec is then presented (summary, `[Q]` decisions, open risks, implied version bump) and building starts only on the user's go, or at once when the user said "build once approved". Includes the reviewer brief template and a must-not list.
+
+### Changed
+- `orchestrator-loop` sends substantial features with open design questions through `spec-review` before any builder is spawned.
+- `model-routing` matrix gains a "spec review" row on Fable (JSON source and readable view).
+- Skill counts in README, `docs/install.md` and `docs/skills.md` now say five.
+
 ## [0.11.1] - 2026-11-17
 
 ### Changed

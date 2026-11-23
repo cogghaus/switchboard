@@ -23,6 +23,7 @@ Each carries a routing description, a tool allowlist, an assigned model, and its
 
 - **`orchestrator-loop`** - the default operating loop: receive a goal, decide direct vs delegate, route to the right specialist at the right model, review, and report. This makes delegation the default behavior rather than something you improvise. Auto-invokes on substantial tasks (best-effort); the skill documents an opt-in `SessionStart` hook to make it your standing default on every session.
 - **`model-routing`** - the model-selection matrix: which model gives the best token-to-quality result for a given task or agent, with the security tier pinned to a stable model. `model-matrix.md` (readable) and `model-matrix.json` (source) ship alongside it.
+- **`spec-review`** - spec first for any substantial feature: the orchestrator writes the spec and ADR, a fresh Fable reviewer critiques it, they iterate to an approved spec, the user sees it, then building starts. Nothing is built before approval.
 - **`theme`** - reskin the roster to any naming theme: keep the plain corporate default, or name a subject (a show, game, universe, or motif) and each role is renamed to a fitting character, its function unchanged.
 - **`wireup`** - connect the roster to a specific project: set up hooks, MCP servers, and code intelligence (LSP) as a reviewed overlay on the project's own config. Optional, once per codebase.
 
@@ -39,7 +40,7 @@ claude plugin install switchboard@switchboard
 
 Optionally, the crew view: `claude plugin install switchboard-crew@switchboard`.
 
-Installs by name and persists across sessions (`switchboard@switchboard` is `plugin@marketplace` - the repo is both); run `claude plugin details switchboard` to confirm 14 agents and 4 skills. To try it without installing, point Claude Code at the plugin's own directory for one session: `claude --plugin-dir <path-to-switchboard>`. Full guide: [docs/install.md](docs/install.md).
+Installs by name and persists across sessions (`switchboard@switchboard` is `plugin@marketplace` - the repo is both); run `claude plugin details switchboard` to confirm 14 agents and 5 skills. To try it without installing, point Claude Code at the plugin's own directory for one session: `claude --plugin-dir <path-to-switchboard>`. Full guide: [docs/install.md](docs/install.md).
 
 ## Model assignments
 

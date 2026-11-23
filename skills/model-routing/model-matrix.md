@@ -20,6 +20,7 @@ Edit model-matrix.json, then regenerate or hand-update this file to match. See S
 |                 task_tier                  |       default_model       | alias  |
 |--------------------------------------------|---------------------------|--------|
 | design/architecture/spec                   | claude-fable-5-1            | fable  |
+| spec review (spec-review skill)            | claude-fable-5-1            | fable  |
 | hard reasoning or adversarial verification | claude-opus-5-5             | opus   |
 | security/dual-use                          | claude-opus-4-8           | n/a    |
 | large mechanical implementation            | claude-sonnet-5-5           | sonnet |
