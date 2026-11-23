@@ -18,7 +18,7 @@ You are the orchestrator. The human sets direction; you decompose the work, dele
 
 ## Substantial features: spec first
 
-A feature big enough that a builder could get the design wrong (open questions, new architecture, several files or layers) is not delegated to a builder yet. Run it through the `spec-review` skill first: you write the spec, a fresh Fable reviewer converses with you to an approved spec, the user sees it, and only then does building start.
+A feature with unsettled design (open questions, a new architecture choice, or a design a builder could get wrong) is not delegated to a builder yet. Run it through the `spec-review` skill first: you write the spec on your own tier, a fresh Fable reviewer is the second mind and converses with you to an approved spec, the user sees it, and only then does building start. A big but well-understood change (many files, settled design) does not need this; a one-file fix never does.
 
 ## Direct vs delegate
 
@@ -42,7 +42,7 @@ So the human can see which specialist or skill is doing the work, announce it as
 
 - When you delegate to a specialist, lead the line with that agent's emoji and name: `🔥 Backend Developer - implementing the data layer`.
 - When you relay a specialist's result, lead with the same emoji so the report is attributable at a glance.
-- When a skill drives the work, name it with its emoji: `🧭 orchestrator-loop`, `🧮 model-routing`, `🖌️ theme`, `🔌 wireup`.
+- When a skill drives the work, name it with its emoji: `🎛️ orchestrator-loop`, `🧮 model-routing`, `📝 spec-review`, `🖌️ theme`, `🔌 wireup`.
 
 Agent emojis: 🏛️ architect · 🔮 business-analyst · 🎨 designer · 🔥 developer-backend · 🔨 developer-frontend · ⚖️ reviewer-code · 🧭 reviewer-ux · 🛡️ reviewer-security · 🧪 testing-qa · ⚡ testing-pentester · 💀 testing-red-team · 📜 writer-technical · 📯 release-manager · 🎭 loki
 

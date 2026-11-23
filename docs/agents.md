@@ -45,7 +45,7 @@ Switchboard's roster is 14 specialist sub-agents living in `agents/`. Each one i
 
 ## Plan & docs
 
-**🏛️ Architect** (`architect`) is the advisory owner of technical design: system architecture decisions, technology/vendor evaluation, cross-cutting concern design (auth, logging, caching, resilience), technical debt assessment, and ADRs weighed against maintainability, scalability, cost, and team capability. It analyzes and recommends; implementation is routed elsewhere. Route significant design decisions here; see `agents/architect.md`.
+**🏛️ Architect** (`architect`) is the advisory owner of technical design: system architecture decisions, technology/vendor evaluation, cross-cutting concern design (auth, logging, caching, resilience), technical debt assessment, and ADRs weighed against maintainability, scalability, cost, and team capability. It analyzes and recommends; implementation is routed elsewhere. It also has a spec-review mode: the `spec-review` skill spawns it as the fresh second mind on a spec the orchestrator wrote, and in that mode it stays read-only and returns a `VERDICT:` line (APPROVED only when nothing Blocking or Important is open) followed by evidenced findings. Route significant design decisions here; see `agents/architect.md`.
 
 **🔮 Business Analyst** (`business-analyst`) defines requirements before implementation begins: problem framing, epic/story breakdown with testable acceptance criteria, user research synthesis, prioritization, and scope discipline against feature creep. Route "what should we build, for whom, and why" here before work starts; see `agents/business-analyst.md`.
 

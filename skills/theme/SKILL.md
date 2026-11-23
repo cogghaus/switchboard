@@ -42,7 +42,13 @@ For each agent file in `agents/`:
 
 Then keep the roster consistent:
 - Update the model matrix: `skills/model-routing/model-matrix.json` (each agent's `agent_id` and `display_name`), then regenerate `model-matrix.md` to match.
-- Update the roster list in `README.md` to the new names (the `orchestrator-loop` skill references the matrix rather than listing names, so it needs no change).
+- Update the roster list in `README.md` to the new names.
+- Update every other place that hardcodes an agent name or slug, or the reskin leaves it pointing at an agent that no longer exists under that name:
+  - `skills/spec-review/SKILL.md` (spawns the architect as `switchboard:architect`; the Theme section there tells the orchestrator to read the themed name from `theme.json`, so keep `theme.json` current);
+  - `skills/orchestrator-loop/SKILL.md` (the "Agent emojis" line lists the slugs);
+  - `docs/agents.md` (table and per-agent headings);
+  - `scripts/subagent-status.sh` (its `case` maps agent names to emoji, so a renamed agent shows a bullet until the case is updated).
+  The crew mod recognises agents by their description emoji, so a reskin needs no change there.
 - Record the applied theme and the full role -> name mapping in `theme.json` at the plugin root, so a reskin is revertible. The value `corporate` restores the shipped defaults. The default install ships no `theme.json`; its absence means the corporate baseline is in effect.
 
 ## Guardrails

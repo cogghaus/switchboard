@@ -79,9 +79,15 @@ question) plus an ADR for any architecture choice, then spawns a fresh Fable rev
 `architect` agent, read-only) with a fixed brief. The reviewer returns a `VERDICT:` line and numbered
 findings with severity and file:line evidence; the orchestrator answers each one (accept, or push
 back with tested evidence), commits the revision and sends it to the same reviewer until it
-approves. A disagreement still open after two rounds goes to the user. The approved spec is then
+approves (APPROVED only when nothing Blocking or Important is open). A disagreement still open after
+two rounds goes to the user, and so does everything after three rounds in all. If the same reviewer
+cannot be continued, a new one gets the full record of findings and replies by file path. Security-
+and UI-heavy specs also go to `reviewer-security` and `reviewer-ux`. The approved spec is then
 presented (summary, decisions on each `[Q]`, open risks, implied version bump) and building starts
-on the user's go, or at once if the user said "build once approved".
+on the user's go, or at once if the user said "build once approved": the builder brief makes the
+approved spec the contract, asks for a failing test first for every behaviour, and has
+`reviewer-code` check the build against the spec. The architect's subagent type follows the active
+theme's name for that agent.
 
 **Invocation:** auto-invokes when a spec or design doc is asked for or a substantial feature needs
 one; `orchestrator-loop` routes such features here first. Also `/spec-review`.

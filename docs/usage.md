@@ -13,6 +13,10 @@ Every substantial task runs the same loop (this is the `orchestrator-loop` skill
 5. **Review.** Never relay a sub-agent's output unread. For high-stakes or security work, have a second agent verify.
 6. **Report.** Plan, then what was done, then results and what is outstanding.
 
+## Spec first
+
+A feature with unsettled design (open questions, a new architecture choice, a design a builder could get wrong) is not handed to a builder yet. The `spec-review` skill runs first: you write the spec on your own tier, a fresh Fable reviewer (the architect agent) critiques it, you answer every finding until it approves (three rounds at most, then you decide), and you see the approved spec before anything is built. A well-understood change, however large, and any one-file fix skip this and go straight into the loop.
+
 ## Direct vs delegate
 
 - **Do it yourself:** small edits, quick lookups, the framing and decomposition, the review, and every serial write and commit.

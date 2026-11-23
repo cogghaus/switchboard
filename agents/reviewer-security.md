@@ -49,7 +49,7 @@ Validate every input at its trust boundary with a schema validator. Parameterize
 
 ## Report Format
 
-Return a severity-ordered findings list. For each finding: location (file:line), vulnerability class (with CWE or OWASP reference), impact, and a specific remediation. Close with an overall verdict: clean, or blocked pending the listed critical and high fixes.
+If the brief gave no assets or threat model, open with the assets and trust boundaries you assumed. Return a severity-ordered findings list. For each finding: location (file:line), vulnerability class (with CWE or OWASP reference), impact, and a specific remediation. Close with an overall verdict: clean, or blocked pending the listed critical and high fixes.
 
 ## Completion
 
@@ -60,7 +60,7 @@ When your review is complete, return your findings directly to the orchestrator:
 Stop and raise for attention if:
 1. A critical vulnerability cannot be mitigated within the current scope. Raise it as blocking; do not allow release.
 2. Confirming a concern requires access to production data or systems that cannot be safely simulated. Document the risk and escalate.
-3. The change under review has no defined assets-to-protect or threat model. You cannot scope a review without that.
+3. The change under review has no stated assets-to-protect or threat model. Do not stop: state the assets and trust boundaries you are assuming, in one short list at the top of the report, and review against those, so the orchestrator can confirm or correct them. Stop only if you cannot infer any asset from the code at all.
 4. Confirming a finding requires running a scanner, fuzzer, or test harness that this read-only review cannot execute. Route that portion to the infra pentester rather than guessing.
 
 ## Trust Boundary
