@@ -14,8 +14,12 @@ Read `model-matrix.md` in this skill's folder - hard rules on top, a per-tier an
 ## Hard rules (override the tables)
 
 1. **Security, dual-use, red-team, pentest, and vulnerability work run on Opus 4.8** (`claude-opus-4-8`), pinned by explicit full model ID in the agent's definition.
-2. **Two model surfaces.** A sub-agent definition's `model:` frontmatter accepts a full model ID; the live Agent tool takes model aliases. Aliases can move between model versions, so pin security-critical agents by full ID in their definitions and re-verify alias behavior periodically.
+2. **Two model surfaces.** A sub-agent definition's `model:` frontmatter accepts an alias or a full model ID; the live Agent tool takes model aliases. Aliases can move between model versions, so pin security-critical agents by full ID in their definitions and re-verify alias behavior periodically.
 3. **Trigger model.** The orchestrator's own tier is one row in the matrix config; change it in one place.
+
+## Why aliases
+
+The 11 non-security agents carry the alias in their frontmatter (`model: fable`, `opus`, `sonnet`), so each follows the current model of its tier and a new generation needs no edit to those files; the matrix records what each alias resolves to today. The three security agents (`reviewer-security`, `testing-red-team`, `testing-pentester`) stay on the explicit full ID `claude-opus-4-8`: an alias can move to a classifier-carrying tier, and a security pin must not. `trigger_model` is advice only; the main session's model is set with `/model`.
 
 ## Short form
 
@@ -23,4 +27,4 @@ Capable tiers where quality compounds (design, ambiguity, orchestration, review)
 
 ## Modify
 
-Edit `model-matrix.json` (add a tier, change a model, adjust the trigger), then update `model-matrix.md` to match. The matrix is the single source for each agent's `model:` frontmatter.
+Edit `model-matrix.json` (add a tier, change a model, adjust the trigger), then update `model-matrix.md` to match. The matrix is the single source for each agent's `model:` frontmatter (the `frontmatter` field per agent); `model-matrix.md` is kept by hand.

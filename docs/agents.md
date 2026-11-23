@@ -6,20 +6,20 @@ Switchboard's roster is 14 specialist sub-agents living in `agents/`. Each one i
 
 |  | Agent | slug | Default model | Use when |
 |---|---|---|---|---|
-| 🔥 | Backend Developer | `developer-backend` | claude-sonnet-5-5 | Building or modifying backend code - routes, middleware, services, data models, schema/migrations, backend tests |
-| 🔨 | Frontend Developer | `developer-frontend` | claude-sonnet-5-5 | Building or modifying frontend UI - components, pages, styling, UI state/hooks, interaction tests |
-| 🎨 | Designer | `designer` | claude-fable-5-1 | Product/UX design - journeys, wireframes, interaction and visual design, accessibility - ahead of or alongside frontend work |
-| ⚖️ | Code Reviewer | `reviewer-code` | claude-opus-5-5 | Code review with an explicit verdict, AC verification, and a Critical/Important/Minor findings list |
-| 🧭 | UX Reviewer | `reviewer-ux` | claude-opus-5-5 | UX and accessibility review of a decision, spec, or interface against WCAG 2.1 AA, ARIA APG, and Nielsen, with an explicit verdict |
-| 🛡️ | Security Reviewer | `reviewer-security` | claude-opus-4-8 | Defensive security review of auth, input handling, secrets, uploads, integrations, or dependencies |
-| 🧪 | QA Engineer | `testing-qa` | claude-sonnet-5-5 | Test design and execution, bug hunting/reproduction, edge-case coverage, Definition-of-Done enforcement |
-| ⚡ | Infra Pentester | `testing-pentester` | claude-opus-4-8 | Authorized infra-focused security testing - CVEs, CI/CD, secret exposure, containers, supply chain |
-| 💀 | Red Team Lead | `testing-red-team` | claude-opus-4-8 | Authorized application-layer offensive testing - OWASP Top 10, auth attacks, business logic abuse, prompt injection |
-| 🏛️ | Architect | `architect` | claude-fable-5-1 | System architecture decisions, tech/vendor evaluation, cross-cutting design, ADRs |
-| 🔮 | Business Analyst | `business-analyst` | claude-sonnet-5-5 | Requirements before implementation - problem framing, story breakdown, acceptance criteria, scope discipline |
-| 📜 | Technical Writer | `writer-technical` | claude-sonnet-5-5 | Maintaining the project knowledge base - architecture docs, ADRs, API references, runbooks, staleness audits |
-| 📯 | Release Manager | `release-manager` | claude-sonnet-5-5 | Coordinating a release - semver bumps, CHANGELOG, tagging, pre-release gates, deploy coordination |
-| 🎭 | Loki | `loki` | claude-fable-5-1 | Invitation-only: challenging assumptions and surfacing alternatives in brainstorms, design reviews, premortems, post-mortems |
+| 🔥 | Backend Developer | `developer-backend` | `sonnet` (Sonnet 5.5) | Building or modifying backend code - routes, middleware, services, data models, schema/migrations, backend tests |
+| 🔨 | Frontend Developer | `developer-frontend` | `sonnet` (Sonnet 5.5) | Building or modifying frontend UI - components, pages, styling, UI state/hooks, interaction tests |
+| 🎨 | Designer | `designer` | `fable` (Fable 5.2) | Product/UX design - journeys, wireframes, interaction and visual design, accessibility - ahead of or alongside frontend work |
+| ⚖️ | Code Reviewer | `reviewer-code` | `opus` (Opus 5.5) | Code review with an explicit verdict, AC verification, and a Critical/Important/Minor findings list |
+| 🧭 | UX Reviewer | `reviewer-ux` | `opus` (Opus 5.5) | UX and accessibility review of a decision, spec, or interface against WCAG 2.1 AA, ARIA APG, and Nielsen, with an explicit verdict |
+| 🛡️ | Security Reviewer | `reviewer-security` | `claude-opus-4-8` (pinned) | Defensive security review of auth, input handling, secrets, uploads, integrations, or dependencies |
+| 🧪 | QA Engineer | `testing-qa` | `sonnet` (Sonnet 5.5) | Test design and execution, bug hunting/reproduction, edge-case coverage, Definition-of-Done enforcement |
+| ⚡ | Infra Pentester | `testing-pentester` | `claude-opus-4-8` (pinned) | Authorized infra-focused security testing - CVEs, CI/CD, secret exposure, containers, supply chain |
+| 💀 | Red Team Lead | `testing-red-team` | `claude-opus-4-8` (pinned) | Authorized application-layer offensive testing - OWASP Top 10, auth attacks, business logic abuse, prompt injection |
+| 🏛️ | Architect | `architect` | `fable` (Fable 5.2) | System architecture decisions, tech/vendor evaluation, cross-cutting design, ADRs, and the second-mind spec review in `spec-review` |
+| 🔮 | Business Analyst | `business-analyst` | `sonnet` (Sonnet 5.5) | Requirements before implementation - problem framing, story breakdown, acceptance criteria, scope discipline |
+| 📜 | Technical Writer | `writer-technical` | `sonnet` (Sonnet 5.5) | Maintaining the project knowledge base - architecture docs, ADRs, API references, runbooks, staleness audits |
+| 📯 | Release Manager | `release-manager` | `sonnet` (Sonnet 5.5) | Coordinating a release - semver bumps, CHANGELOG, tagging, pre-release gates, deploy coordination |
+| 🎭 | Loki | `loki` | `fable` (Fable 5.2) | Invitation-only: challenging assumptions and surfacing alternatives in brainstorms, design reviews, premortems, post-mortems |
 
 ## Build & design
 
@@ -59,4 +59,4 @@ Switchboard's roster is 14 specialist sub-agents living in `agents/`. Each one i
 
 ## Model assignments
 
-The three security agents - 🛡️ Security Reviewer, 💀 Red Team Lead, and ⚡ Infra Pentester - are pinned to `claude-opus-4-8` by full model ID, not by alias, so security and dual-use work always lands on that tier regardless of how aliases move between model versions elsewhere. All model assignments in this document, including these three, come from `skills/model-routing/model-matrix.md` (the human-readable derived view of `skills/model-routing/model-matrix.json`, the source of truth) - consult it directly for the current routing rules and rationale rather than treating this reference as authoritative for future changes.
+The three security agents - 🛡️ Security Reviewer, 💀 Red Team Lead, and ⚡ Infra Pentester - are pinned to `claude-opus-4-8` by full model ID, not by alias, so security and dual-use work always lands on that tier regardless of how aliases move between model versions elsewhere. The other eleven carry the alias (`fable`, `opus`, `sonnet`) in their frontmatter, so each follows the current model of its tier; the table shows what the alias resolves to today (checked 2026-11-23). All model assignments in this document, including these three, come from `skills/model-routing/model-matrix.md` (the human-readable derived view of `skills/model-routing/model-matrix.json`, the source of truth) - consult it directly for the current routing rules and rationale rather than treating this reference as authoritative for future changes.
