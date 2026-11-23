@@ -2,15 +2,18 @@
 """Render the Switchboard markdown docs into styled site HTML pages.
 
 Usage:  python site/render.py   (run from anywhere)
-Requires: python-markdown  (pip install markdown)
+Requires: python-markdown  (pip install markdown==3.10.3, the version the Pages
+workflow uses)
 
 Renders the four docs from ../docs plus the repo-root ROADMAP.md into <name>.html
-in this folder (site/), sharing docs.css. Each page is a two-column docs layout:
+in this folder (site/), sharing docs.css. The rendered pages are not committed:
+.github/workflows/pages.yml runs this script on every deploy. Each page is a two-column docs layout:
 a left-rail nav (the pages, with the active page's section anchors nested under
 it) and a prose column. Cross-links between the docs (foo.md) are rewritten to
 foo.html so navigation stays on the site; links into repo source (agents/*,
 skills/*, other *.md) are rewritten to GitHub.
 """
+import glob
 import os
 import re
 import markdown
@@ -19,11 +22,16 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.normpath(os.path.join(HERE, ".."))
 GH = "https://github.com/cogghaus/switchboard/blob/main/"
 
+# The skill count is read from skills/*/SKILL.md, not typed, so it cannot go stale.
+_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+_n = len(glob.glob(os.path.join(REPO, "skills", "*", "SKILL.md")))
+SKILL_COUNT = _WORDS[_n] if _n < len(_WORDS) else str(_n)
+
 # out-file -> (nav label, meta description, source markdown path)
 DOCS = {
     "usage.html":   ("Usage",           "The Switchboard orchestrator workflow, direct vs delegate, a worked example.", os.path.join(REPO, "docs", "usage.md")),
     "agents.html":  ("Agents",          "The Switchboard specialist roster, one entry per agent.",                      os.path.join(REPO, "docs", "agents.md")),
-    "skills.html":  ("Skills",          "The four skills that drive the Switchboard roster.",                           os.path.join(REPO, "docs", "skills.md")),
+    "skills.html":  ("Skills",          "The %s skills that drive the Switchboard roster." % SKILL_COUNT,               os.path.join(REPO, "docs", "skills.md")),
     "install.html": ("Install & setup", "Install, share, theme, and wire Switchboard into a project.",                 os.path.join(REPO, "docs", "install.md")),
     "roadmap.html": ("Roadmap",         "The Switchboard roadmap: ranked skill and feature backlog, and how to vote.", os.path.join(REPO, "ROADMAP.md")),
 }
