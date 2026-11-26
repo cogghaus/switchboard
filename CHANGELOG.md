@@ -6,6 +6,8 @@ Release convention: the version lives in `.claude-plugin/plugin.json` only. Ever
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-11-26
+
 From a review of every agent and skill by five Fable 5.2 reviewers, checked against the maintainer's rule log and 737 real switchboard agent calls (2026-10-01 to 2026-11-26), with the model facts re-checked against the Claude Code docs on 2026-11-26.
 
 ### Added
