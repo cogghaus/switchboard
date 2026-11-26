@@ -18,11 +18,15 @@ The loop, run for every substantial task:
 1. **Understand and frame** - restate the goal in one line, to catch a bad framing before executing.
 2. **Decide direct vs. delegate** - small and quick work is done directly; large, mechanical,
    parallelizable, or specialized work is delegated.
-3. **Route** - consult the `model-routing` skill to pick the model and the specialist whose role fits.
+3. **Route** - pick the specialist whose role fits and spawn it without a `model` argument: its
+   definition carries the model the matrix assigns, and a spawn-time model replaces it, pins
+   included. A model is passed only to a non-roster agent, using `model-routing`. Before a
+   significant design decision or ADR is final, run it past `loki` once.
 4. **Delegate** with a clear spec (goal, input paths, constraints, acceptance criteria), forbidding
    re-delegation.
 5. **Review** - never relay a sub-agent's output unread; high-stakes or dual-use work gets a second
-   agent to verify.
+   agent to verify. A build is accepted only with its evidence: the quoted failing-test line, the
+   passing run, and what was verified kept apart from what was assumed.
 6. **Report** - plan, then did (one line per action), then results and outstanding.
 
 **Invocation:** auto-invokes on substantial development tasks (building a feature, cross-file bug
@@ -49,9 +53,12 @@ exact injected framing.
 
 The model-selection matrix: which model a given task or agent should run on, so capable tiers are
 spent where quality compounds (design, ambiguity, orchestration, review) and cheap tiers absorb
-volume (large mechanical work, quick lookups). Security and dual-use work is pinned to
-`claude-opus-4-8` by explicit full model ID in the agent's definition, overriding every table -
-this is a hard rule, not a default that can be routed around.
+volume (large mechanical work, quick lookups). Security work is pinned by explicit full model ID
+in the agent's definition, overriding every table: offensive testing (red team, pentest) to
+`claude-opus-4-8`, defensive security review to `claude-opus-5-5`, whose cybersecurity-flagged
+requests re-run on Opus 4.8 automatically. Roster agents are spawned without a `model` argument,
+since a spawn-time model replaces the definition's, pins included. These are hard rules, not
+defaults that can be routed around.
 
 Two files carry the matrix:
 
@@ -64,7 +71,8 @@ To change routing, edit `model-matrix.json` first, then update `model-matrix.md`
 JSON is the single source for each agent's `model:` frontmatter.
 
 **Invocation:** consulted, not run standalone - the `orchestrator-loop` skill (and you, before
-spawning any agent) reads `model-matrix.md` as part of routing step 3.
+spawning a non-roster agent) reads `model-matrix.md` as part of routing step 3; a roster agent
+already carries its model in its definition.
 
 **Output:** no artifact of its own - it informs which model alias or full model ID gets used for a
 spawned agent.
@@ -75,9 +83,11 @@ See `skills/model-routing/SKILL.md` for the full text.
 
 Spec first for any feature big enough that a builder could get the design wrong. The orchestrator
 writes the spec into the project's design docs (marks `[V]` verified, `[I]` inferred, `[Q]` open
-question) plus an ADR for any architecture choice, then spawns a fresh Fable reviewer (the
-`architect` agent, read-only) with a fixed brief. The reviewer returns a `VERDICT:` line and numbered
-findings with severity and file:line evidence; the orchestrator answers each one (accept, or push
+question) plus an ADR for any architecture choice, then runs the draft past `loki` once (its two
+or three counterpoints are answered under `Alternatives considered` and never block), then spawns
+a fresh Fable reviewer (the `architect` agent, read-only, no `model` argument) with a fixed brief.
+The reviewer returns numbered findings with severity and file:line evidence, ending with a
+`VERDICT:` line; the orchestrator answers each one (accept, or push
 back with tested evidence), commits the revision and sends it to the same reviewer until it
 approves (APPROVED only when nothing Blocking or Important is open). A disagreement still open after
 two rounds goes to the user, and so does everything after three rounds in all. If the same reviewer
@@ -115,8 +125,8 @@ without changing what any agent does.
    revertible record of the applied theme and mapping) consistent with the new names.
 
 Reskinning is strictly cosmetic - names, and at most one flavor line, per agent. It never touches
-`tools`, `model`, `description`, or any functional or safety instruction; the security agents keep
-`model: claude-opus-4-8` under whatever name they're given. The one intentional exception to the
+`tools`, `model`, `description`, or any functional or safety instruction; every agent keeps its
+`model:` line exactly, pins included, under whatever name it's given. The one intentional exception to the
 plain corporate baseline is the challenger role, which ships already named **Loki** rather than a
 neutral role word.
 

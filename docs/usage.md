@@ -8,7 +8,7 @@ Every substantial task runs the same loop (this is the `orchestrator-loop` skill
 
 1. **Frame.** Restate the goal in one line, so a bad framing is caught before any work happens.
 2. **Decide direct vs delegate.** Small, quick, or one-off: do it yourself. Large, mechanical, parallelizable, or specialized: delegate.
-3. **Route.** Consult the `model-routing` skill to pick the model, and pick the specialist whose role fits the task.
+3. **Route.** Pick the specialist whose role fits the task and spawn it without a `model` argument: its definition carries the model the matrix assigns, and a spawn-time model replaces it, pins included. Use the `model-routing` skill only to pick a model for a non-roster agent.
 4. **Delegate** with a clear brief: the goal, inputs by file path, constraints, and acceptance criteria.
 5. **Review.** Never relay a sub-agent's output unread. For high-stakes or security work, have a second agent verify.
 6. **Report.** Plan, then what was done, then results and what is outstanding.
@@ -34,7 +34,7 @@ Each agent ships with a default model chosen for its work (see the `model-routin
 
 - Capable tiers where quality compounds: design, architecture, ambiguity, orchestration, and review.
 - Cheaper tiers for volume: large mechanical implementation to a mid tier, quick lookups to a small tier.
-- Security, dual-use, red-team, and pentest work is pinned to a stable safety tier (`claude-opus-4-8`) and routed to the dedicated security agents. Do not run security work on other tiers; route it to `reviewer-security`, `testing-red-team`, or `testing-pentester`.
+- Security work is routed to the dedicated security agents, each pinned by full ID: defensive review (`reviewer-security`) on Opus 5.5 (`claude-opus-5-5`), whose cybersecurity-flagged requests re-run on Opus 4.8 automatically, and offensive testing (`testing-red-team`, `testing-pentester`) on Opus 4.8 (`claude-opus-4-8`). Do not run security work on other agents, and spawn these without a `model` argument so the pin holds.
 
 ## A worked example
 

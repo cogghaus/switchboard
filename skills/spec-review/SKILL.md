@@ -10,17 +10,18 @@ Spec first, reviewed by a second mind, approved, then built. The orchestrator wr
 ## The process
 
 1. **Write the spec** yourself, in the project's design docs (where its `docs/` or ADR convention says), on a branch, docs only. Mark every claim: `[V]` verified (checked against code, the real system or a doc), `[I]` inferred (say what would confirm it), `[Q]` open question. Add an ADR for any architecture choice. Test what you can test before writing it down; do not leave a testable fact as `[I]`.
-2. **Spawn the reviewer:** Agent tool, `subagent_type: switchboard:architect` (or the active theme's name for that agent, see Theme below), `model: "fable"` (fresh context, read-only: Read, Grep, Glob). Use the brief below. Note the agent id.
-3. **Answer every finding** (round protocol below), commit the revision, and send it back to the SAME reviewer with `SendMessage` so its context is kept.
-4. **Stop when** the reviewer's latest reply carries the verdict line `VERDICT: APPROVED` and you have no open disagreement. At most three rounds in all; if the third reply is not an approval, the user decides (see Round protocol).
-5. **Present to the user:** a short summary of the spec, the decisions made on each `[Q]`, the open risks, and the version bump it implies (patch / minor / major; major is the user's call). Then wait for the user's go.
-6. **Build** on the user's go. If the user already said "build once approved", build at once through the usual flow: builder agent with the builder brief below, failing test first, code review against the spec, CI.
+2. **Challenge it once with Loki** before the reviewer's first round: Agent tool, `subagent_type: switchboard:loki` (or the active theme's name for that agent), no `model` argument, with the draft spec only (its path), not your reasoning about it. It returns two or three counterpoints. Answer each in one line in the spec under `Alternatives considered` (`adopted: what changed` or `rejected: why`). Counterpoints are not findings: they never block and never start a review round. Run Loki once per spec, not per round.
+3. **Spawn the reviewer:** Agent tool, `subagent_type: switchboard:architect` (or the active theme's name for that agent, see Theme below), no `model` argument (fresh context, read-only: Read, Grep, Glob). Use the brief below. Note the agent id.
+4. **Answer every finding** (round protocol below), commit the revision, and send it back to the SAME reviewer with `SendMessage` so its context is kept.
+5. **Stop when** the reviewer's latest reply ends with the verdict line `VERDICT: APPROVED` and you have no open disagreement. At most three rounds in all; if the third reply is not an approval, the user decides (see Round protocol).
+6. **Present to the user:** a short summary of the spec, the decisions made on each `[Q]`, the open risks, and the version bump it implies (patch / minor / major; major is the user's call). Then wait for the user's go.
+7. **Build** on the user's go. If the user already said "build once approved", build at once through the usual flow: builder agent with the builder brief below, failing test first, code review against the spec, CI.
 
 ## Reviewer brief (fill the paths; paste the rest)
 
 > Review the spec at `<spec path>` and the ADR at `<adr path>`, plus the code the spec relies on: `<paths>`. You are read-only; do not write or edit anything.
 > Check: (1) correctness and safety gaps against the project's hard rules (`<CLAUDE.md path>`); (2) gaps against the stated goal: `<goal in one line>`; (3) whether a builder agent could build it in one pass from the text alone; (4) whether the ADR's choice is sound against its alternatives; (5) for every `[Q]`, give a decision or a proposal; challenge any `[V]` you can disprove from the code.
-> Answer format: first line `VERDICT: APPROVED` or `VERDICT: CHANGES REQUESTED`. APPROVED only when nothing Blocking or Important is open. Then numbered findings, each with severity (Blocking / Important / Minor), spec section, evidence (file:line), and the change you want. No finding without evidence. Do not rewrite the spec; say what to change.
+> Answer format: numbered findings, each with severity (Blocking / Important / Minor), spec section, evidence (file:line), and the change you want. No finding without evidence. Do not rewrite the spec; say what to change. End with the verdict as the last two lines: `VERDICT: APPROVED`, `VERDICT: CHANGES REQUESTED` or `VERDICT: BLOCKED` (the spec cannot be reviewed as submitted), then a one-line reason. APPROVED only when nothing Blocking or Important is open.
 
 On later rounds the brief is the orchestrator's reply (below); the reviewer keeps its context and the same answer format.
 
@@ -47,22 +48,23 @@ Then run `reviewer-code` with the spec path in its brief: it checks the build ag
 
 ## Extra reviewers
 
-- **Security-heavy spec** (auth, secrets, input handling, uploads, integrations): also run `reviewer-security` on the spec and the code it relies on, with the assets to protect and the trust boundaries in the brief. It returns a severity-ordered list (CRITICAL / HIGH / MEDIUM / LOW) and a closing verdict, "clean" or "blocked pending" the listed fixes. It does not write a `VERDICT:` line; read it as: CRITICAL and HIGH are Blocking, MEDIUM is Important, LOW is Minor, "clean" is approval only when no MEDIUM is open (a MEDIUM stays Important and must be resolved), "blocked" is not. Quote its closing verdict. If the brief names no assets or threat model it states the assets it assumed and reviews against those, so the spec should confirm or correct them. Fable and Opus 5.5 run safety classifiers and a flagged request silently re-runs on a fallback model inside a subagent; keep security detail inside `reviewer-security` (pinned to Opus 4.8).
-- **UI-heavy spec** (screens, flows, forms, grids): also run `reviewer-ux` on the spec. It returns `APPROVED`, `CHANGES REQUESTED` or `BLOCKED` and Critical / Important / Minor findings, each citing a standard. Critical and Important are Blocking-equivalent and must be resolved; BLOCKED means the approach must be replaced, not patched. It cannot see rendered output, so contrast and layout items under its "Needs a rendered check" list are carried into the spec as checks for a human or a tool.
-- Treat these verdicts like the architect's: quote the closing verdict of the latest round, and their findings go through the same round protocol.
+- **Security-heavy spec** (auth, secrets, input handling, uploads, integrations): also run `reviewer-security` on the spec and the code it relies on, with the assets to protect and the trust boundaries in the brief. It returns a severity-ordered list (CRITICAL / HIGH / MEDIUM / LOW) and ends with the same `VERDICT:` line: `VERDICT: APPROVED` means no MEDIUM or above is open, `VERDICT: CHANGES REQUESTED` means a MEDIUM or HIGH is open, `VERDICT: BLOCKED` means a CRITICAL is open or the code cannot be reviewed. Its CRITICAL and HIGH findings are Blocking, MEDIUM is Important, LOW is Minor. A security review that returns no `VERDICT: APPROVED`, including one that failed or ended early, is not an approval. If the brief names no assets or threat model it states the assets it assumed and reviews against those, so the spec should confirm or correct them. Keep security detail inside `reviewer-security`: it runs on Opus 5.5, pinned by full ID, and a cybersecurity-flagged request re-runs on Opus 4.8 automatically, while in the main session a flagged request moves the whole session to the fallback model until `/model`.
+- **UI-heavy spec** (screens, flows, forms, grids): also run `reviewer-ux` on the spec. It returns Critical / Important / Minor findings, each citing a standard, and ends with the same `VERDICT:` line (APPROVED / CHANGES REQUESTED / BLOCKED). Critical and Important are Blocking-equivalent and must be resolved. A BLOCKED whose reason starts `Replace approach:` means the approach must be replaced, not patched; one that starts `Not reviewable:` means the submission must be fixed and sent again. It cannot see rendered output, so contrast and layout items under its "Needs a rendered check" list are carried into the spec as checks for a human or a tool.
+- Treat these verdicts like the architect's: quote the `VERDICT:` line of the latest round, and their findings go through the same round protocol.
 
 ## Model and tier
 
-Reviewer: Fable (`model: "fable"`, via the architect agent, whose frontmatter carries the same `fable` alias, so the agent and the spawn agree). Writer: you, the orchestrator, on whatever tier the session runs on (the matrix suggests Opus 4.8 as `trigger_model`); spec writing is not delegated. That is deliberate: the fresh Fable reviewer is the second mind, and the review, not the writer's tier, supplies the frontier-tier scrutiny. If the reviewer's reply looks truncated or off-model, say so and re-ask.
+Reviewer: Fable, through the architect agent, whose definition carries the `fable` alias. Spawn it with no `model` argument: a spawn-time model replaces the definition's. Writer: you, the orchestrator, on whatever tier the session runs on (the matrix suggests Opus 5.5 as `trigger_model`); spec writing is not delegated. That is deliberate: the fresh Fable reviewer is the second mind, and the review, not the writer's tier, supplies the frontier-tier scrutiny. If the reviewer's reply looks truncated or off-model, say so and re-ask.
 
 ## Theme
 
-`theme` renames agents, so the `subagent_type` above follows the active theme's name for the architect (`switchboard:<themed-name>`); the role is what matters, not the slug. If `theme.json` exists at the plugin root, read the architect's themed name from it.
+`theme` renames agents, so the `subagent_type` above follows the active theme's name for the architect and for loki (`switchboard:<themed-name>`); the role is what matters, not the slug. If `theme.json` exists at the plugin root, read their themed names from it.
 
 ## Must not
 
 - Build, scaffold or write code before the user's go (or a prior "build once approved").
-- Report the reviewer as approving without quoting its `VERDICT:` line (or, for the security and UX reviewers, their closing verdict) from the latest round. A summary of its mood is not a verdict.
+- Report a reviewer as approving without quoting its `VERDICT:` line from the latest round. A summary of its mood is not a verdict.
+- Treat a Loki counterpoint as a finding, or run Loki again for a later round.
 - Let the reviewer write or edit the spec, or let it see only your summary instead of the files.
 - Argue from the reviewer's findings without checking them: it can be wrong, and a finding with no file:line evidence is a question, not a defect.
 - Skip the ADR when the spec makes an architecture choice, or leave a `[Q]` unanswered in the approved spec.

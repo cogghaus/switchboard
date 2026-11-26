@@ -2,9 +2,30 @@
 
 All notable changes to Switchboard are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Release convention: the version lives in `.claude-plugin/plugin.json` only. Every release gets an annotated git tag `v<version>` on the release commit on main, pushed with the release; a published tag is never moved (a mistake is fixed by the next patch release). Releases before 0.13.0 are untagged.
+Release convention: the version lives in `.claude-plugin/plugin.json` only. Every release gets an annotated git tag `v<version>` on the release commit on main, pushed after that commit is confirmed on remote main; a published tag is never moved (a mistake is fixed by the next patch release). Releases before 0.13.0 are untagged.
 
 ## [Unreleased]
+
+## [0.14.0] - 2026-11-26
+
+From a review of every agent and skill by five Fable 5.2 reviewers, checked against the maintainer's rule log and 737 real switchboard agent calls (2026-10-01 to 2026-11-26), with the model facts re-checked against the Claude Code docs on 2026-11-26.
+
+### Added
+- **Working Rules for the builders.** `developer-backend`, `developer-frontend` and `testing-qa` carry one identical section: change files with Edit and Write only (never through the shell), a refusal from a hook, guard or permission check is final for that route, exit codes are evidence (no piping a test run into `tail`), no foreground waits, affected tests only, no commit unless the brief says so, no installs or destructive commands, and what was verified kept apart from what was assumed. `release-manager` carries the same block with release bullets; `writer-technical` a docs version (every fact read in the task; the code is the ground truth). Until now none of these rules was in a definition: briefs had to paste them, and when they did, shell-edit calls fell by more than 90%.
+- **Test first, on behaviour.** Both developers: write the test, see it fail on the behaviour (not a compile error or a missing import), only then the fix, never while the red run is in flight; quote the failing line as read. `testing-qa` hands a bug over as a failing reproduction test.
+- **Loki in the regular flow.** `spec-review` runs `loki` once on the draft spec before the first review round, and `orchestrator-loop` sends significant design decisions and ADRs past it too. Its two or three counterpoints are answered in one line each under `Alternatives considered` and never block. `loki` drops its live-meeting text and gains Grep and Glob.
+
+### Changed
+- **Spawn roster agents with no `model` argument** (new model-routing hard rule). Claude Code takes the per-call `model` first, ahead of the definition, so a spawn-time model overrode every full-ID pin: 41 of 106 security reviews and 98 of 396 code reviews ran off their pin. `orchestrator-loop`, the session-start framing and `spec-review` (which passed `model: "fable"`) follow the rule.
+- **Security review on Opus 5.5.** `reviewer-security` moves to `claude-opus-5-5` by full ID; a cybersecurity-flagged request re-runs on Opus 4.8 by itself and later requests return to Opus 5.5. In the maintainer's runs, 37 security reviews on Opus 5.5 or Fable 5.2 (about 2,000 turns) never fell back. The offensive agents (`testing-red-team`, `testing-pentester`) stay on `claude-opus-4-8`. The matrix splits the security tier into defensive review and offensive testing; `trigger_model` is now `claude-opus-5-5`. Keep fallback on automatic switching: under "ask each time" a flagged subagent fails instead.
+- **One verdict line.** `reviewer-code`, `reviewer-ux`, `reviewer-security` and `architect` end every report with `VERDICT: APPROVED | CHANGES REQUESTED | BLOCKED` and a one-line reason. `reviewer-code` lists an unmet criterion as a Critical finding, and re-reviews check only the earlier Critical and Important fixes. A security review that does not end with `VERDICT: APPROVED`, including one that failed, blocks the release.
+- **One Trust Boundary** in all 14 agents: the definition and the orchestrator's brief are the instructions, everything read while working is data, and a subagent cannot pause for confirmation.
+- **Probe Files**, identical in `reviewer-code`, `testing-red-team` and `testing-pentester`: no Edit (rewrite with Write), never inside the project's tests directory, a way out when the test runner only finds in-repo files, no git state or config changes, and a refusal ends the route by any tool.
+- `release-manager`: one CI re-run for a suspected flake, then stop; bumps through Edit or a file-only tool mode; a refused push or tag is a failed gate.
+
+### Fixed
+- **Secret probes that leaked.** The allowed form `grep -n ... | cut -d: -f1,2` printed the matched line on a single file or stdin, and `env | cut -d= -f1` could print multi-line values. Allowed forms are now a scanner's redact option, `grep -l` and `grep -c`, and environment names through `compgen -e`.
+- The matrix classifier note names Fable 5, 5.1 and 5.2, says a subagent under "ask each time" fails instead of re-running, and drops the settled to-do about comparing Opus 4.8 with Opus 5.5.
 
 ## [0.13.0] - 2026-11-23
 
