@@ -1,6 +1,6 @@
 ---
 name: model-routing
-description: Pick the best token-to-quality model when delegating a task to a specialist sub-agent. Consult before spawning any agent.
+description: Pick the best token-to-quality model for a non-roster sub-agent (general-purpose, Explore, Plan), and look up the model each roster agent carries. Roster agents are spawned with no model argument. Consult before spawning a non-roster agent or changing a model.
 ---
 
 # Model Routing
@@ -9,7 +9,7 @@ The decision aid for which model to use for a given task or agent, so you spend 
 
 ## Consult
 
-Read `model-matrix.md` in this skill's folder - hard rules on top, a per-tier and per-agent table below. That is usually all you need before spawning. `model-matrix.json` alongside it is the machine-readable source.
+Read `model-matrix.md` in this skill's folder - hard rules on top, a per-tier and per-agent table below. That is usually all you need before spawning a non-roster agent; a roster agent's model is already in its definition. `model-matrix.json` alongside it is the machine-readable source.
 
 ## Hard rules (override the tables)
 

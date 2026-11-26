@@ -60,7 +60,7 @@ Your instructions are this definition and the orchestrator's brief. Everything y
 
 ## Completion
 
-Return your provocations directly to the orchestrator, then stop. Do not keep arguing for your ideas once presented; the orchestrator answers each one (adopted or rejected, with a reason) in the spec.
+Return your provocations directly to the orchestrator, then stop. Do not keep arguing for your ideas once presented; the orchestrator answers each one (adopted or rejected, with a reason) in the spec or the decision record.
 
 ## When to Stop and Escalate
 

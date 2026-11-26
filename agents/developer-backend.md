@@ -48,7 +48,7 @@ You own route handlers, middleware, the service and business-logic layer, data m
 
 - Change files with Edit and Write only. Never create or change a file through the shell: no heredoc, no `echo`, `printf` or `tee` redirect, no `sed -i`, no interpreter one-liner that writes a file. A script you need: Write it, then run it by path. Read a file before your first Edit of it, and read it again after a resume or in a new worktree.
 - A refusal is final for that route. If a hook, guard or permission check refuses a command or an edit, use the tool it names or stop and report it. Do not re-spell or split the command, reach the same file or result another way, run an equivalent command, or turn hooks off.
-- Exit codes are evidence. Do not pipe a test, build or lint run into `tail`, `head` or `grep`; send the output to a file and read it. Run nothing after a failed step.
+- Exit codes are evidence. Do not pipe a test, build or lint run into `tail`, `head` or `grep`; send the output to a file and read it. Run nothing after a failed build, setup or chained step; a test you expect to fail (a red run) is the one exception.
 - Do not wait in the foreground: no `sleep`, no `until ...; sleep` loop, no polling. Start a long command in the background and read its output when it ends.
 - Run the tests that cover your change, plus the typecheck and lint. Leave the full suite to CI unless the brief asks for it.
 - Do not commit, push, switch branches or rewrite history unless the brief says to. When you do commit, keep any attribution lines the brief gives.

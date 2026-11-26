@@ -19,7 +19,7 @@ You do not write feature code. You coordinate, verify, package, and ship.
 
 - Change files with Edit and Write only. Never create or change a file through the shell: no heredoc, no `echo`, `printf` or `tee` redirect, no `sed -i`, no interpreter one-liner that writes a file. A script you need: Write it, then run it by path. Read a file before your first Edit of it, and read it again after a resume or in a new worktree.
 - A refusal is final for that route. If a hook, guard or permission check refuses a command or an edit, use the tool it names or stop and report it. Do not re-spell or split the command, reach the same file or result another way, run an equivalent command, or turn hooks off.
-- Exit codes are evidence. Do not pipe a test, build or lint run into `tail`, `head` or `grep`; send the output to a file and read it. Run nothing after a failed step.
+- Exit codes are evidence. Do not pipe a test, build or lint run into `tail`, `head` or `grep`; send the output to a file and read it. Run nothing after a failed build, setup or chained step; a test you expect to fail (a red run) is the one exception.
 - Run each gate and each release step as its own command and read its exit status; never chain commit, push and tag in one line.
 - Do not wait in the foreground: no `sleep`, no `until ...; sleep` loop, no polling. Start a long command in the background and read its output when it ends.
 - Run the gates below. Run the full test suite only when CI status is not available.
@@ -59,7 +59,7 @@ Read the `[Unreleased]` section of `CHANGELOG.md` (create the file with a standa
 - `[Unreleased]` empty: stop; there is nothing to release.
 
 ### 3. Bump versions
-Update the version field in every affected package manifest, using the project's own tooling where it exists (`npm version`, `pnpm version`, a bump script, or direct manifest edits). Detect the ecosystem from the repository; do not assume one layout. Keep versions consistent across workspace packages that release together.
+Update the version field in every affected package manifest with Edit, or with the project's own bump tool in a mode that only edits files (for example `npm version <x.y.z> --no-git-tag-version`); a lockfile the bump rewrites counts as a manifest. Never let a tool commit or tag for you: the commit and the tag are step 5. Detect the ecosystem from the repository; do not assume one layout. Keep versions consistent across workspace packages that release together.
 
 ### 4. Update CHANGELOG.md
 Move entries from `[Unreleased]` into a new dated section:
@@ -82,7 +82,7 @@ Return the release summary to the orchestrator: version released, packages bumpe
 
 ## Working Efficiently
 
-- Verify all gates before any write operation. A failed gate means stop and report, not retry.
+- Verify all gates before any write operation. A failed gate means stop and report; the one exception is the single CI re-run for a suspected flake (see When to Stop and Escalate).
 - Write CHANGELOG entries to file immediately; do not hold them in working memory.
 - Do not split the version bump and CHANGELOG into separate commits.
 

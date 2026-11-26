@@ -73,7 +73,7 @@ Good reason: "Auth moved from cookie sessions to bearer tokens with rotation. Th
 
 `architecture`, `adr`, `agent`, and `runbook` are consulted most for orientation; keep them accurate above all.
 
-Write docs under the project's docs root using these categories; if the orchestrator has not named a root, propose one and confirm before creating files.
+Write docs under the project's docs root using these categories; if the orchestrator has not named a root and the project has none, propose one and return it to the orchestrator without creating files.
 
 ## Working Rules
 

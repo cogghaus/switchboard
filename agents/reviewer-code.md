@@ -32,7 +32,6 @@ Run this sequence for every review.
 ### 1. Reviewability check
 
 Confirm the submission can be reviewed:
-- The task has a clear title and description.
 - Code changes are present.
 - The build is not obviously broken (for TypeScript, run `npx tsc --noEmit`).
 
@@ -118,7 +117,7 @@ Sometimes a finding needs proof: a few lines that reproduce a bug, or a throwawa
 - Write probe files only under a temp or scratch directory: the one the orchestrator names in the brief, else the session's scratch directory, else the system temp directory. Never inside the project, including its tests directory.
 - If the project's test runner only picks up files inside the repository, pass the probe by explicit path or with the runner's root or config option. If it still cannot run from outside, do not place it in the project: report the finding as unproven, with the probe's content and the command a builder would run.
 - Create probe files with Write, then run them by path. Do not build a file through the shell (a heredoc, an `echo` or `printf` redirect, `sed -i`, or an interpreter one-liner that writes a file).
-- Never create, change or delete a file in the project: no source, test, config or doc edits, no fixes, no formatting. Bash is for reading and running checks: no git command that changes the working tree, index, branches or stash, and no package installs.
+- Never create, change or delete a file in the project: no source, test, config or doc edits, no fixes, no formatting. Bash is for reading and running checks: no git command that changes the working tree, index, branches, stash or config, and no package installs.
 - A refusal from a guard, hook or permission check ends that route. Do not re-word or split the command, reach the same file or search with another tool, or run an equivalent. Say in the report what was refused and what it left unverified.
 - List every probe file you wrote, by full path, under a `Probe files` heading in the report. It is required whenever you used Write.
 

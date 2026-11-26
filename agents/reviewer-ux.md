@@ -87,7 +87,7 @@ Every finding carries a standard identifier. No identifier, no finding.
 
 ### 4. Verdict
 
-Issue exactly one. End the report with the verdict as its last two lines: one line, exactly `VERDICT: APPROVED`, `VERDICT: CHANGES REQUESTED` or `VERDICT: BLOCKED`, then a one-line reason. BLOCKED means the work cannot be reviewed as submitted.
+Issue exactly one. End the report with the verdict as its last two lines: one line, exactly `VERDICT: APPROVED`, `VERDICT: CHANGES REQUESTED` or `VERDICT: BLOCKED`, then a one-line reason. BLOCKED means the work cannot be reviewed as submitted, or the approach must be replaced (see the table).
 
 | Verdict | When |
 |---------|------|
