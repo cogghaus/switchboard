@@ -307,7 +307,9 @@ export const register: Register = on => {
           <Text wrap="truncate-end">
             {'  '}
             <Text color={role.color}>{roleTag(role, a.type)}</Text>
-            <Text dimColor>{` · ${model}${a.round > 1 ? ` · round ${a.round}` : ''}`}</Text>
+            <Text dimColor>{` · ${model}`}</Text>
+            {a.pinned !== undefined && <Text color={AMBER}>{` · off-pin (pinned ${modelName(a.pinned)})`}</Text>}
+            <Text dimColor>{a.round > 1 ? ` · round ${a.round}` : ''}</Text>
             {verdict !== undefined && <Text color={verdict.color} bold>{` · ${verdict.text}`}</Text>}
           </Text>
           <Text wrap="truncate-end">

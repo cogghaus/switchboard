@@ -37,6 +37,25 @@ export const OTHER: Role = { slug: 'other', label: 'Agent', emoji: '', color: '#
 /** The roles that hand back a verdict worth showing on their row. */
 export const REVIEWERS = new Set(['reviewer-code', 'reviewer-ux', 'reviewer-security'])
 
+// Pinned model per role. Mirrors the `frontmatter` of the full-ID agents in
+// skills/model-routing/model-matrix.json; change both together.
+export const PINS: Readonly<Record<string, string>> = {
+  'reviewer-code': 'claude-opus-5-5',
+  'reviewer-ux': 'claude-opus-5-5',
+  'reviewer-security': 'claude-opus-5-5',
+  'testing-red-team': 'claude-opus-4-8',
+  'testing-pentester': 'claude-opus-4-8',
+}
+
+/**
+ * The pinned model id when `role` is pinned and `model` is not that pin, else undefined.
+ * A model id may carry a suffix such as `[1m]`, so it is compared by prefix.
+ */
+export const offPinOf = (role: string, model: string): string | undefined => {
+  const pin = Object.hasOwn(PINS, role) ? PINS[role] : undefined
+  return pin !== undefined && !model.startsWith(pin) ? pin : undefined
+}
+
 const BY_SLUG = new Map(ROLES.map(r => [r.slug, r]))
 
 // Variation selectors and spaces differ between how an emoji is typed and stored.

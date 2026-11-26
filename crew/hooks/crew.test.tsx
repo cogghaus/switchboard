@@ -4,7 +4,7 @@ import type { AgentRun } from '../types'
 import { COSTUMES, crab } from './crabs'
 import { agentSvg, bandSvg, xml } from './draw'
 import { bandOf, MAX_TASKS, MAX_TEXT, merge, plannedOf, recordComplete, recordSpawn, recordStep, waveOf } from './logic'
-import { costOf, modelName, roleByDescription, roleBySlug, roleOf, ROLES, verdictOf } from './roster'
+import { costOf, modelName, offPinOf, PINS, roleByDescription, roleBySlug, roleOf, ROLES, verdictOf } from './roster'
 
 const run = (over: Partial<AgentRun>): AgentRun => ({
   id: 'a1',
@@ -52,6 +52,29 @@ describe('roster', () => {
     expect(verdictOf('Overall verdict: clean.')).toBe('approved')
     expect(verdictOf('Overall verdict: blocked pending the listed critical fixes')).toBe('blocked')
     expect(verdictOf('no verdict line here')).toBe(undefined)
+  })
+
+  test('reviewers ending with a plain VERDICT line are read', () => {
+    expect(verdictOf('findings...\nVERDICT: CHANGES REQUESTED\nreason')).toBe('changes')
+    expect(verdictOf('...\nVERDICT: APPROVED\nok')).toBe('approved')
+  })
+
+  test('offPinOf names the pin only when a pinned role runs on another model', () => {
+    expect(PINS['reviewer-code']).toBe('claude-opus-5-5')
+    expect(PINS['testing-red-team']).toBe('claude-opus-4-8')
+    expect(offPinOf('reviewer-code', 'claude-opus-5-5')).toBe(undefined)
+    expect(offPinOf('reviewer-code', 'claude-sonnet-5-5')).toBe('claude-opus-5-5')
+    expect(offPinOf('testing-pentester', 'claude-opus-5-5')).toBe('claude-opus-4-8')
+    expect(offPinOf('reviewer-ux', 'claude-opus-5-5[1m]')).toBe(undefined)
+    expect(offPinOf('reviewer-security', 'claude-sonnet-5-5[1m]')).toBe('claude-opus-5-5')
+    expect(offPinOf('developer-backend', 'claude-haiku-5-5')).toBe(undefined)
+  })
+
+  test('recordSpawn marks a run spawned off its pin, and only that', () => {
+    const spawn = (role: string, model: string) => recordSpawn([], { agentId: 'p', type: `switchboard:${role}`, role, description: 'Review', model, at: 1 })[0]
+    expect(spawn('reviewer-code', 'claude-sonnet-5-5')?.pinned).toBe('claude-opus-5-5')
+    expect(spawn('reviewer-code', 'claude-opus-5-5')).not.toHaveProperty('pinned')
+    expect(spawn('developer-backend', 'claude-sonnet-5-5')).not.toHaveProperty('pinned')
   })
 
   test('cost estimates follow the model family and model names read well', () => {

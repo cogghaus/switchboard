@@ -4,7 +4,7 @@
 
 import type { AgentRun, Flow, PlannedTask } from '../types'
 import type { BandModel, Totals } from './draw'
-import { costOf, isRosterRole, PHASES, roleOf, tokensOf, verdictOf, windowOf, REVIEWERS } from './roster'
+import { costOf, isRosterRole, offPinOf, PHASES, roleOf, tokensOf, verdictOf, windowOf, REVIEWERS } from './roster'
 import type { Usage } from './roster'
 
 // The `progress` tool is model-callable, so its input is untrusted: every count, list and
@@ -95,6 +95,7 @@ export type Spawn = { agentId: string; type: string; role: string; description: 
 /** A started subagent joins the list; a second run of the same task counts as a new round. */
 export const recordSpawn = (list: readonly AgentRun[], s: Spawn): AgentRun[] => {
   const round = 1 + list.filter(a => s.description !== '' && norm(a.description) === norm(s.description)).length
+  const pinned = offPinOf(s.role, s.model)
   const run: AgentRun = {
     id: s.agentId,
     agentId: s.agentId,
@@ -102,6 +103,7 @@ export const recordSpawn = (list: readonly AgentRun[], s: Spawn): AgentRun[] => 
     role: s.role,
     description: s.description,
     model: s.model,
+    ...(pinned === undefined ? {} : { pinned }),
     status: 'running',
     startedAt: s.at,
     contextTokens: 0,
