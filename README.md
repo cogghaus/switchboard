@@ -15,14 +15,14 @@ One standalone Claude Code sub-agent per role:
 - **Build & design:** 🔥 Backend Developer, 🔨 Frontend Developer, 🎨 Designer
 - **Review & testing:** ⚖️ Code Reviewer, 🧭 UX Reviewer, 🛡️ Security Reviewer, 🧪 QA Engineer, ⚡ Infra Pentester, 💀 Red Team Lead
 - **Plan & docs:** 🏛️ Architect, 🔮 Business Analyst, 📜 Technical Writer, 📯 Release Manager
-- **Challenger:** 🎭 Loki
+- **Challenger:** 🎭 Loki (runs once per spec and per significant design decision)
 
 Each carries a routing description, a tool allowlist, an assigned model, and its full persona - identity, principles, domain expertise, and output formats. A sub-agent is spawned by your main session and returns its result directly.
 
 ### `skills/` - how to drive the roster
 
 - **`orchestrator-loop`** - the default operating loop: receive a goal, decide direct vs delegate, route to the right specialist at the right model, review, and report. This makes delegation the default behavior rather than something you improvise. Auto-invokes on substantial tasks (best-effort); the skill documents an opt-in `SessionStart` hook to make it your standing default on every session.
-- **`model-routing`** - the model-selection matrix: which model gives the best token-to-quality result for a given task or agent, with the security tier pinned to a stable model. `model-matrix.md` (readable) and `model-matrix.json` (source) ship alongside it.
+- **`model-routing`** - the model-selection matrix: which model gives the best token-to-quality result for a given task or agent, with the security and review agents pinned by full model ID. `model-matrix.md` (readable) and `model-matrix.json` (source) ship alongside it.
 - **`spec-review`** - spec first for any substantial feature: the orchestrator writes the spec and ADR, a fresh Fable reviewer critiques it, they iterate to an approved spec, the user sees it, then building starts. Nothing is built before approval.
 - **`theme`** - reskin the roster to any naming theme: keep the plain corporate default, or name a subject (a show, game, universe, or motif) and each role is renamed to a fitting character, its function unchanged.
 - **`wireup`** - connect the roster to a specific project: set up hooks, MCP servers, and code intelligence (LSP) as a reviewed overlay on the project's own config. Optional, once per codebase.
@@ -44,7 +44,7 @@ Installs by name and persists across sessions (`switchboard@switchboard` is `plu
 
 ## Model assignments
 
-Each agent's `model:` is set from the routing matrix: security agents pinned by full ID to Opus 4.8, design and lateral work on the frontier tier (`fable`, today Fable 5.2), review pinned by full ID to Opus 5.5 (an `opus` alias would follow an Opus 4.8 main session), mechanical and build work on `sonnet` (Sonnet 5.5), lookups on `haiku` (Haiku 5.5). Nine agents carry the alias, so each follows the current model of its tier; the three security agents and the two reviewers keep an explicit full ID. See `skills/model-routing/model-matrix.md`.
+Each agent's `model:` is set from the routing matrix: the offensive security agents (red team, pentest) pinned by full ID to Opus 4.8, design and lateral work on the frontier tier (`fable`, today Fable 5.2), the three reviewers (code, UX, security) pinned by full ID to Opus 5.5 (an `opus` alias would follow an Opus 4.8 main session), mechanical and build work on `sonnet` (Sonnet 5.5), lookups on `haiku` (Haiku 5.5). Nine agents carry the alias, so each follows the current model of its tier; the two offensive agents and the three reviewers keep an explicit full ID. Spawn roster agents without a `model` argument: a spawn-time model replaces the definition's, pins included. See `skills/model-routing/model-matrix.md`.
 
 ## Brand
 

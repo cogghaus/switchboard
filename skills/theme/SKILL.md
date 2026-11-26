@@ -38,7 +38,7 @@ Switchboard ships with a mostly plain corporate roster (Security Reviewer, Backe
 For each agent file in `agents/`:
 - Change the `name:` frontmatter to a kebab-case slug of the themed name, unique across the roster, and the `# H1` title to the themed name.
 - Optionally add ONE short themed flavor line at the top of the Identity section - a nod to the character. Keep every functional section (principles, method, output format, tools, model, when-to-stop) exactly as-is.
-- Do NOT change `tools`, `model`, `description`, or any functional or safety instruction. The security agents (reviewer-security, testing-red-team, testing-pentester) keep `model: claude-opus-4-8` whatever their new name.
+- Do NOT change `tools`, `model`, `description`, or any functional or safety instruction. Every agent keeps its `model:` line exactly, pins included.
 
 Then keep the roster consistent:
 - Update the model matrix: `skills/model-routing/model-matrix.json` (each agent's `agent_id` and `display_name`), then regenerate `model-matrix.md` to match.
