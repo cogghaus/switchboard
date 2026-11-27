@@ -5,8 +5,9 @@
 // walk, a prop class (it, orb, flame, ndl, gl, b1, b2, zap, tail, horn, bell) is a prop with a motion of
 // its own, and `bd` is everything else. An outline cell joins the group of the cell it outlines.
 //
-// Based on _proposals/icons/hand-v2/sprites.mjs: crabBase, the palette, the outline and the three approved
-// sprites (plain, architect, business-analyst) are unchanged. Everything after them is the rest of the crew set.
+// Drawn for Switchboard in 2026-11 (the owner's working copy outside the repo): crabBase, the palette, the
+// outline and the first three sprites (plain, architect, business-analyst) set the style; the rest of the crew
+// set follows it. This file is now the source of the crabs.
 import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 

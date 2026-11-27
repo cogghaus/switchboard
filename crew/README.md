@@ -49,4 +49,4 @@ claude plugin validate crew
 claude plugin test crew
 ```
 
-Credits: the crabs are Switchboard's own drawings (0.2.0). The group-per-motion layout and the walk are adapted from [savvy-progress](https://github.com/JohnnyVizz/claude-kit/tree/main/plugins/savvy-progress) (MIT), whose 0.1.x crab was Pixel Clawd from DockCrab. See [NOTICE](NOTICE).
+Credits: the crabs are Switchboard's own drawings (0.2.0). The group-per-motion layout and the walk are adapted from [savvy-progress](https://github.com/JohnnyVizz/claude-kit/tree/main/plugins/savvy-progress) (MIT). The crew's 0.1.x crab body also came from savvy-progress, which credits it as Pixel Clawd from DockCrab. See [NOTICE](NOTICE).
