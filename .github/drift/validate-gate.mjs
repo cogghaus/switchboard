@@ -125,17 +125,28 @@ export function gateReport(report, allowList, target, expected) {
 
 // ---------- CLI ----------
 
-class GateError extends Error {}
+/** Thrown when the gate cannot run at all (claude missing, a bad target, an unreadable file). CLI exit 2. */
+export class GateError extends Error {}
 
-function runClaude(args, cwd) {
-  const opts = { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 };
-  let r = spawnSync("claude", args, opts);
-  // On Windows `claude` can be a .cmd shim that only a shell finds; the arguments here are fixed words and
-  // a marketplace folder name, so retrying with a shell is acceptable for that case only.
-  if (r.error && r.error.code === "ENOENT" && process.platform === "win32") {
-    r = spawnSync("claude", args, { ...opts, shell: true });
+/** A target must be a plain relative plugin folder: segments of letters, digits, '.', '_' and '-'. */
+export function checkTarget(t) {
+  const ok =
+    typeof t === "string" &&
+    t !== "" &&
+    t.split("/").every((seg) => /^[A-Za-z0-9._][A-Za-z0-9._-]*$/.test(seg) && seg !== "..");
+  if (!ok) {
+    throw new GateError(`target ${JSON.stringify(t)} is not a safe relative plugin folder (letters, digits, '.', '_', '-' and '/' only; no '..', no absolute path)`);
   }
-  if (r.error) throw new GateError(`cannot run claude: ${r.error.message}`);
+  return t;
+}
+
+// claude is started directly with an argument list. On Windows that needs claude.exe (the native CLI) on PATH.
+function runClaude(args, cwd) {
+  const r = spawnSync("claude", args, { cwd, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  if (r.error) {
+    const hint = r.error.code === "ENOENT" ? " claude was not found on PATH: install the native Claude Code CLI (claude.exe on Windows)." : "";
+    throw new GateError(`cannot run claude: ${r.error.message}.${hint}`);
+  }
   return r;
 }
 
@@ -161,6 +172,8 @@ function main(argv) {
       if (t !== "." && !targets.includes(t)) targets.push(t);
     }
   }
+
+  for (const t of targets) checkTarget(t); // every target is checked before anything is spawned
 
   const pluginName = readJson(path.join(root, ".claude-plugin", "plugin.json")).name ?? "switchboard";
   const list = (dir, test) => (fs.existsSync(dir) ? fs.readdirSync(dir).filter(test).sort() : []);

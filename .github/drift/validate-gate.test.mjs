@@ -45,7 +45,27 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+
 import { gateReport } from "./validate-gate.mjs";
+import * as gate from "./validate-gate.mjs";
+
+// Review fixes R2 and R3 add three exports to validate-gate.mjs (tests below):
+//   GateError                 class; thrown for "the gate cannot run"; the CLI maps it to exit 2
+//   checkTarget(t)            returns t unchanged when it is a safe relative plugin folder
+//                             ('.', 'crew', 'a/b-c_d.e': segments of letters, digits, '.', '_', '-';
+//                             no leading '-', no '..' segment, no space, no absolute path, not empty);
+//                             throws GateError for anything else (also for a non-string)
+//   runResult(result, target) result = { status, signal, stdout } of the validator process;
+//                             returns { report, findings }: report is the parsed stdout JSON (null when
+//                             it does not parse); findings are GATE findings (kind, rule, target,
+//                             message): rule 'EXIT' when status is not 0 or signal is not null (even
+//                             when the report says success: true), rule 'BAD-OUTPUT' when stdout is not
+//                             valid JSON. target defaults to '.'.
 
 // ---------- fixtures ----------
 
@@ -374,4 +394,78 @@ test("T29: the right number of agents but one wrong name fails with missing and 
 
 test("T29: the coverage check applies to the root target only (crew report with empty provides passes)", () => {
   assert.deepEqual(gateCrew(crewReport("win", 7)), []);
+});
+
+// ---------- R2: target validation and no shell ----------
+
+const needs = (name) => assert.equal(typeof gate[name], "function", `validate-gate.mjs must export ${name}`);
+const GOOD_TARGETS = [".", "crew", "a/b-c_d.e"];
+const BAD_TARGETS = [
+  ["a shell metacharacter string", "x&echo hi&rem"],
+  ["a leading dash", "-x"],
+  ["a parent directory", "../up"],
+  ["a space", "a b"],
+  ["the empty string", ""],
+  ["a POSIX absolute path", "/etc"],
+  ["a Windows absolute path", "C:\\x"],
+  ["a non-string", undefined],
+];
+
+for (const t of GOOD_TARGETS) {
+  test(`R2: checkTarget accepts ${JSON.stringify(t)} and returns it unchanged`, () => {
+    needs("checkTarget");
+    assert.equal(gate.checkTarget(t), t);
+  });
+}
+
+for (const [name, t] of BAD_TARGETS) {
+  test(`R2: checkTarget rejects ${name} with a GateError`, () => {
+    needs("checkTarget");
+    needs("GateError");
+    assert.throws(() => gate.checkTarget(t), (e) => e instanceof gate.GateError);
+  });
+}
+
+test("R2: the module source no longer contains 'shell: true'", () => {
+  const src = fs.readFileSync(fileURLToPath(new URL("./validate-gate.mjs", import.meta.url)), "utf8");
+  assert.equal(src.includes("shell: true"), false, "the Windows shell fallback must be removed");
+});
+
+/** A copy of the gate CLI with its own marketplace, run with a PATH that has no claude. */
+function runGateCopy(marketplaceSource) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "gate-test-"));
+  const emptyBin = path.join(root, "empty-bin");
+  try {
+    const drift = path.join(root, ".github", "drift");
+    fs.mkdirSync(drift, { recursive: true });
+    fs.mkdirSync(emptyBin);
+    fs.mkdirSync(path.join(root, ".claude-plugin"));
+    const here = path.dirname(fileURLToPath(import.meta.url));
+    fs.copyFileSync(path.join(here, "validate-gate.mjs"), path.join(drift, "validate-gate.mjs"));
+    fs.copyFileSync(path.join(here, "validate-allow.json"), path.join(drift, "validate-allow.json"));
+    fs.writeFileSync(path.join(root, ".claude-plugin", "plugin.json"), JSON.stringify({ name: "switchboard" }));
+    fs.writeFileSync(
+      path.join(root, ".claude-plugin", "marketplace.json"),
+      JSON.stringify({ name: "m", plugins: [{ name: "p", source: marketplaceSource }] }),
+    );
+    const env = { ...process.env };
+    for (const k of Object.keys(env)) if (k.toLowerCase() === "path") delete env[k];
+    env.PATH = emptyBin;
+    return spawnSync(process.execPath, [path.join(drift, "validate-gate.mjs")], { encoding: "utf8", env, cwd: root });
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+}
+
+test("R2: a marketplace source that fails target validation stops the gate with exit 2 naming the source", () => {
+  const r = runGateCopy("./x&echo hi&rem");
+  assert.equal(r.status, 2, `exit status: expected 2, got ${r.status}; stderr: ${r.stderr}`);
+  assert.ok(r.stderr.includes("x&echo hi&rem"), `stderr should name the rejected target, got: ${r.stderr}`);
+});
+
+test("R2: when claude is not found the gate exits 2 and hints at the native CLI", () => {
+  const r = runGateCopy("./crew");
+  assert.equal(r.status, 2, `exit status: expected 2, got ${r.status}; stdout: ${r.stdout}; stderr: ${r.stderr}`);
+  assert.match(r.stderr, /claude/i);
+  assert.match(r.stderr, /native/i);
 });
