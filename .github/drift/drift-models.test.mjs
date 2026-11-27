@@ -495,3 +495,20 @@ test("R1: blank lines and comment lines inside PINS are ignored (no finding)", (
     assert.deepEqual(checkModels(root), []);
   });
 });
+
+// ---------- R4: a malformed matrix row is a clean exit 2, not a stack trace ----------
+
+for (const [name, mutate] of [
+  ["without frontmatter", (row) => delete row.frontmatter],
+  ["with a non-string frontmatter", (row) => (row.frontmatter = 5)],
+]) {
+  test(`R4: a matrix row ${name} makes the CLI exit 2 with a message and no TypeError`, () => {
+    withCopy((root) => {
+      editJson(root, "skills/model-routing/model-matrix.json", (m) => mutate(m.agent_defaults.find((r) => r.agent_id === "architect")));
+      const r = runCli(["--root", root]);
+      assert.equal(r.status, 2, `exit status: expected 2, got ${r.status}; stderr: ${r.stderr.slice(0, 300)}`);
+      assert.doesNotMatch(r.stderr, /TypeError/);
+      assert.ok(r.stderr.trim().length > 0, "a message must be printed to stderr");
+    });
+  });
+}

@@ -477,8 +477,29 @@ export function checkModels(root) {
     return i === -1 ? MATRIX_JSON : `${MATRIX_JSON}:${lineAt(jsonText, i)}`;
   };
 
-  const agents = matrix.agent_defaults ?? [];
-  const tiers = matrix.task_tier_rules ?? [];
+  // Row shapes are validated up front so a malformed matrix is a clean exit 2, not a stack trace.
+  const need = (cond, what) => {
+    if (!cond) throw new CheckError(`${MATRIX_JSON}: ${what}`);
+  };
+  need(Array.isArray(matrix.agent_defaults), '"agent_defaults" must be an array');
+  need(Array.isArray(matrix.task_tier_rules), '"task_tier_rules" must be an array');
+  const isStr = (v) => typeof v === "string";
+  matrix.agent_defaults.forEach((a, i) => {
+    need(a && typeof a === "object", `agent_defaults[${i}] must be an object`);
+    for (const k of ["agent_id", "emoji", "display_name", "default_model", "default_alias", "frontmatter"]) {
+      need(isStr(a[k]), `agent_defaults[${i}] (${isStr(a.agent_id) ? a.agent_id : "no agent_id"}): "${k}" must be a string`);
+    }
+  });
+  matrix.task_tier_rules.forEach((t, i) => {
+    need(t && typeof t === "object", `task_tier_rules[${i}] must be an object`);
+    for (const k of ["task_tier", "default_model", "agent_tool_alias"]) {
+      need(isStr(t[k]), `task_tier_rules[${i}] (${isStr(t.task_tier) ? t.task_tier : "no task_tier"}): "${k}" must be a string`);
+    }
+  });
+  need(matrix.config && typeof matrix.config === "object" && isStr(matrix.config.trigger_model), '"config.trigger_model" must be a string');
+
+  const agents = matrix.agent_defaults;
+  const tiers = matrix.task_tier_rules;
   const byId = new Map(agents.map((a) => [a.agent_id, a]));
 
   // Alias map: alias -> model, one model per alias (M3).
