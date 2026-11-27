@@ -9,7 +9,7 @@ The backlog below came out of a Fable ideation pass (2026-08-27), ranked, with w
 ## Next up (highest conviction)
 
 1. **Ledger + delegation telemetry hook** - the keystone. Everything Switchboard claims (best token-to-quality, review-before-relay, delegation discipline) is currently asserted, not evidenced. The ledger is the evidence stream: it makes review concrete, survives compaction, unblocks `retro`/`meter`, and back-doors the blocked fire-rate measurement. Small: a JSONL hook plus a page of convention. (Skill L1 + Feature F1 built as one unit.)
-2. **`doctor`** (Feature F2) - single-source codegen + roster lint. Kills the hand-fixing drift that fills much of the 0.9.x changelog.
+2. **`doctor`** (Feature F2) - single-source codegen + roster lint. Kills the hand-fixing drift that fills much of the 0.9.x changelog. The lint half for shared blocks and model pins now exists as a CI check (`.github/drift/drift-check.mjs`); its block files (`.github/drift/blocks/`) and manifest (`shared-blocks.json`) are the input a generator would write the agent sections from.
 3. **Cut 1.0** - after a real test-drive: the pre-1.0 list is essentially a version bump + a "what's in 1.0" changelog section; nothing structural remains. Marketplace listing (Feature F3) follows.
 
 ## Skill backlog (ranked)

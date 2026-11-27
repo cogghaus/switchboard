@@ -32,4 +32,4 @@ Capable tiers where quality compounds (design, ambiguity, orchestration, review)
 
 The orchestrator's own tier (`trigger_model`) is one row in the matrix config; change it in one place.
 
-Edit `model-matrix.json` (add a tier, change a model, adjust the trigger), then update `model-matrix.md` to match. The matrix is the single source for each agent's `model:` frontmatter (the `frontmatter` field per agent); `model-matrix.md` is kept by hand.
+Edit `model-matrix.json` (add a tier, change a model, adjust the trigger), then update `model-matrix.md` to match. The matrix is the single source for each agent's `model:` frontmatter (the `frontmatter` field per agent); `model-matrix.md` is kept by hand, and CI (`.github/drift/drift-check.mjs`) fails a pull request where it, the agents, `docs/agents.md`, the site or the crew pins disagree with the JSON.

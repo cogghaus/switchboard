@@ -1,0 +1,16 @@
+[
+  {
+    "target": ".",
+    "file": "CLAUDE.md",
+    "contains": "CLAUDE.md at the plugin root is not loaded as project context",
+    "count": 1,
+    "why": "Owner file; moving it is a #15 item and an open decision in NEXT-UP.md"
+  },
+  {
+    "target": "crew",
+    "file": "hooks/crew.test.tsx",
+    "contains": "error TS",
+    "count": 7,
+    "why": "Test-file type gaps against the CLI's testing types; cleanup tracked in #15 follow-ups"
+  }
+]
