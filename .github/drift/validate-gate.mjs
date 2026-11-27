@@ -150,6 +150,28 @@ function runClaude(args, cwd) {
   return r;
 }
 
+/**
+ * Turn the validator process result ({ status, signal, stdout }) into { report, findings }.
+ * A non-zero exit status or a signal is a finding even when the report says success: true;
+ * stdout that is not JSON is a BAD-OUTPUT finding and a null report.
+ */
+export function runResult(result, target = ".") {
+  const findings = [];
+  const gate = (rule, message) => findings.push({ kind: "GATE", rule, target, message: `GATE ${rule} target=${target}: ${message}` });
+  if (result.signal) {
+    gate("EXIT", `claude plugin validate was ended by signal ${result.signal}`);
+  } else if (result.status !== 0) {
+    gate("EXIT", `claude plugin validate exited with status ${result.status}, not 0`);
+  }
+  let report = null;
+  try {
+    report = JSON.parse(result.stdout);
+  } catch {
+    gate("BAD-OUTPUT", "claude plugin validate did not print valid JSON");
+  }
+  return { report, findings };
+}
+
 function readJson(file) {
   try {
     return JSON.parse(fs.readFileSync(file, "utf8"));
@@ -188,15 +210,15 @@ function main(argv) {
   let failed = 0;
   for (const target of targets) {
     const r = runClaude(["plugin", "validate", target, "--json"], root);
-    let report;
-    try {
-      report = JSON.parse(r.stdout);
-    } catch {
-      console.error(`GATE BAD-OUTPUT target=${target}: claude plugin validate did not print valid JSON (exit ${r.status}).\n${String(r.stderr).slice(0, 500)}`);
+    const res = runResult(r, target);
+    const report = res.report;
+    if (report === null) {
+      for (const f of res.findings) console.error(f.message);
+      console.error(String(r.stderr).slice(0, 500));
       failed++;
       continue;
     }
-    const findings = gateReport(report, allow, target, expected);
+    const findings = [...res.findings, ...gateReport(report, allow, target, expected)];
     const warnings = classifyWarnings(report, allow, target);
     const newCount = warnings.filter((w) => w.allowIndex === -1).length;
     console.log(`validate-gate: target ${target}: success=${report.success}, ${warnings.length} warnings (${warnings.length - newCount} allowed, ${newCount} NEW), ${findings.length} findings`);

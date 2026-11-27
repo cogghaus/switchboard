@@ -469,3 +469,39 @@ test("R2: when claude is not found the gate exits 2 and hints at the native CLI"
   assert.match(r.stderr, /claude/i);
   assert.match(r.stderr, /native/i);
 });
+
+// ---------- R3: the validator's own exit status counts ----------
+
+const okReport = () => JSON.stringify({ success: true, manifest: { errors: [], warnings: [] }, contents: [] });
+
+test("R3: status 0 with a valid report gives the parsed report and no findings", () => {
+  needs("runResult");
+  const res = gate.runResult({ status: 0, signal: null, stdout: okReport() }, ".");
+  assert.deepEqual(res.findings, []);
+  assert.equal(res.report.success, true);
+});
+
+test("R3: status 1 with a report that says success: true gives an EXIT finding", () => {
+  needs("runResult");
+  const res = gate.runResult({ status: 1, signal: null, stdout: okReport() }, "crew");
+  const f = res.findings.find((x) => x.rule === "EXIT");
+  assert.ok(f, `expected an EXIT finding, got ${JSON.stringify(res.findings)}`);
+  assert.equal(f.kind, "GATE");
+  assert.equal(f.target, "crew");
+  assert.match(f.message, /1/);
+});
+
+test("R3: a non-null signal gives an EXIT finding", () => {
+  needs("runResult");
+  const res = gate.runResult({ status: null, signal: "SIGKILL", stdout: okReport() }, ".");
+  const f = res.findings.find((x) => x.rule === "EXIT");
+  assert.ok(f, `expected an EXIT finding, got ${JSON.stringify(res.findings)}`);
+  assert.match(f.message, /SIGKILL/);
+});
+
+test("R3: stdout that is not JSON gives a BAD-OUTPUT finding and a null report", () => {
+  needs("runResult");
+  const res = gate.runResult({ status: 0, signal: null, stdout: "not json" }, ".");
+  assert.equal(res.report, null);
+  assert.ok(res.findings.some((x) => x.rule === "BAD-OUTPUT"), `got ${JSON.stringify(res.findings)}`);
+});
