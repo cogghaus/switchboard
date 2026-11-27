@@ -512,3 +512,24 @@ for (const [name, mutate] of [
     });
   });
 }
+
+// ---------- R5: CLI arguments ----------
+
+test("R5: --root with no value exits 2", () => {
+  const r = runCli(["--root"]);
+  assert.equal(r.status, 2, `exit status: expected 2, got ${r.status}; stdout: ${r.stdout.slice(0, 200)}`);
+  assert.ok(r.stderr.trim().length > 0, "a message must be printed to stderr");
+});
+
+test("R5: an unknown option exits 2", () => {
+  const r = runCli(["--bogus"]);
+  assert.equal(r.status, 2, `exit status: expected 2, got ${r.status}; stdout: ${r.stdout.slice(0, 200)}`);
+  assert.ok(r.stderr.trim().length > 0, "a message must be printed to stderr");
+});
+
+test("R5: a stray positional argument exits 2", () => {
+  withCopy((root) => {
+    const r = runCli(["--root", root, "extra"]);
+    assert.equal(r.status, 2, `exit status: expected 2, got ${r.status}; stdout: ${r.stdout.slice(0, 200)}`);
+  });
+});

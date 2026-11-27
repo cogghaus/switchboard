@@ -846,8 +846,15 @@ export function checkSources(root) {
 
 function main(argv) {
   let root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
-  const i = argv.indexOf("--root");
-  if (i !== -1 && argv[i + 1]) root = path.resolve(argv[i + 1]);
+  // Only `--root <dir>` is accepted; anything else is a usage error (exit 2), never silently ignored.
+  for (let k = 0; k < argv.length; k++) {
+    if (argv[k] === "--root" && k + 1 < argv.length && !argv[k + 1].startsWith("--")) {
+      root = path.resolve(argv[++k]);
+    } else {
+      console.error(`drift-check: cannot run: ${argv[k] === "--root" ? "--root needs a directory" : `unexpected argument ${JSON.stringify(argv[k])}`}. Usage: node .github/drift/drift-check.mjs [--root <dir>]`);
+      return 2;
+    }
+  }
 
   let result;
   try {
