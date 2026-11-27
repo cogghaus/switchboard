@@ -25,14 +25,14 @@ Restart Claude Code afterwards. Needs Claude Code **2.1.291 or later** (the func
 | ⚖️ Code Reviewer | judge's wig, gavel | the gavel bangs |
 | 🧭 UX Reviewer | pith helmet, compass | the needle hunts |
 | 🛡️ Security Reviewer | plumed helm, shield | the shield glints |
-| 🧪 QA Engineer | lab goggles, flask | the flask bubbles |
+| 🧪 QA Engineer | white lab cap with a green cross, flask | the flask bubbles |
 | ⚡ Infra Pentester | dark hood, lightning | the lightning crackles |
 | 💀 Red Team Lead | ninja wrap, skull headband | the tails flutter |
-| 📜 Technical Writer | reading glasses, scroll, quill | the quill scribbles |
-| 📯 Release Manager | herald's feathered cap, post horn | the horn toots |
+| 📜 Technical Writer | two separate round reading lenses, scroll, quill | the quill scribbles |
+| 📯 Release Manager | herald's cap with a golden feather, post horn and pennant | the horn toots |
 | 🎭 Loki | jester's cap, half mask | the bells jingle |
 
-Claude Code's own Explore agent carries a spyglass; any other agent is a plain crab. Every crab walks while its agent runs, and `prefers-reduced-motion` stops all motion. A themed roster (the `theme` skill) keeps its costumes: the mod recognises each agent by the emoji its description leads with.
+Claude Code's own Explore agent carries a spyglass; any other agent is a plain crab. The plugin's own icon is the operator crab, in a headset with a patch cord. Every crab walks while its agent runs, and `prefers-reduced-motion` stops all motion. A themed roster (the `theme` skill) keeps its costumes: the mod recognises each agent by the emoji its description leads with.
 
 ## How it works
 
@@ -40,7 +40,7 @@ Claude Code's own Explore agent carries a spyglass; any other agent is a plain c
 - The `progress` tool is model-callable, so its input is untrusted: counts, task lists and texts are bounded (99, 50 tasks, 120 characters) whatever the schema let through.
 - Every hook passes the engine's input on unchanged: the mod never alters a tool call, a prompt or an agent.
 - Per-agent cost is an estimate from token counts and the list-price table in `hooks/roster.ts`; the session total comes from Claude Code itself.
-- Adding a role to the roster means a row in `hooks/roster.ts`, a costume in `hooks/crabs.ts`, and the roster count in `hooks/crew.test.tsx`; the tests fail until all three agree.
+- Adding a role to the roster means a row in `hooks/roster.ts`, a sprite in `tools/sprites.mjs` (run `node crew/tools/sprites.mjs` to regenerate `hooks/sprites.ts`, which is generated and never edited by hand), and the roster count in `hooks/crew.test.tsx`; the tests fail until all three agree.
 
 ## Developing
 
@@ -49,4 +49,4 @@ claude plugin validate crew
 claude plugin test crew
 ```
 
-Credits: the crab body and walk are adapted from [savvy-progress](https://github.com/JohnnyVizz/claude-kit/tree/main/plugins/savvy-progress) (MIT), whose crab is Pixel Clawd from DockCrab. See [NOTICE](NOTICE).
+Credits: the crabs are Switchboard's own drawings (0.2.0). The group-per-motion layout and the walk are adapted from [savvy-progress](https://github.com/JohnnyVizz/claude-kit/tree/main/plugins/savvy-progress) (MIT), whose 0.1.x crab was Pixel Clawd from DockCrab. See [NOTICE](NOTICE).
