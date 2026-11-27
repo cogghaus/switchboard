@@ -1,0 +1,60 @@
+{
+  "sections": [
+    {
+      "heading": "Trust Boundary",
+      "agents": {
+        "architect": ["trust-boundary"],
+        "business-analyst": ["trust-boundary"],
+        "designer": ["trust-boundary"],
+        "developer-backend": ["trust-boundary"],
+        "developer-frontend": ["trust-boundary"],
+        "loki": ["trust-boundary"],
+        "release-manager": ["trust-boundary", "", "trust-boundary-release-manager"],
+        "reviewer-code": ["trust-boundary"],
+        "reviewer-security": ["trust-boundary"],
+        "reviewer-ux": ["trust-boundary"],
+        "testing-pentester": ["trust-boundary", "", "trust-boundary-authorization"],
+        "testing-qa": ["trust-boundary"],
+        "testing-red-team": ["trust-boundary", "", "trust-boundary-authorization"],
+        "writer-technical": ["trust-boundary"]
+      }
+    },
+    {
+      "heading": "Working Rules",
+      "agents": {
+        "developer-backend": ["working-rules"],
+        "developer-frontend": ["working-rules"],
+        "testing-qa": ["working-rules"],
+        "release-manager": { "variant": "Release variant of the rules (0.14.0 spec S2r): gates and tags replace the builder bullets." },
+        "writer-technical": { "variant": "Writer variant of the rules (0.14.0 spec S2w): the technical writer's own bullets replace the builder bullets." }
+      }
+    },
+    {
+      "heading": "Probe Files",
+      "agents": {
+        "reviewer-code": ["probe-files"],
+        "testing-pentester": ["probe-files"],
+        "testing-red-team": ["probe-files"]
+      }
+    },
+    {
+      "heading": "Engagement Scope",
+      "agents": {
+        "testing-pentester": [
+          "scope-intro",
+          "",
+          "scope-fields-and-boundary-pentester",
+          "scope-authorization",
+          "scope-network-pentester"
+        ],
+        "testing-red-team": [
+          "scope-intro",
+          "",
+          "scope-fields-and-boundary-red-team",
+          "scope-authorization",
+          "scope-network-and-secrets-red-team"
+        ]
+      }
+    }
+  ]
+}
