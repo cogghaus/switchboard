@@ -6,6 +6,9 @@ Release convention: the version lives in `.claude-plugin/plugin.json` only. Ever
 
 ## [Unreleased]
 
+### Added
+- **switchboard-crew 0.1.1: off-pin marker.** The `/crew` panel marks a pinned roster agent (the three reviewers, the two offensive agents) spawned on another model: ` · off-pin (pinned Opus 5.5)`. That happens when a spawn passes a `model` argument, which replaces the definition's pin. It only observes; a mid-run classifier fallback is not flagged, and a spawn whose model is not known yet is not flagged. `PINS` in `crew/hooks/roster.ts` mirrors the full-ID frontmatter in `model-matrix.json`. Held out of 0.14.0 until its fallback test could be written: the secret-read guard refused the test file because token counts read as credentials, fixed in guard-parser #32.
+
 ## [0.14.0] - 2026-11-26
 
 From a review of every agent and skill by five Fable 5.2 reviewers, checked against the maintainer's rule log and 737 real switchboard agent calls (2026-10-01 to 2026-11-26), with the model facts re-checked against the Claude Code docs on 2026-11-26.

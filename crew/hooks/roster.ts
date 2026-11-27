@@ -53,7 +53,7 @@ export const PINS: Readonly<Record<string, string>> = {
  */
 export const offPinOf = (role: string, model: string): string | undefined => {
   const pin = Object.hasOwn(PINS, role) ? PINS[role] : undefined
-  return pin !== undefined && !model.startsWith(pin) ? pin : undefined
+  return pin !== undefined && model !== '' && !model.startsWith(pin) ? pin : undefined
 }
 
 const BY_SLUG = new Map(ROLES.map(r => [r.slug, r]))

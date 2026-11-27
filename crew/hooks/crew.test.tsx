@@ -77,6 +77,19 @@ describe('roster', () => {
     expect(spawn('developer-backend', 'claude-sonnet-5-5')).not.toHaveProperty('pinned')
   })
 
+  test('a mid-run classifier fallback is not off-pin, and an off-pin mark survives a step', () => {
+    const at = (role: string, model: string, agentId: string) => recordSpawn([], { agentId, type: `switchboard:${role}`, role, description: 'Review', model, at: 1 })
+    const fell = recordComplete(recordStep(at('reviewer-security', 'claude-opus-5-5', 's'), 's', { input_tokens: 10 }, 'claude-opus-4-8', undefined), 's', { reason: 'answer', answer: 'VERDICT: APPROVED', at: 3 })
+    expect(fell[0]?.model).toBe('claude-opus-4-8')
+    expect(fell[0]).not.toHaveProperty('pinned')
+    const off = recordStep(at('reviewer-code', 'claude-sonnet-5-5', 'c'), 'c', { input_tokens: 10 }, 'claude-sonnet-5-5', undefined)
+    expect(off[0]?.pinned).toBe('claude-opus-5-5')
+  })
+
+  test('a spawn whose model is not known yet is not off-pin', () => {
+    expect(offPinOf('reviewer-code', '')).toBe(undefined)
+  })
+
   test('cost estimates follow the model family and model names read well', () => {
     expect(costOf('claude-opus-5-5', { input_tokens: 1_000_000 })).toBe(4)
     expect(costOf('claude-opus-4-8', { output_tokens: 1_000_000 })).toBe(25)
