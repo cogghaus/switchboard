@@ -461,3 +461,37 @@ test("T24: CLI exits 2 when a file the model checks need is missing", () => {
     assert.equal(r.status, 2, `exit status: expected 2, got ${r.status}; stderr: ${r.stderr}`);
   });
 });
+
+// ---------- R1: M7 must see every key form in PINS, and fail closed on syntax it does not know ----------
+
+const LAST_PIN = "  'testing-pentester': 'claude-opus-4-8',\n";
+
+test("R1: an unquoted extra key in PINS (loki: 'claude-opus-5-5',) gives exactly one M7 finding for loki", () => {
+  withCopy((root) => {
+    edit(root, ROSTER, (t) => replaceOnce(t, LAST_PIN, `${LAST_PIN}  loki: 'claude-opus-5-5',\n`));
+    assertOne(checkModels(root), { kind: "MODEL", check: "M7", agent: "loki" });
+  });
+});
+
+test("R1: a PINS line that is not blank, a comment or an entry (...OTHER,) gives an M7 finding", () => {
+  withCopy((root) => {
+    edit(root, ROSTER, (t) => replaceOnce(t, LAST_PIN, `${LAST_PIN}  ...OTHER,\n`));
+    const m7 = checkModels(root).filter((f) => f.check === "M7");
+    assert.ok(m7.length >= 1, `expected an M7 finding for unknown syntax, got ${JSON.stringify(m7)}`);
+    assert.ok(m7.every((f) => f.kind === "MODEL" && f.message.length > 0));
+  });
+});
+
+test("R1: a backtick-quoted value counts as an entry (no finding)", () => {
+  withCopy((root) => {
+    edit(root, ROSTER, (t) => replaceOnce(t, "  'reviewer-code': 'claude-opus-5-5',\n", "  'reviewer-code': `claude-opus-5-5`,\n"));
+    assert.deepEqual(checkModels(root), []);
+  });
+});
+
+test("R1: blank lines and comment lines inside PINS are ignored (no finding)", () => {
+  withCopy((root) => {
+    edit(root, ROSTER, (t) => replaceOnce(t, LAST_PIN, `${LAST_PIN}\n  // a note\n`));
+    assert.deepEqual(checkModels(root), []);
+  });
+});

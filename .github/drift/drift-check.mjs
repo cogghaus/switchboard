@@ -732,8 +732,22 @@ export function checkModels(root) {
     } else {
       const base = lineAt(src, decl.index);
       const have = new Map();
-      for (const m of decl[1].matchAll(/['"]([^'"]+)['"]\s*:\s*['"]([^'"]+)['"]/g)) {
-        have.set(m[1], { value: m[2], line: lineAt(src, decl.index + decl[0].indexOf(decl[1]) + m.index) });
+      // One entry per line: key quoted ('', "", ``) or a bare identifier, value quoted, optional comma and
+      // trailing // comment. Blank lines and // comment lines are ignored. Any other line fails closed.
+      const ENTRY = /^(?:'([^']+)'|"([^"]+)"|`([^`]+)`|([A-Za-z_$][\w$]*))\s*:\s*(?:'([^']*)'|"([^"]*)"|`([^`]*)`)\s*,?\s*(?:\/\/.*)?$/;
+      const bodyStart = decl.index + decl[0].indexOf(decl[1]);
+      let offset = 0;
+      for (const raw of decl[1].split("\n")) {
+        const line = lineAt(src, bodyStart + offset);
+        offset += raw.length + 1;
+        const t = raw.trim();
+        if (t === "" || t.startsWith("//")) continue;
+        const m = ENTRY.exec(t);
+        if (!m) {
+          out.push(modelFinding("M7", { where: `${ROSTER}:${line}`, expected: "an entry like 'slug': 'claude-model-id',", actual: t, fix: `${ROSTER}: PINS may hold only blank lines, // comments and 'slug': 'model-id' entries, so the check can read it. Rewrite the line, or extend the reader in drift-check.mjs.` }));
+          continue;
+        }
+        have.set(m[1] ?? m[2] ?? m[3] ?? m[4], { value: m[5] ?? m[6] ?? m[7], line });
       }
       for (const [slug, id] of want) {
         const h = have.get(slug);
