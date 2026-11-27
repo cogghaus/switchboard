@@ -75,6 +75,8 @@ export const BAND_H = 26
 const BAR_H = 16
 const CELL = 3
 const CREW_SLOT = 26
+// A crab is 32 cells: 0.8 draws it 25.6 px, inside the band's height and its slot.
+const CREW_SCALE = 0.8
 
 const BAND_CSS = `<style>
 .t{fill:#1f1f1f}.m{fill:#8a8a8a}.k{fill:#e4e4e2}.tk{fill:#b4b4b0}
@@ -124,7 +126,7 @@ export const bandSvg = (b: BandModel, W: number): string => {
   const percent = `${Math.round(Math.min(1, b.ratio) * 100)}%`
   const crewX = W - crewW
   const crabs = (crewShown.length === 0 ? [{ role: roleBySlug('other'), isRunning: false }] : crewShown)
-    .map((m, i) => crab(crewX + i * CREW_SLOT, 0, m.role.slug, m.role.color, false, m.isRunning, 0.9))
+    .map((m, i) => crab(crewX + i * CREW_SLOT, 0, m.role.slug, m.role.color, false, m.isRunning, CREW_SCALE))
     .join('')
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${BAND_H}" viewBox="0 0 ${W} ${BAND_H}">${BAND_CSS}${CRAB_CSS}
 <defs><clipPath id="c"><rect width="${barW}" height="${BAR_H}" rx="${BAR_H / 2}"/></clipPath></defs>
@@ -255,7 +257,7 @@ export const compactSvg = (W: number, crew: { role: Role; isRunning: boolean; is
   const shown = crew.slice(0, fit)
   const more = crew.length - shown.length
   const body = shown
-    .map((m, i) => crab(i * 36, 0, m.role.slug, m.role.color, m.isPlanned, m.isRunning) + (m.isRunning ? `<circle class="live" cx="${i * 36 + 32}" cy="4" r="3" fill="${m.role.color}"/>` : ''))
+    .map((m, i) => crab(i * 36, 0, m.role.slug, m.role.color, m.isPlanned, m.isRunning, 1) + (m.isRunning ? `<circle class="live" cx="${i * 36 + 32}" cy="4" r="3" fill="${m.role.color}"/>` : ''))
     .join('')
   const x = shown.length * 36 + 4
   return svg(

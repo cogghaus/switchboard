@@ -2,7 +2,7 @@ import { describe, expect, mock, test } from 'claude-code/testing'
 
 import type { AgentRun } from '../types'
 import { COSTUMES, crab } from './crabs'
-import { agentSvg, bandSvg, xml } from './draw'
+import { agentSvg, BAND_H, bandSvg, xml } from './draw'
 import { bandOf, MAX_TASKS, MAX_TEXT, merge, plannedOf, recordComplete, recordSpawn, recordStep, waveOf } from './logic'
 import { costOf, modelName, offPinOf, PINS, roleByDescription, roleBySlug, roleOf, ROLES, verdictOf } from './roster'
 
@@ -216,6 +216,78 @@ describe('drawing', () => {
     for (const r of ROLES) {
       expect(crab(0, 0, r.slug, r.color, false, true).includes(`c-${r.slug} run`)).toBe(true)
     }
+  })
+
+  // The 0.2.0 sprites: 32x32 cells, hand-drawn with an outline, centred in the grid.
+  const GRID = 32
+  const HIGHLIGHTS = ['#F4F3EE', '#FFFFFF']
+  const INK_CELL = '#1F1E1D'
+  type Cell = { x: number; y: number; fill: string }
+  // Every <rect> of a crab, expanded to unit cells, so the test does not care how runs are merged.
+  const cellsOf = (markup: string): Cell[] => {
+    const out: Cell[] = []
+    for (const m of markup.matchAll(/<rect x="(-?[\d.]+)" y="(-?[\d.]+)" width="([\d.]+)" height="([\d.]+)" fill="(#[0-9A-Fa-f]{6})"\/>/g)) {
+      const [x, y, w, h] = [Number(m[1]), Number(m[2]), Number(m[3]), Number(m[4])]
+      for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) out.push({ x: x + dx, y: y + dy, fill: (m[5] ?? '').toUpperCase() })
+    }
+    return out
+  }
+  const everyCostume = [...ROLES.map(r => ({ slug: r.slug, color: r.color })), { slug: 'explore', color: '#7A7A7A' }, { slug: 'other', color: '#888780' }]
+
+  test('every crab is drawn on the 32x32 grid and uses all of it', () => {
+    for (const r of everyCostume) {
+      const cells = cellsOf(crab(0, 0, r.slug, r.color))
+      expect(cells.length > 0).toBe(true)
+      const xs = cells.map(c => c.x)
+      const ys = cells.map(c => c.y)
+      expect(Math.min(...xs) >= 0 && Math.min(...ys) >= 0).toBe(true)
+      expect(Math.max(...xs) < GRID && Math.max(...ys) < GRID).toBe(true)
+      // The old 30x28 sprites never reach x 30 or y 28.
+      expect(Math.max(...xs) >= 30 || Math.max(...ys) >= 28).toBe(true)
+    }
+  })
+
+  test('no two crabs are the same sprite, and none is the plain crab', () => {
+    const drawn = new Map(everyCostume.map(r => [r.slug, crab(0, 0, r.slug, '#123456')]))
+    const plain = crab(0, 0, 'other', '#123456')
+    expect(new Set(drawn.values()).size).toBe(everyCostume.length)
+    for (const [slug, markup] of drawn) if (slug !== 'other') expect(markup === plain).toBe(false)
+    // The plain crab is the fallback for an agent the roster does not know.
+    expect(crab(0, 0, 'not-a-role', '#123456')).toBe(crab(0, 0, 'other', '#123456').replace('c-other', 'c-not-a-role'))
+  })
+
+  test('every crab keeps both leg pairs and its costume class, and walking adds run', () => {
+    for (const r of everyCostume) {
+      for (const walking of [false, true]) {
+        const markup = crab(0, 0, r.slug, r.color, false, walking)
+        expect(markup.includes(`class="c-${r.slug}${walking ? ' run' : ''}"`)).toBe(true)
+        expect(/<g class="la">(<rect [^>]*\/>)+<\/g>/.test(markup)).toBe(true)
+        expect(/<g class="lb">(<rect [^>]*\/>)+<\/g>/.test(markup)).toBe(true)
+        expect(/<g class="bd">(<rect [^>]*\/>)+/.test(markup)).toBe(true)
+      }
+    }
+  })
+
+  test('every crab keeps both eyes visible: a white highlight on a black eye, one per stalk', () => {
+    for (const r of everyCostume) {
+      const cells = cellsOf(crab(0, 0, r.slug, r.color))
+      const key = (x: number, y: number) => `${x},${y}`
+      const ink = new Set(cells.filter(c => c.fill === INK_CELL).map(c => key(c.x, c.y)))
+      // A highlight: a white cell with black directly beside it (the eye), not a white prop.
+      const lights = cells.filter(c => HIGHLIGHTS.includes(c.fill) && [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => ink.has(key(c.x + (dx ?? 0), c.y + (dy ?? 0)))))
+      // The two eyes sit 11 cells apart on one row.
+      const pairs = lights.filter(a => lights.some(b => b.y === a.y && b.x - a.x === 11))
+      expect(pairs.length >= 1).toBe(true)
+    }
+  })
+
+  test('a crab fits the band: its 32 cells, scaled, fit the band height and the slot between crabs', () => {
+    const crew = ['loki', 'architect'].map(slug => ({ role: roleBySlug(slug), isRunning: true }))
+    const svg = bandSvg({ title: 'Ship', label: 'Tasks 1/2', ratio: 0.5, runRatio: 1, ticks: 2, isFinished: false, crew }, 600)
+    const placed = [...svg.matchAll(/translate\((-?[\d.]+),(-?[\d.]+)\) scale\(([\d.]+)\)/g)].map(m => ({ x: Number(m[1]), size: Number(m[3]) * GRID }))
+    expect(placed.length).toBe(2)
+    for (const p of placed) expect(p.size <= BAND_H).toBe(true)
+    expect((placed[1]?.x ?? 0) - (placed[0]?.x ?? 0) >= (placed[0]?.size ?? 0)).toBe(true)
   })
 
   test('the band draws its crew at work', () => {
