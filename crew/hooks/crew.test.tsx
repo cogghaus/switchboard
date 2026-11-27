@@ -205,6 +205,13 @@ describe('drawing', () => {
     expect(svg.includes('<script>')).toBe(false)
   })
 
+  test('the desktop row shows the off-pin mark, and only for a run spawned off its pin', () => {
+    const off = agentSvg(400, run({ role: 'reviewer-code', type: 'switchboard:reviewer-code', model: 'claude-sonnet-5-5', pinned: 'claude-opus-5-5' }), 2000)
+    expect(off.includes('off-pin (pinned Opus 5.5)')).toBe(true)
+    const on = agentSvg(400, run({ role: 'reviewer-code', type: 'switchboard:reviewer-code', model: 'claude-opus-5-5' }), 2000)
+    expect(on.includes('off-pin')).toBe(false)
+  })
+
   test('every costume draws, walking or still', () => {
     for (const r of ROLES) {
       expect(crab(0, 0, r.slug, r.color, false, true).includes(`c-${r.slug} run`)).toBe(true)
