@@ -1,6 +1,6 @@
 # Model-Selection Matrix (hand-kept view of model-matrix.json - the source of truth)
 
-Edit model-matrix.json, then hand-update this file to match (there is no generator yet; see ROADMAP `doctor`). See SKILL: model-routing.
+Edit model-matrix.json, then hand-update this file to match (there is no generator yet; see ROADMAP `doctor`; CI checks this file against the JSON). See SKILL: model-routing.
 
 ## Hard rules (always win over the tables below)
 

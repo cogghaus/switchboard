@@ -46,6 +46,17 @@ Installs by name and persists across sessions (`switchboard@switchboard` is `plu
 
 Each agent's `model:` is set from the routing matrix: the offensive security agents (red team, pentest) pinned by full ID to Opus 4.8, design and lateral work on the frontier tier (`fable`, today Fable 5.2), the three reviewers (code, UX, security) pinned by full ID to Opus 5.5 (an `opus` alias would follow an Opus 4.8 main session), mechanical and build work on `sonnet` (Sonnet 5.5), lookups on `haiku` (Haiku 5.5). Nine agents carry the alias, so each follows the current model of its tier; the two offensive agents and the three reviewers keep an explicit full ID. Spawn roster agents without a `model` argument: a spawn-time model replaces the definition's, pins included. See `skills/model-routing/model-matrix.md`.
 
+## Checks
+
+CI runs two checks on every pull request. Both can be run locally from the repo root (Node 22 or later; the second needs the `claude` CLI):
+
+```
+node .github/drift/drift-check.mjs
+node .github/drift/validate-gate.mjs
+```
+
+The first fails when a shared agent block (Trust Boundary, Working Rules, Probe Files, Engagement Scope) differs from its canonical copy in `.github/drift/blocks/`, or when a model pin differs between `model-matrix.json`, the agents, the docs, the site and the crew mod. The second runs `claude plugin validate` on both plugins and fails on any warning not listed in `.github/drift/validate-allow.json`. The checker's own tests: `node --test ".github/drift/*.test.mjs"`.
+
 ## Brand
 
 The wordmark and mark live in `brand/`:
