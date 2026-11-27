@@ -34,6 +34,8 @@ export type AgentRun = {
   role: string
   description: string
   model: string
+  /** The model the role is pinned to, set only when the run was spawned on another one. */
+  pinned?: string
   effort?: string
   status: AgentStatus
   verdict?: Verdict

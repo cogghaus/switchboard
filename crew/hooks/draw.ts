@@ -212,6 +212,7 @@ export const agentSvg = (W: number, a: AgentRun, at: number): string => {
   const tag = roleTag(role, a.type)
   const verdict = a.verdict === undefined ? undefined : VERDICT[a.verdict]
   const chipW = verdict === undefined ? 0 : Math.round(14 + textWidth(verdict.text, 10))
+  const offPin = a.pinned === undefined ? '' : `<tspan fill="${AMBER}">  ·  ${xml(`off-pin (pinned ${modelName(a.pinned)})`)}</tspan>`
   const chip =
     verdict === undefined
       ? ''
@@ -221,7 +222,7 @@ export const agentSvg = (W: number, a: AgentRun, at: number): string => {
     AGENT_H,
     `${crab(0, 14, role.slug, role.color, false, a.status === 'running')}
 <text class="t" x="44" y="18" font-family="${FONT}" font-size="13" font-weight="600">${xml(fitText(a.description || a.type, 13, textW))}</text>
-<text x="44" y="35" font-family="${FONT}" font-size="11"><tspan fill="${role.color}" font-weight="600">${xml(fitText(tag, 11, textW * 0.55))}</tspan><tspan class="s">  ${xml(meta.join('  ·  '))}</tspan></text>
+<text x="44" y="35" font-family="${FONT}" font-size="11"><tspan fill="${role.color}" font-weight="600">${xml(fitText(tag, 11, textW * 0.55))}</tspan><tspan class="s">  ${xml(meta.join('  ·  '))}</tspan>${offPin}</text>
 ${chip}
 <text class="s" x="${44 + textW}" y="53" text-anchor="end" font-family="${FONT}" font-size="11" font-variant-numeric="tabular-nums">${stats}</text>
 <rect class="k" x="44" y="60" width="${textW}" height="4" rx="2"/><rect x="44" y="60" width="${fillW}" height="4" rx="2" fill="${isDone ? role.color : '#9a9a96'}"/>

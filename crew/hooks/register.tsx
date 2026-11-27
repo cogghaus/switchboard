@@ -266,7 +266,7 @@ export const register: Register = on => {
           {isEmpty && <Text dimColor>No subagents yet.</Text>}
           {running.length > 0 && <Text dimColor>{`Working · ${running.length}`}</Text>}
           {running.map(a => (
-            <Svg key={a.id} source={agentSvg(W, a, at)} alt={`${a.description}: ${roleTag(roleBySlug(a.role), a.type)}, ${modelName(a.model)}, working`} width={W} height={AGENT_H} />
+            <Svg key={a.id} source={agentSvg(W, a, at)} alt={`${a.description}: ${roleTag(roleBySlug(a.role), a.type)}, ${modelName(a.model)}${a.pinned === undefined ? '' : `, off-pin (pinned ${modelName(a.pinned)})`}, working`} width={W} height={AGENT_H} />
           ))}
           {finished.length > 0 && toggleDone}
           {!p.isDoneCollapsed &&
@@ -274,7 +274,7 @@ export const register: Register = on => {
               <Svg
                 key={a.id}
                 source={agentSvg(W, a, at)}
-                alt={`${a.description}: ${roleTag(roleBySlug(a.role), a.type)}, ${a.status}${a.verdict === undefined ? '' : `, ${VERDICT[a.verdict].text}`}`}
+                alt={`${a.description}: ${roleTag(roleBySlug(a.role), a.type)}, ${a.pinned === undefined ? '' : `off-pin (pinned ${modelName(a.pinned)}), `}${a.status}${a.verdict === undefined ? '' : `, ${VERDICT[a.verdict].text}`}`}
                 width={W}
                 height={AGENT_H}
               />
@@ -307,7 +307,9 @@ export const register: Register = on => {
           <Text wrap="truncate-end">
             {'  '}
             <Text color={role.color}>{roleTag(role, a.type)}</Text>
-            <Text dimColor>{` · ${model}${a.round > 1 ? ` · round ${a.round}` : ''}`}</Text>
+            <Text dimColor>{` · ${model}`}</Text>
+            {a.pinned !== undefined && <Text color={AMBER}>{` · off-pin (pinned ${modelName(a.pinned)})`}</Text>}
+            <Text dimColor>{a.round > 1 ? ` · round ${a.round}` : ''}</Text>
             {verdict !== undefined && <Text color={verdict.color} bold>{` · ${verdict.text}`}</Text>}
           </Text>
           <Text wrap="truncate-end">

@@ -4,7 +4,7 @@ import type { AgentRun } from '../types'
 import { COSTUMES, crab } from './crabs'
 import { agentSvg, bandSvg, xml } from './draw'
 import { bandOf, MAX_TASKS, MAX_TEXT, merge, plannedOf, recordComplete, recordSpawn, recordStep, waveOf } from './logic'
-import { costOf, modelName, roleByDescription, roleBySlug, roleOf, ROLES, verdictOf } from './roster'
+import { costOf, modelName, offPinOf, PINS, roleByDescription, roleBySlug, roleOf, ROLES, verdictOf } from './roster'
 
 const run = (over: Partial<AgentRun>): AgentRun => ({
   id: 'a1',
@@ -52,6 +52,42 @@ describe('roster', () => {
     expect(verdictOf('Overall verdict: clean.')).toBe('approved')
     expect(verdictOf('Overall verdict: blocked pending the listed critical fixes')).toBe('blocked')
     expect(verdictOf('no verdict line here')).toBe(undefined)
+  })
+
+  test('reviewers ending with a plain VERDICT line are read', () => {
+    expect(verdictOf('findings...\nVERDICT: CHANGES REQUESTED\nreason')).toBe('changes')
+    expect(verdictOf('...\nVERDICT: APPROVED\nok')).toBe('approved')
+  })
+
+  test('offPinOf names the pin only when a pinned role runs on another model', () => {
+    expect(PINS['reviewer-code']).toBe('claude-opus-5-5')
+    expect(PINS['testing-red-team']).toBe('claude-opus-4-8')
+    expect(offPinOf('reviewer-code', 'claude-opus-5-5')).toBe(undefined)
+    expect(offPinOf('reviewer-code', 'claude-sonnet-5-5')).toBe('claude-opus-5-5')
+    expect(offPinOf('testing-pentester', 'claude-opus-5-5')).toBe('claude-opus-4-8')
+    expect(offPinOf('reviewer-ux', 'claude-opus-5-5[1m]')).toBe(undefined)
+    expect(offPinOf('reviewer-security', 'claude-sonnet-5-5[1m]')).toBe('claude-opus-5-5')
+    expect(offPinOf('developer-backend', 'claude-haiku-5-5')).toBe(undefined)
+  })
+
+  test('recordSpawn marks a run spawned off its pin, and only that', () => {
+    const spawn = (role: string, model: string) => recordSpawn([], { agentId: 'p', type: `switchboard:${role}`, role, description: 'Review', model, at: 1 })[0]
+    expect(spawn('reviewer-code', 'claude-sonnet-5-5')?.pinned).toBe('claude-opus-5-5')
+    expect(spawn('reviewer-code', 'claude-opus-5-5')).not.toHaveProperty('pinned')
+    expect(spawn('developer-backend', 'claude-sonnet-5-5')).not.toHaveProperty('pinned')
+  })
+
+  test('a mid-run classifier fallback is not off-pin, and an off-pin mark survives a step', () => {
+    const at = (role: string, model: string, agentId: string) => recordSpawn([], { agentId, type: `switchboard:${role}`, role, description: 'Review', model, at: 1 })
+    const fell = recordComplete(recordStep(at('reviewer-security', 'claude-opus-5-5', 's'), 's', { input_tokens: 10 }, 'claude-opus-4-8', undefined), 's', { reason: 'answer', answer: 'VERDICT: APPROVED', at: 3 })
+    expect(fell[0]?.model).toBe('claude-opus-4-8')
+    expect(fell[0]).not.toHaveProperty('pinned')
+    const off = recordStep(at('reviewer-code', 'claude-sonnet-5-5', 'c'), 'c', { input_tokens: 10 }, 'claude-sonnet-5-5', undefined)
+    expect(off[0]?.pinned).toBe('claude-opus-5-5')
+  })
+
+  test('a spawn whose model is not known yet is not off-pin', () => {
+    expect(offPinOf('reviewer-code', '')).toBe(undefined)
   })
 
   test('cost estimates follow the model family and model names read well', () => {
@@ -167,6 +203,13 @@ describe('drawing', () => {
     expect(xml(`<a href="x">'&'</a>`)).toBe('&lt;a href=&quot;x&quot;&gt;&#39;&amp;&#39;&lt;/a&gt;')
     const svg = agentSvg(400, run({ description: '<script>alert(1)</script>' }), 2000)
     expect(svg.includes('<script>')).toBe(false)
+  })
+
+  test('the desktop row shows the off-pin mark, and only for a run spawned off its pin', () => {
+    const off = agentSvg(400, run({ role: 'reviewer-code', type: 'switchboard:reviewer-code', model: 'claude-sonnet-5-5', pinned: 'claude-opus-5-5' }), 2000)
+    expect(off.includes('off-pin (pinned Opus 5.5)')).toBe(true)
+    const on = agentSvg(400, run({ role: 'reviewer-code', type: 'switchboard:reviewer-code', model: 'claude-opus-5-5' }), 2000)
+    expect(on.includes('off-pin')).toBe(false)
   })
 
   test('every costume draws, walking or still', () => {
