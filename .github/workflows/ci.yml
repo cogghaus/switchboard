@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: "24"
       - name: Checker self-tests
-        run: node --test ".github/drift/*.test.mjs"
+        run: node --test .github/drift/drift-check.test.mjs .github/drift/drift-models.test.mjs .github/drift/validate-gate.test.mjs
       - name: Shared blocks, model pins, plugin sources
         run: node .github/drift/drift-check.mjs
 

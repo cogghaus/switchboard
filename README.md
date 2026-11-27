@@ -55,7 +55,7 @@ node .github/drift/drift-check.mjs
 node .github/drift/validate-gate.mjs
 ```
 
-The first fails when a shared agent block (Trust Boundary, Working Rules, Probe Files, Engagement Scope) differs from its canonical copy in `.github/drift/blocks/`, or when a model pin differs between `model-matrix.json`, the agents, the docs, the site and the crew mod. The second runs `claude plugin validate` on both plugins and fails on any warning not listed in `.github/drift/validate-allow.json`. The checker's own tests: `node --test ".github/drift/*.test.mjs"`.
+The first fails when a shared agent block (Trust Boundary, Working Rules, Probe Files, Engagement Scope) differs from its canonical copy in `.github/drift/blocks/`, or when a model pin differs between `model-matrix.json`, the agents, the docs, the site and the crew mod. The second runs `claude plugin validate` on both plugins and fails on any warning not listed in `.github/drift/validate-allow.json`. The checker's own tests: `node --test .github/drift/drift-check.test.mjs .github/drift/drift-models.test.mjs .github/drift/validate-gate.test.mjs`.
 
 ## Brand
 
