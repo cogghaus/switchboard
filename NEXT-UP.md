@@ -4,8 +4,8 @@ Hub: cogghaus/hub#64
 
 ## Now
 
-- [ ] #15 Medium cleanups as one release: requirements and a recommended cut are written; the owner
-      decisions (release label, security-agent scope text, WCAG version, tool changes) come first.
+- [ ] #15 Medium cleanups as release 0.14.1: owner decisions D1 to D12 are recorded on #15
+      (https://github.com/cogghaus/switchboard/issues/15#issuecomment-7238672422); building next.
 
 ## Next
 
@@ -16,7 +16,7 @@ Hub: cogghaus/hub#64
 
 ## Decisions needed (Adam)
 
-- The #15 cleanup decisions (D1 to D12 in the requirements notes).
+- None open. The security agents' scope-text diff in the 0.14.1 PR goes to Adam for review (D2).
 
 ## Done
 
