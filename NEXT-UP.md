@@ -4,26 +4,29 @@ Hub: cogghaus/hub#64
 
 ## Now
 
-- [ ] Housekeeping: delete merged or superseded branches (local and remote: `feat/crew-off-pin`,
-      `feat/crew-off-pin-0.1.1`, `feature/switchboard-review`, `feat/reviewer-code-write`,
-      `review-0.13`, `feat/crew-mod`, `feat/spec-review`); pull `G:\dev\switchboard` (main is behind).
+- [ ] #15 Medium cleanups as one release: requirements and a recommended cut are written; the owner
+      decisions (release label, security-agent scope text, WCAG version, tool changes) come first.
 
 ## Next
 
-- [ ] CI drift check, the 1.0 gate (#15): `claude plugin validate`, shared agent blocks byte-identical,
-      matrix vs agent frontmatter vs docs and site.
-- [ ] Smoke runs of business-analyst, testing-pentester, testing-red-team (never used); the two
-      security agents against a throwaway local repo with a scope block Adam approves.
-- [ ] #15 Medium cleanups as one patch release.
-- [ ] Plugin icon (512-2048 px PNG); owner-specific text out of the public repo (see Decisions).
+- [ ] Main Switchboard plugin icon (512-2048 px PNG): on hold until the owner picks a design.
+- [ ] #21: check `crew/hooks/sprites.ts` against its generator in CI; make the crew icon rebuildable.
+- [ ] At 1.0: make the `validate` CI check required too, if it stayed quiet through the soak
+      (cogghaus/hub#80).
 
 ## Decisions needed (Adam)
 
-- Whether this file and the hub pointer in CLAUDE.md stay in the public repo or move to
-  `*.local.md` (gitignored); the hub sweep reads NEXT-UP.md from origin's default branch.
+- The #15 cleanup decisions (D1 to D12 in the requirements notes).
 
 ## Done
 
 - 2026-11-26: 0.14.0 released (PR #13, tag v0.14.0). 2026-11-27: crew 0.1.1 off-pin marker (PR #16).
+- 2026-11-27: CI drift check, the 1.0 gate (PR #18): `drift` (required) and `validate` jobs, weekly
+  `validate-latest`; ruleset on `main` (PR required, `drift` required, no bypass).
+- 2026-11-27: smoke runs of business-analyst, testing-pentester and testing-red-team, all useful;
+  their definition gaps feed #15.
+- 2026-11-27: crew 0.2.0, new 32x32 crab sprites and an operator plugin icon (PR #22).
+- 2026-11-28: the owner-specific hub section moved out of the public repo to `CLAUDE.local.md`
+  (gitignored); this file stays public because the hub sweep reads it.
 
-_Last updated: 2026-11-27_
+_Last updated: 2026-11-28_
