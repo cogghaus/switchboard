@@ -32,7 +32,8 @@ Hub: cogghaus/hub#64
 - 2026-11-28: the owner-specific hub section moved out of the public repo to `CLAUDE.local.md`
   (gitignored); this file stays public because the hub sweep reads it (PR #23).
 - 2026-11-28: 0.14.1 released (PR #24, release PR #25, tag v0.14.1): the #15 cleanups across the
-  agents, skills and docs, with the security agents' scope and secret rules reviewed by
-  reviewer-security and the owner (D2).
+  agents, skills and docs. The security agents' scope and secret rules were reviewed by
+  reviewer-security, and the owner's D2 review was delegated to the orchestrator session (recorded on
+  PR #24).
 
 _Last updated: 2026-11-28_
