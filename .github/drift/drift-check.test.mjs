@@ -269,12 +269,19 @@ test("T6: two bullets swapped in testing-pentester's Engagement Scope give one D
   withCopy((root) => {
     const auth = blockText("scope-authorization");
     const net = blockText("scope-network-pentester");
+    // The first swapped line is where the authorization bullet sits in the section body today,
+    // worked out from the agent file so the test survives a change to the lines above it.
+    const lines = read(agentFile(root, "testing-pentester")).split("\n");
+    const heading = lines.indexOf("## Engagement Scope");
+    let bodyStart = heading + 1;
+    while (lines[bodyStart] === "") bodyStart++;
+    const expectedLine = lines.indexOf(auth.split("\n")[0], bodyStart) - bodyStart + 1;
     editAgent(root, "testing-pentester", (t) => replaceOnce(t, `${auth}\n${net}`, `${net}\n${auth}`));
     assertOne(checkBlocks(root), {
       kind: "DRIFT",
       agent: "testing-pentester",
       section: "Engagement Scope",
-      line: 14,
+      line: expectedLine,
       reason: "line differs",
     });
   });
