@@ -42,8 +42,8 @@ Each agent ships with a default model chosen for its work (see the `model-routin
 
 1. **Frame:** one feature (rate limiting) plus a doc update.
 2. **Decide:** the implementation is specialized (backend) and the doc is a separate specialized task - delegate both.
-3. **Route + delegate:** brief `developer-backend` (Sonnet) with the endpoint list, the limit policy, and acceptance criteria; it implements, writes tests, and runs them.
-4. **Review:** read the diff and the test result. If the change touches auth or abuse surfaces, have `reviewer-security` verify.
+3. **Route + delegate:** brief `developer-backend` (Sonnet) with the endpoint list, the limit policy, and acceptance criteria; it writes a test for each behaviour first, runs it and sees it fail on behaviour, then implements and re-runs it.
+4. **Review:** read the diff and the test result, and check the failing-test line the builder quoted. If the change touches auth or abuse surfaces, have `reviewer-security` verify.
 5. **Delegate the doc:** brief `writer-technical` to document the new behavior once the code is settled.
 6. **Report:** summarize what shipped, the test outcome, and anything deferred; make the commit yourself.
 

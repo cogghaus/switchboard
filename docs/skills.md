@@ -22,8 +22,9 @@ The loop, run for every substantial task:
    definition carries the model the matrix assigns, and a spawn-time model replaces it, pins
    included. A model is passed only to a non-roster agent, using `model-routing`. Before a
    significant design decision or ADR is final, run it past `loki` once.
-4. **Delegate** with a clear spec (goal, input paths, constraints, acceptance criteria), forbidding
-   re-delegation.
+4. **Delegate** with a clear spec (goal, input paths, constraints, acceptance criteria). Roster
+   agents have no Agent tool and cannot re-delegate; re-delegation is forbidden in the brief only
+   for a non-roster agent that can spawn agents.
 5. **Review** - never relay a sub-agent's output unread; high-stakes or dual-use work gets a second
    agent to verify. A build is accepted only with its evidence: the quoted failing-test line, the
    passing run, and what was verified kept apart from what was assumed.
@@ -38,7 +39,7 @@ explicitly with `/orchestrator-loop`.
 to be your operating mode on every session, add a per-user `SessionStart` hook to your own
 `~/.claude/settings.json` (or a project's `.claude/settings.json`) that injects the framing text
 shipped in `session-start-framing.md` (next to the skill's `SKILL.md`) - a POSIX (`cat`) and a
-Windows (`type`) command form are both provided in the SKILL.md, with `<SWITCHBOARD>` swapped for
+Windows (`type`, tested on Windows with Claude Code 2.1.332) command form are both provided in the SKILL.md, with `<SWITCHBOARD>` swapped for
 your installed plugin path. This is opt-in and per-user: the shipped plugin adds no always-on hook
 by design, so installing it never reframes someone else's session. Merge the hook into any
 existing `hooks` block rather than replacing it; removing the entry turns it off.
@@ -64,11 +65,12 @@ Two files carry the matrix:
 
 - `model-matrix.json` - the machine-readable source of truth (tiers, per-agent defaults, the
   trigger model).
-- `model-matrix.md` - the human-readable view generated from it, with the hard rules on top and a
-  per-tier and per-agent table below.
+- `model-matrix.md` - the human-readable view, kept by hand to match the JSON, with the hard rules
+  on top and a per-tier and per-agent table below.
 
-To change routing, edit `model-matrix.json` first, then update `model-matrix.md` to match - the
-JSON is the single source for each agent's `model:` frontmatter.
+To change routing, edit `model-matrix.json` first, then update `model-matrix.md` by hand to match
+(there is no generator; CI check M4 compares the two) - the JSON is the single source for each
+agent's `model:` frontmatter.
 
 **Invocation:** consulted, not run standalone - the `orchestrator-loop` skill (and you, before
 spawning a non-roster agent) reads `model-matrix.md` as part of routing step 3; a roster agent
