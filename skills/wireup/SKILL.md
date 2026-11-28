@@ -62,7 +62,7 @@ Connect the roster to the codebase's ecosystem: a code index, the issue tracker,
     "example-stdio": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@scope/some-mcp@latest"],
+      "args": ["-y", "@scope/some-mcp@<version>"],
       "env": { "SOME_TOKEN": "${SOME_TOKEN}" }
     },
     "example-http": {
@@ -74,7 +74,21 @@ Connect the roster to the codebase's ecosystem: a code index, the issue tracker,
 }
 ```
 
+Pin the package to the version you tested (replace `<version>`): `.mcp.json` is committed and shared, and an unpinned `npx -y` package runs whatever is newest on every teammate's machine.
+
 `.mcp.json` is committed and shared with the team, so it must be value-free: reference every credential as an environment variable (`${SOME_TOKEN}`), never inline a real token. If a server needs a secret, tell the user which env var to set in their own environment - do not ask for the value and do not write it to the file.
+
+## Permission rule example - pre-approve WebFetch for one domain
+
+The orchestrator fetches the WCAG criteria a UX review needs from w3.org (see `orchestrator-loop`). An `allow` rule pre-approves WebFetch for that domain only; fetches to other domains still ask (an `allow` rule does not block anything, and a bypass permission mode skips asking altogether). A project can add it to `<project>/.claude/settings.json`. This is an example to adapt, shown and approved like any other overlay entry:
+
+```json
+{
+  "permissions": {
+    "allow": ["WebFetch(domain:www.w3.org)"]
+  }
+}
+```
 
 ## LSP - recommend, do not silently write
 

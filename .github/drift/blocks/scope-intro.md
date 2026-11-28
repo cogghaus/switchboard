@@ -1,1 +1,1 @@
-The brief must carry a scope block. Without one you work only inside the default boundary below.
+The brief must carry a scope block. The table below says what you do when it is absent or incomplete.

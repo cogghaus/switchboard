@@ -35,7 +35,7 @@ The plugin is portable either way: it ships no project-specific config and no al
 
 ## Make orchestrator-loop your default
 
-The `orchestrator-loop` skill auto-invokes on substantial tasks, but that is best-effort. For a deterministic always-on default, add the opt-in per-user `SessionStart` hook documented in `skills/orchestrator-loop/SKILL.md` (there is a POSIX form and a Windows form). It injects a short orchestrator framing at the start of each of your sessions and is per-user, so it never affects coworkers who install the plugin. Remove the hook entry to turn it off.
+The `orchestrator-loop` skill auto-invokes on substantial tasks, but that is best-effort. For a deterministic always-on default, add the opt-in per-user `SessionStart` hook documented in `skills/orchestrator-loop/SKILL.md` (there is a POSIX form and a Windows form; the Windows form was tested with Claude Code 2.1.332). It injects a short orchestrator framing at the start of each of your sessions and is per-user, so it never affects coworkers who install the plugin. Remove the hook entry to turn it off.
 
 ## See which agent is working
 
@@ -86,7 +86,7 @@ Nothing is written without your review, and re-running `wireup` changes nothing 
 | Surface | Where | Set by |
 |---|---|---|
 | Which model each agent uses | `agents/<name>.md` frontmatter, per the matrix | edit the file / the matrix |
-| Model routing policy | `skills/model-routing/model-matrix.json` (source) + `.md` (view) | edit the JSON, regenerate the view |
+| Model routing policy | `skills/model-routing/model-matrix.json` (source) + `.md` (view) | edit the JSON, then update the view by hand (CI checks they agree) |
 | Agent names / theme | `agents/<name>.md` + `theme.json` | the `theme` skill |
 | Always-on orchestrator mode | your own `SessionStart` hook | opt-in, see above |
 | Project hooks / MCP / LSP | the project's own config | the `wireup` skill |

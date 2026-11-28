@@ -41,14 +41,17 @@ For each agent file in `agents/`:
 - Do NOT change `tools`, `model`, `description`, or any functional or safety instruction. Every agent keeps its `model:` line exactly, pins included.
 
 Then keep the roster consistent:
-- Update the model matrix: `skills/model-routing/model-matrix.json` (each agent's `agent_id` and `display_name`), then regenerate `model-matrix.md` to match.
+- Update the model matrix: in `skills/model-routing/model-matrix.json` change only each agent's `display_name`. Leave `agent_id` as the file slug: CI check M1 requires every `agent_id` to match an `agents/<slug>.md` filename, and filenames stay as slugs (see Guardrails). Then update `model-matrix.md` by hand to match; it is not generated, and CI check M4 compares it with the JSON.
 - Update the roster list in `README.md` to the new names.
 - Update every other place that hardcodes an agent name or slug, or the reskin leaves it pointing at an agent that no longer exists under that name:
   - `skills/spec-review/SKILL.md` (spawns the architect as `switchboard:architect`; the Theme section there tells the orchestrator to read the themed name from `theme.json`, so keep `theme.json` current);
   - `skills/orchestrator-loop/SKILL.md` (the "Agent emojis" line lists the slugs);
-  - `docs/agents.md` (table and per-agent headings);
-  - `scripts/subagent-status.sh` (its `case` maps agent names to emoji, so a renamed agent shows a bullet until the case is updated).
-  The crew mod recognises agents by their description emoji, so a reskin needs no change there.
+  - `docs/agents.md` (table and per-agent headings), and the display names in `docs/install.md`, `docs/usage.md`, `docs/skills.md`, `skills/model-routing/SKILL.md` and `skills/model-routing/model-matrix.md`;
+  - `site/index.html` (the roster list on the page);
+  - `scripts/subagent-status.sh` (its `case` maps agent names to emoji, so a renamed agent shows a bullet until the case is updated);
+  - `crew/README.md` and `crew/hooks/roster.ts` (the crew view's role labels, and its model pins, which are keyed by slug).
+  The crew mod recognises agents by their description emoji, so a reskin keeps its costumes; the files above only carry display text and slug-keyed tables.
+- Finish with a repo-wide search for every old agent name and slug (excluding `CHANGELOG.md`) and fix or justify each remaining hit.
 - Record the applied theme and the full role -> name mapping in `theme.json` at the plugin root, so a reskin is revertible. The value `corporate` restores the shipped defaults. The default install ships no `theme.json`; its absence means the corporate baseline is in effect.
 
 ## Guardrails

@@ -44,6 +44,7 @@
           "scope-intro",
           "",
           "scope-fields-and-boundary-pentester",
+          "",
           "scope-authorization",
           "scope-network-pentester"
         ],
@@ -51,6 +52,7 @@
           "scope-intro",
           "",
           "scope-fields-and-boundary-red-team",
+          "",
           "scope-authorization",
           "scope-network-and-secrets-red-team"
         ]
