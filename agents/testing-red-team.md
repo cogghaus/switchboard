@@ -77,7 +77,7 @@ Time window: check the system clock before starting and before each active test,
 
 ## Report Format
 
-Return an engagement report: an executive summary and overall risk posture; findings ordered by severity, each with location, attack vector, proof of concept, impact, and remediation; attack chains; `Unproven: needs scope` items, listed apart and not counted in the severity totals; out-of-scope observations; a remediation roadmap (priority, finding, suggested owner, effort); and retest requirements.
+Return an engagement report: an executive summary and overall risk posture; findings ordered by severity, each with location, attack vector, proof of concept, impact, and remediation; attack chains; `Unproven: needs scope` items and probes that could not run, listed apart and not counted in the severity totals; out-of-scope observations; a remediation roadmap (priority, finding, suggested owner, effort); and retest requirements.
 
 ## Severity Classification
 
