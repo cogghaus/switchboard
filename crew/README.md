@@ -8,7 +8,7 @@ claude plugin install switchboard-crew@switchboard
 
 Restart Claude Code afterwards. Needs Claude Code **2.1.291 or later** (the function-hooks API it is built on; 2.1.251 lacks the events it uses). Tested on 2.1.291 and 2.1.295.
 
-Where it draws: the terminal CLI, and the Claude desktop app's Code tab in a local session. The desktop app does not run mods in a WSL or SSH session, so there `/crew` reports the panel open but nothing is drawn; open the folder in a local session instead.
+Where it draws: the terminal CLI, the VS Code extension's chat panel, and the Claude desktop app's Code tab in a local session. In the desktop app's WSL sessions plugins are not available, so `/crew` does not exist. In an SSH session the mod runs only if it is installed on the remote machine, and even then the desktop app draws nothing: `/crew` replies that the panel is open, and no panel appears. Open the folder in a local session instead.
 
 ## What it shows
 
