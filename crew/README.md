@@ -8,6 +8,8 @@ claude plugin install switchboard-crew@switchboard
 
 Restart Claude Code afterwards. Needs Claude Code **2.1.291 or later** (the function-hooks API it is built on; 2.1.251 lacks the events it uses). Tested on 2.1.291 and 2.1.295.
 
+Where it draws: the terminal CLI, the VS Code extension's chat panel, and the Claude desktop app's Code tab in a local session. In the desktop app's WSL sessions plugins are not available, so `/crew` does not exist. In an SSH session the mod runs only if it is installed on the remote machine, and even then the desktop app draws nothing: `/crew` replies that the panel is open, and no panel appears. Open the folder in a local session instead.
+
 ## What it shows
 
 - **A band above the prompt.** When `orchestrator-loop` reports a plan, the band shows its title, accepted tasks out of planned, the phase, and the specialists at work walking at its end. With no plan it follows the agents running right now and leaves once they finish. It stacks above any other mod's band rather than replacing it. `×N` toggles the crew panel; `✕` sets the plan aside and hides the band until the next plan or agent. The plan is model-reported: the band shows what the orchestrator says, while the panel's rows come from the agents themselves.
