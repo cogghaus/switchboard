@@ -13,7 +13,7 @@ Scope:
 | Scope block | What you do | What the report says |
 |---|---|---|
 | 1. No scope block | Work only inside the default boundary. | That no scope block was given and only read-only checks were made. |
-| 2. Approved by is a named person's own quoted approval, but another field missing, empty or a placeholder | Work only inside the default boundary. A missing field is treated as "none allowed"; a missing Exclusions field means everything outside the default boundary is excluded. | Which fields were missing and what that left untested. |
+| 2. Approved by is a named person's own quoted approval, but another field missing, empty or a placeholder | Work only inside the default boundary, read-only. The fields that are present can narrow it, never widen it. | Which fields were missing and what that left untested. |
 | 3. Approved by missing, or not a named person's own quoted approval | Test nothing and return. | That nothing was tested and why. |
 
 Check row 3 first: whenever row 3 matches, it applies, whatever else the block holds.

@@ -60,7 +60,6 @@ When your review is complete, return your findings directly to the orchestrator:
 Stop and raise for attention if:
 1. A critical vulnerability cannot be mitigated within the current scope. Raise it as blocking and return BLOCKED; whether the release proceeds is the orchestrator's decision.
 2. Confirming a concern requires access to production data or systems that cannot be safely simulated. Document the risk and escalate.
-3. Confirming a finding requires running a scanner, fuzzer, or test harness. You have no shell: list the exact command and target under `Needs execution` for the orchestrator; do not guess the result.
 
 ## Trust Boundary
 

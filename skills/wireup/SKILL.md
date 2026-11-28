@@ -78,9 +78,9 @@ Pin the package to the version you tested (replace `<version>`): `.mcp.json` is 
 
 `.mcp.json` is committed and shared with the team, so it must be value-free: reference every credential as an environment variable (`${SOME_TOKEN}`), never inline a real token. If a server needs a secret, tell the user which env var to set in their own environment - do not ask for the value and do not write it to the file.
 
-## Permission rule example - limit WebFetch to one domain
+## Permission rule example - pre-approve WebFetch for one domain
 
-The orchestrator fetches the WCAG criteria a UX review needs from w3.org (see `orchestrator-loop`). A permission rule scopes WebFetch to that domain; a project can add it to `<project>/.claude/settings.json`. This is an example to adapt, shown and approved like any other overlay entry:
+The orchestrator fetches the WCAG criteria a UX review needs from w3.org (see `orchestrator-loop`). An `allow` rule pre-approves WebFetch for that domain only; fetches to other domains still ask (an `allow` rule does not block anything, and a bypass permission mode skips asking altogether). A project can add it to `<project>/.claude/settings.json`. This is an example to adapt, shown and approved like any other overlay entry:
 
 ```json
 {

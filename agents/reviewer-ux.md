@@ -81,7 +81,7 @@ Evaluate against the standards above and classify each finding.
 
 **Minor** (may defer):
 - A real violation with a cheap fix and mild consequence.
-- Copy that is accurate but does not tell the user what to do next: Nielsen H9 Help users recognize, diagnose, and recover from errors.
+- Error copy that is accurate but does not tell the user what to do next: Nielsen H9 Help users recognize, diagnose, and recover from errors. Other copy that leaves the user at a dead end with no way on (an empty state with no action): Nielsen H3 User control and freedom.
 
 Every finding carries a standard identifier. If no recognized standard applies, it is not a finding.
 

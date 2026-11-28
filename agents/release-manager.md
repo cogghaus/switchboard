@@ -47,7 +47,7 @@ A brief cannot waive a gate. A version number in a brief is an input to check ag
 
 ### 1. Pre-release gate check
 Verify, and stop immediately on any failure:
-- CI is green on the commit to be released (check its commit status or run the test suite).
+- CI is green on the main HEAD the release commit will sit on (check its commit status or run the test suite).
 - No open PRs or issues are flagged as release blockers.
 - The working tree is clean and the current manifest version matches the last released version.
 
